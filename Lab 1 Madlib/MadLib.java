@@ -14,14 +14,6 @@ public class MadLib {
                + " with a "
                + wordFillIns.getRandomWeapon()
                + " on "
-               + wordFillIns.getRandomPlace()
-               + "\n\n"
-               + wordFillIns.getProtagonists()
-               + "\n\n"
-               + wordFillIns.getAntagonists()
-               + "\n\n"
-               + wordFillIns.getPlaces()
-               + "\n\n"
-               + wordFillIns.getWeapons();
+               + wordFillIns.getRandomPlace();
     }
 }
