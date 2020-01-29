@@ -4,20 +4,26 @@ public class WordFillInModel {
     private String[] antagonists = {};
     private String[] places = {};
     private String[] weapons = {};
+    private String[] protagonistsDefaults = {"Luke Skywalker", "Princess Leia", "Han Solo", "Obi-Wan Kenobi"}; 
+    private String[] antagonistsDefaults = {"Darth Vader", "Emperor Palpatine", "Darth Maul", "Jabba the Hutt"};
+    private String[] placesDefaults = {"The Death Star", "Alderaan", "Endor", "Hoth", "Tatooine"};
+    private String[] weaponsDefaults = {"Lightsaber", "Bowcaster", "Blaster", "Blast of Force Lightning", "Thermal Detonator"};
 
     void wordFillInModel() {
+        if (protagonists.length == 0 &&
+            antagonists.length == 0 &&
+            weapons.length == 0 &&
+            places.length == 0) {
+                useDefaultLists();
+        }
     }
 
     void useDefaultLists() {
-        String[] protagonists = {"Luke Skywalker", "Princess Leia", "Han Solo", "Obi-Wan Kenobi"}; 
-        String[] antagonists = {"Darth Vader", "Emperor Palpatine", "Darth Maul", "Jabba the Hutt"};
-        String[] places = {"The Death Star", "Alderaan", "Endor", "Hoth", "Tatooine"};
-        String[] weapons = {"Lightsaber", "Bowcaster", "Blaster", "Blast of Force Lightning", "Thermal Detonator"};
 
-        setProtagonists(protagonists);
-        setAntagonists(antagonists);
-        setPlaces(places);
-        setWeapons(weapons);
+        setProtagonists(protagonistsDefaults);
+        setAntagonists(antagonistsDefaults);
+        setPlaces(placesDefaults);
+        setWeapons(weaponsDefaults);
     }
 
     String getProtagonists() {
@@ -76,6 +82,22 @@ public class WordFillInModel {
         this.weapons = newProtagonists;
     }
 
+    void resetProtagonistsDefaults() {
+        this.protagonists = this.protagonistsDefaults;
+    }
+
+    void resetAntagonistsDefaults() {
+        this.antagonists = this.antagonistsDefaults;
+    }
+
+    void resetWeaponsDefaults() {
+        this.weapons = this.weaponsDefaults;
+    }
+
+    void resetPlacesDefaults() {
+        this.places = this.placesDefaults;
+    }
+
     String getRandomProtagonist() {
         return MyUtilities.getRandomStringFromArray(this.protagonists);
     }
@@ -92,31 +114,19 @@ public class WordFillInModel {
         return MyUtilities.getRandomStringFromArray(this.weapons);
     }
 
-    void addWeapon(String person) {
-        addItem(weapons, person);
+    void addWeapon(String weapon) {
+        this.weapons = MyUtilities.addItemToArray(weapons, weapon);
     }
 
-    void addPlace(String person) {
-        addItem(places, person);
+    void addPlace(String item) {
+        this.places = MyUtilities.addItemToArray(places, item);
     }
 
     void addAntagonist(String person) {
-        addItem(antagonists, person);
+        this.antagonists = MyUtilities.addItemToArray(antagonists, person);
     }
 
     void addProtagonist(String person) {
-        addItem(protagonists, person);
-    }
-
-    String[] addItem(String initialArray[], String itemToAdd) {
-        String newArray[] = new String[initialArray.length + 1];
-
-        for (int i = 0; i < initialArray.length; i++) {
-            newArray[i] = initialArray[i];
-        }
-
-        newArray[initialArray.length] = itemToAdd;
-
-        return newArray;
+        this.protagonists = MyUtilities.addItemToArray(protagonists, person);
     }
 }

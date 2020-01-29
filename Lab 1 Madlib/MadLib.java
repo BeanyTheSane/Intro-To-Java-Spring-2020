@@ -1,19 +1,16 @@
+import java.util.Scanner;
+
 public class MadLib {
     public static void main(String[] args) {
+        WordFillInModel wordFillInModel = new WordFillInModel();
+        wordFillInModel.useDefaultLists();
+        InterfaceStatusModel status = new InterfaceStatusModel();
 
-        System.out.println(textToDisplayBuilder());
+        System.out.println("Lab #1 Adam Knitter");
+        System.out.println("Star Wars MadLib Generator\n");
 
-    }
-    
-    public static String textToDisplayBuilder() {
-        WordFillInModel wordFillIns = new WordFillInModel();
-        wordFillIns.useDefaultLists();
-        return   wordFillIns.getRandomProtagonist()
-               + " attacked "
-               + wordFillIns.getRandomAntagonist()
-               + " with a "
-               + wordFillIns.getRandomWeapon()
-               + " on "
-               + wordFillIns.getRandomPlace();
-    }
+        while (status.runInterface) {
+            InterfaceController.openMainMenu(wordFillInModel, status );
+        }
+    }   
 }
