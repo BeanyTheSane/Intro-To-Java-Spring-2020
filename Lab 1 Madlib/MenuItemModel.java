@@ -79,22 +79,22 @@ public class MenuItemModel {
         }
     }
 
-        public void resetSpecificListsDefaultValues(WordFillInModel model, MenuItemModel menuItem) {
+    public void resetSpecificListsDefaultValues(WordFillInModel model, MenuItemModel menuItem) {
             switch (menuItem.getMenuCode()) {
-                case 1:
-                    model.resetProtagonistsDefaults();
-                    break;
-                case 2:
-                    model.resetAntagonistsDefaults();
-                    break;
-                case 3:
-                    model.resetWeaponsDefaults();
-                    break;
-                case 4:
-                    model.resetPlacesDefaults();
-                    break;
-                default:
-                    break;
-            }
+            case 1:
+                model.resetProtagonistsDefaults();
+                break;
+            case 2:
+                model.resetAntagonistsDefaults();
+                break;
+            case 3:
+                model.resetWeaponsDefaults();
+                break;
+            case 4:
+                model.resetPlacesDefaults();
+                break;
+            default:
+                break;
         }
+    }
 }

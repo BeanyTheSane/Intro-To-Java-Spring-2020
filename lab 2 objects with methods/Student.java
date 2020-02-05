@@ -6,6 +6,22 @@ public class Student {
     private String studentNumber;
     private int creditHours;
 	private String residencyCode;
+	
+	Student(){}
+
+	Student(String name, String studentNumber,  int creditHours, String residencyCode) {
+		this.name = name;
+		this.studentNumber = studentNumber;
+		this.creditHours = creditHours;
+		this.residencyCode = residencyCode;
+	}
+
+	Student(String name, String studentNumber, int creditHours) {
+		this.name = name;
+		this.studentNumber = studentNumber;
+		this.creditHours = creditHours;
+		this.residencyCode = "INC";
+	}
 
 	public String getResidencyCode() {
 		return this.residencyCode;
