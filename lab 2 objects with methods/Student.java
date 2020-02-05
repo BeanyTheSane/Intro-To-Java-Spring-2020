@@ -6,6 +6,8 @@ public class Student {
     private String studentNumber;
     private int creditHours;
 	private String residencyCode;
+	
+	Student(){}
 
 	Student(String name, String studentNumber,  int creditHours, String residencyCode) {
 		this.name = name;
