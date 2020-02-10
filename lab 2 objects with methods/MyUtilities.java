@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MyUtilities {
 
@@ -6,8 +7,6 @@ public class MyUtilities {
         int rnd = new Random().nextInt(array.length);
         return array[rnd];
     }
-
-
 
     public static String[] addItemToArray(String initialArray[], String itemToAdd) {
         String newArray[] = new String[initialArray.length + 1];
@@ -26,5 +25,11 @@ public class MyUtilities {
             return true;
         }
         return false;
+    }
+
+    //generates a random number of the given length
+    public static Long generateRandomNumber(int n) {
+        long min = (long) Math.pow(10, n - 1);
+        return ThreadLocalRandom.current().nextLong(min, min * 10);
     }
 }
