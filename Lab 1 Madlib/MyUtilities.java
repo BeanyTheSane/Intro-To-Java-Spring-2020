@@ -22,7 +22,7 @@ public class MyUtilities {
     }
 
     public static boolean continueProcess(String input) {
-        if (input.isBlank()) {
+        if (input.equals("")) {
             return true;
         }
         return false;
