@@ -21,11 +21,7 @@ public class MyUtilities {
     }
 
     public static boolean continueProcess(String input) {
-<<<<<<< HEAD
-        if (input.isBlank()) {
-=======
         if (input.equals("")) {
->>>>>>> master
             return true;
         }
         return false;
