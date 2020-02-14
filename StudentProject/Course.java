@@ -28,4 +28,10 @@ public class Course {
     public void setCreditHours(int creditHours) {
         this.creditHours = creditHours;
     }
+
+    public void setDefaultNameAndIdByCreditHours(int creditHours) {
+        this.courseId = "101";
+        this.courseName = "Test Course";
+        this.creditHours = creditHours;
+    }
 }
