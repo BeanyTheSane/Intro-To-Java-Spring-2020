@@ -97,37 +97,8 @@ public class Student {
 		this.name = getRandomName();
 		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
 		this.residencyCode = residencyCode;
-		this.courses = buildDefaultCourseList(creditHours);
+		this.courses = Course.buildDefaultCourseList(creditHours);
 			
-	}
-
-	public static ArrayList<Course> buildDefaultCourseList(int creditHours) {
-		ArrayList<Course> defaultCourseList = new ArrayList<>();
-		if (creditHours == 0 || creditHours == 1) {
-			Course course = new Course();
-			course.setDefaultNameAndIdByCreditHours(1);
-			defaultCourseList.add(course);
-		}
-		else if ((creditHours % 3) == 0) {
-			for (int i = 0; i < 3; i++) {
-				Course course = new Course();
-				course.setDefaultNameAndIdByCreditHours(creditHours / 3);
-				defaultCourseList.add(course);			
-			}
-		}
-		else if ((creditHours % 2) == 0) {
-			for (int i = 0; i < 2; i++) {
-				Course course = new Course();
-				course.setDefaultNameAndIdByCreditHours(creditHours / 2);
-				defaultCourseList.add(course);
-			}
-		}
-		else {
-			Course course = new Course();
-			course.setDefaultNameAndIdByCreditHours(creditHours);
-			defaultCourseList.add(course);
-		}
-		return defaultCourseList;
 	}
 
 	public String getDetailsAsString() {
@@ -152,6 +123,19 @@ public class Student {
 	private boolean doCreditHoursQualifyForSpecialRate() {
 		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
 			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+	}
+
+	public String getCourseList() {
+		StringBuilder courseList = new StringBuilder();
+		courseList.append("		Course List:\n");
+		if (!this.courses.isEmpty()) {
+			for (Course course : this.courses) {
+				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
+			}
+			return courseList.toString();
+		}
+		courseList.append("This Student has not signed up for any classes yet");
+		return courseList.toString();
 	}
 
 	private static String getRandomName() {
