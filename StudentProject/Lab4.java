@@ -1,12 +1,13 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Lab3 {
+public class Lab4 {
 
-    public static void main(String[] args) {
-        Scanner myScanner = new Scanner(System.in);
+    public static void main(final String[] args) {
+        final Scanner myScanner = new Scanner(System.in);
         boolean interfaceRunning = true;
-        TestScenarios constructorTest = new TestScenarios();
+        final TestScenarios constructorTest = new TestScenarios();
         
         while(interfaceRunning) {
             String mainMenuChoice = "";
@@ -14,12 +15,13 @@ public class Lab3 {
             System.out.println("1.)  Run Full Tuition Chart Test");
             System.out.println("2.)  Run Auto Filled Constructor Test");
             System.out.println("3.)  Run User Filled Constructor Test");
+            System.out.println("4.)  Run Course Adding Test");
             System.out.println("0.)  Exit the Program");
             System.out.println("Please Enter The Number of Your Selection...");
             mainMenuChoice = myScanner.nextLine();
             switch (mainMenuChoice) {
                 case "1":
-                    constructorTest.runTuitionTest();
+                    constructorTest.runTuitionChartTest();
                     break;
 
                 case "2":
@@ -28,6 +30,10 @@ public class Lab3 {
 
                 case "3":
                     constructorTest.runUserFilledConstructorTest();
+                    break;
+
+                case "4":
+                    constructorTest.runCourseAddingTest();
                     break;
             
                 case "0":
@@ -42,25 +48,21 @@ public class Lab3 {
         myScanner.close();
     }
 
-    
-
-    
-
     private static class TestScenarios {
         boolean testIsRunning = true;
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
 
-        public void runTuitionTest() {
-            int testCaseLimit = 22;//general max number of credit hours reccomended
+        public void runTuitionChartTest() {
+            final int testCaseLimit = 22;//general max number of credit hours reccomended
     
             for (int i = 1; i <= testCaseLimit; i++) {
-                Student inCountyStudent = new Student();
-                Student outOfCountyStudent = new Student();
-                Student outOfStateStudent = new Student();
-                inCountyStudent.buildRandomPerson("INC", i);
-                outOfCountyStudent.buildRandomPerson("OOC", i);
-                outOfStateStudent.buildRandomPerson("OOS", i);
+                final Student inCountyStudent = new Student();
+                final Student outOfCountyStudent = new Student();
+                final Student outOfStateStudent = new Student();
+                inCountyStudent.buildRandomPerson(ResidentialCodes.INC.toString(), i);
+                outOfCountyStudent.buildRandomPerson(ResidentialCodes.OOC.toString(), i);
+                outOfStateStudent.buildRandomPerson(ResidentialCodes.OOS.toString(), i);
     
                 System.out.println(inCountyStudent.getDetailsAsString());
                 System.out.println(outOfCountyStudent.getDetailsAsString());
@@ -71,23 +73,38 @@ public class Lab3 {
             myScanner.nextLine();
         }
 
+
+        //this is broken getting a nullpointer error somewhere
         public void runAutoFilledConstructorTest() {
-            Student constructorTest1 = new Student("Cloud Strife", "999999", 12, "OOC");
-            Student constructorTest2 = new Student("Cait Sith", "111111", 4);
+            final Student constructorTest1 = new Student("Cloud Strife", "999999", ResidentialCodes.INC.toString());
+            final Student constructorTest2 = new Student("Cait Sith", "777777", ResidentialCodes.OOS.toString());
+            final Student constructorTest3 = new Student("Tifa Lockhart", "444444", ResidentialCodes.OOC.toString());
+            final Student constructorTest4 = new Student("Aerith Gainsborogh", "111111");
+
+            constructorTest1.addCourseList(Student.buildDefaultCourseList(19));
+            constructorTest2.addCourseList(Student.buildDefaultCourseList(12));
+            constructorTest3.addCourseList(Student.buildDefaultCourseList(4));
+            constructorTest4.addCourseList(Student.buildDefaultCourseList(1));
     
-            System.out.println("\nThe following two Students are created using the new constructors\n");
+            System.out.println("\nThe following Students are created using the new constructors and course lists\n");
             System.out.println(constructorTest1.getDetailsAsString());
             System.out.println(constructorTest2.getDetailsAsString());
+            System.out.println(constructorTest3.getDetailsAsString());
+            System.out.println(constructorTest4.getDetailsAsString());
             System.out.println("\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
 
+        // This doesn't work the second time through for some reason.  First pass seemed to be fine. 
+        // after i return to the main menu I can't select three again.  just keeps looping.  other choices work on second pass
         public void runUserFilledConstructorTest() {
             String name = "";
             String studentNumber = "";
             int creditHours = 0;
             String residentialStatus = "";
+            ArrayList<Course> courses = new ArrayList<>();
 
+            testIsRunning = true;
             while (testIsRunning) {
                 System.out.println("\nYou can test the new constructors with your own criteria now");
                 System.out.println("Type in exit at any time to return to the main menu\n");
@@ -110,6 +127,7 @@ public class Lab3 {
                 if (creditHours == 0) {
                     continue;
                 }
+                courses = Student.buildDefaultCourseList(creditHours);
                 loopRunner = true;
                 System.out.println("\nPlease enter the students 3 letter residential status code by refering to the following list of options");
                 System.out.println("'INC' -> In County");
@@ -120,7 +138,7 @@ public class Lab3 {
                     continue;
                 }
                 System.out.println("\nHere are the details for the student you just created\n");
-                System.out.println(new Student(name, studentNumber, creditHours, residentialStatus).getDetailsAsString());
+                System.out.println(new Student(name, studentNumber, courses, residentialStatus).getDetailsAsString());
                 
                 System.out.println("\nPress enter to Continue\n");
                 myScanner.nextLine();
@@ -146,8 +164,9 @@ public class Lab3 {
                 if (creditHours == 0) {
                     continue;
                 }
+                courses = Student.buildDefaultCourseList(creditHours);
                 System.out.println("\nHere are the details for the student you just created\n");
-                System.out.println(new Student(name, studentNumber, creditHours).getDetailsAsString());
+                System.out.println(new Student(name, studentNumber, courses).getDetailsAsString());
 
                 System.out.println("\nPress enter to return to the main menu\n");
                 myScanner.nextLine();
@@ -155,7 +174,11 @@ public class Lab3 {
             }
         }
 
-        public boolean returnToMainMenu(String command) {
+        public void runCourseAddingTest() {
+            //this test will allow the user to add courses to a student 
+        }
+
+        public boolean returnToMainMenu(final String command) {
             if ("exit".equals(command.toLowerCase())) {
                 testIsRunning = false;
                 loopRunner = false;
@@ -186,7 +209,7 @@ public class Lab3 {
 
         public String verifyStudentNumberInput(boolean loopRunner) {
             String inputToVerify = "";
-            Pattern sixDigitNumberRegex = Pattern.compile("[0-9]{6}");
+            final Pattern sixDigitNumberRegex = Pattern.compile("[0-9]{6}");
 
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
@@ -216,7 +239,7 @@ public class Lab3 {
                 }
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     System.out.println("\nPlease enter a number between 1 and 22 inclusive.  Try Again");
                 }
                 if (convertedInput < 1
@@ -240,9 +263,9 @@ public class Lab3 {
                     System.out.println("\nThe Residential Status cannot be blank.  Try Again");
                     continue;
                 }
-                if ("INC".equals(inputToVerify)
-                        || "OOC".equals(inputToVerify)
-                        || "OOS".equals(inputToVerify)) {
+                if (ResidentialCodes.INC.toString().equals(inputToVerify)
+                        || ResidentialCodes.OOC.toString().equals(inputToVerify)
+                        || ResidentialCodes.OOS.toString().equals(inputToVerify)) {
                     loopRunner = false;
                 } else {
                     System.out.println("\nThe Residential Status must be a 3 letter code from the provided list.  Try Again");
@@ -251,5 +274,11 @@ public class Lab3 {
             }
             return inputToVerify;
         }
+    }
+
+    enum ResidentialCodes {
+        INC,
+        OOC,
+        OOS
     }
 }
