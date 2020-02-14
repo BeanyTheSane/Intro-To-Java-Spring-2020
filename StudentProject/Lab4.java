@@ -184,7 +184,54 @@ public class Lab4 {
         }
 
         public void runCourseClassTest() {
-            //this test will allow the user to add courses to a student 
+            String courseTestChoice = "";
+            boolean courseInterfaceRunning = true;
+            while (courseInterfaceRunning) {
+                System.out.println("\nYou can test the new Course class by adding and viewing courses for a student");
+                System.out.println("Please select the task you would like to perform");
+                System.out.println("1.) Add courses one by one then view the details");
+                System.out.println("2.) Run automated test with default courses added");
+                System.out.println("0.) Return to The previous menu");
+                System.out.println("Please Enter The Number of Your Selection...");
+                courseTestChoice = myScanner.nextLine();
+                switch (courseTestChoice) {
+                    case "1":
+                        runAddCoursesManuallyTest();
+                        break;
+
+                    case "2":
+                        runAddCoursesAutomaticallyTest();
+                
+                    case "0":
+                        courseInterfaceRunning = false;
+                        break;
+
+                    default:
+                        System.out.println("Please Enter The Number of Your Selection!");
+                        break;
+                }
+            }
+
+        }
+
+        private void runAddCoursesAutomaticallyTest() {
+            testIsRunning = true;
+
+            while (testIsRunning) {
+                System.out.println("\nThis test allows you to manually create courses and add them to a students record, \nthen view the students full details");
+                System.out.println("Type in exit at any time to return to the main menu\n");
+                //need to take all parameters in.  below is an unfinished model.
+                loopRunner = true;
+                System.out.println("\nPlease enter the course ID");
+                name = verifyNameInput(loopRunner);
+                if ("exit".equals(name.toLowerCase())) {
+                    continue;
+                }
+
+            }
+        }
+
+        private void runAddCoursesManuallyTest() {
         }
 
         private boolean returnToMainMenu(final String command) {
