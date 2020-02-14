@@ -187,7 +187,7 @@ public class Lab4 {
             //this test will allow the user to add courses to a student 
         }
 
-        public boolean returnToMainMenu(final String command) {
+        private boolean returnToMainMenu(final String command) {
             if ("exit".equals(command.toLowerCase())) {
                 testIsRunning = false;
                 loopRunner = false;
@@ -196,7 +196,7 @@ public class Lab4 {
             return false;
         }
 
-        public String verifyNameInput(boolean loopRunner) {
+        private String verifyNameInput(boolean loopRunner) {
             String inputToVerify = "";
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
@@ -216,7 +216,7 @@ public class Lab4 {
             return inputToVerify;
         }
 
-        public String verifyStudentNumberInput(boolean loopRunner) {
+        private String verifyStudentNumberInput(boolean loopRunner) {
             String inputToVerify = "";
             final Pattern sixDigitNumberRegex = Pattern.compile("[0-9]{6}");
 
@@ -238,7 +238,7 @@ public class Lab4 {
             return inputToVerify;
         }
 
-        public int verifyCreditHourInput(boolean loopRunner) {
+        private int verifyCreditHourInput(boolean loopRunner) {
             String inputToVerify = "";
             int convertedInput = 0;
             while(loopRunner) {
@@ -261,7 +261,7 @@ public class Lab4 {
             return convertedInput;
         }
 
-        public int verifyResidentialStatusInput(boolean loopRunner) {
+        private int verifyResidentialStatusInput(boolean loopRunner) {
             String inputToVerify = "";
             int convertedInput = 0;
             while(loopRunner) {
