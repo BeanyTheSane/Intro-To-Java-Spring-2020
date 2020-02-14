@@ -1,7 +1,7 @@
 public class InterfaceController {
     public static void openMainMenu(WordFillInModel wordFillInModel, InterfaceStatusModel status) {
         boolean inputIsInvalid = true; 
-        if (status.mainMenuInput.isBlank()) {
+        if (status.mainMenuInput.equals("")) {
             InterfaceController.displayMainMenu();
         }
 
@@ -20,7 +20,7 @@ public class InterfaceController {
                 while (inputIsInvalid) {
                     System.out.println("\nPress enter to continue\n");
                     String validateInput = status.myScanner.nextLine();
-                    if (validateInput.isBlank()) {
+                    if (validateInput.equals("")) {
                         inputIsInvalid = false;
                     }
                 }
@@ -38,7 +38,7 @@ public class InterfaceController {
     }
 
         public static void openListSelectionMenu(WordFillInModel wordFillInModel, InterfaceStatusModel status) {
-            if (status.editMenuProInput.isBlank()) {
+            if (status.editMenuProInput.equals("")) {
                 InterfaceController.displayListSelection();
             }
 
@@ -82,7 +82,7 @@ public class InterfaceController {
 
         boolean inputIsInvalid = true;
 
-        if (status.subEditMenuInput.isBlank()) {                                   
+        if (status.subEditMenuInput.equals("")) {                                   
             InterfaceController.displaySpecificListMenu(menuItem.getTitle());
         }
 
@@ -103,7 +103,7 @@ public class InterfaceController {
                 while (inputIsInvalid) {
                     System.out.println("\nPress enter to continue\n");
                     String validateInput = status.myScanner.nextLine();
-                    if (validateInput.isBlank()) {
+                    if (validateInput.equals("")) {
                         inputIsInvalid = false;
                     }
                 }
@@ -117,7 +117,7 @@ public class InterfaceController {
                 System.out.println("Please enter the item you would like to add");
                 status.itemToAdd = status.myScanner.nextLine();
 
-                if (status.itemToAdd.isBlank()) {
+                if (status.itemToAdd.equals("")) {
                     System.out.println("You cannot add a blank item");
                     status.mainMenuInput = "2";
                     status.editMenuProInput = menuItem.getMenuCode().toString();
@@ -131,7 +131,7 @@ public class InterfaceController {
                 while (inputIsInvalid) {
                     System.out.println("\nPress enter to continue\n");
                     String validateInput = status.myScanner.nextLine();
-                    if (validateInput.isBlank()) {
+                    if (validateInput.equals("")) {
                         inputIsInvalid = false;
                     }
                 }
@@ -150,7 +150,7 @@ public class InterfaceController {
                 while (inputIsInvalid) {
                     System.out.println("\nPress enter to continue\n");
                     String validateInput = status.myScanner.nextLine();
-                    if (validateInput.isBlank()) {
+                    if (validateInput.equals("")) {
                         inputIsInvalid = false;
                     }
                 }

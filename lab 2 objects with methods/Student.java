@@ -1,30 +1,11 @@
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Locale;
 
 public class Student {
     private String name;
     private String studentNumber;
+    private int creditHours;
 	private String residencyCode;
-	private ArrayList<Course> courses;  
-	
-	Student(){}
-
-	Student(String name, String studentNumber, String residencyCode) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = residencyCode;
-	}
-
-	Student(String name, String studentNumber) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = "INC";
-	}
-
-	public void addCourse(Course course) {
-		this.courses.add(course);
-	}
 
 	public String getResidencyCode() {
 		return this.residencyCode;
@@ -51,11 +32,11 @@ public class Student {
 	}
 
 	public int getCreditHours() {
-		int creditHours = 0;
-		for (Course course : courses) {
-			creditHours += course.getCreditHours();
-		}
-		return creditHours;
+		return this.creditHours;
+	}
+
+	public void setCreditHours(int creditHours) {
+		this.creditHours = creditHours;
 	}
 
     public Double getTuition() {
@@ -63,51 +44,33 @@ public class Student {
                         : this.residencyCode.equals("OOC") ? TuitionRates.getOutOfCountyBaseRate()
                         : this.residencyCode.equals("OOS") ? TuitionRates.getOutOfStateBaseRate()
                                                            : 0.0;
-        if (getCreditHours() <= 13) {
-            return baseRate * getCreditHours();
-        } else if (getCreditHours() >= 13 && getCreditHours() <= 18) {
+        if (this.creditHours <= 13) {
+            return baseRate * this.creditHours;
+        } else if (this.creditHours >= 13 && this.creditHours <= 18) {
             return baseRate * TuitionRates.getCreditHourBonusRate();
         }
         
-        return (getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
+        return (this.creditHours - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
 	}
 	
 	public void buildRandomPerson(String residencyCode, int creditHours) {
 		this.name = getRandomName();
 		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.creditHours = creditHours;
 		this.residencyCode = residencyCode;
-		//TODO add courses to get credit hours
-		Course course = new Course();
-		if (creditHours == 0 || creditHours == 1) {
-			course.setDefaultNameAndIdByCreditHours(1);
-			this.courses.add(course);
-		}
-		else if ((creditHours % 3) == 0) {
-			for (int i = 0; i < 3; i++) {
-				course.setDefaultNameAndIdByCreditHours(creditHours / 3);
-				this.courses.add(course);
-			}
-		}
-		else if ((creditHours % 2) == 0) {
-			
-		}
-		for (int i = 0; i < 3; i++) {
-			this.courses.add(Course course = new Course())
-		}
-		
 	}
 
 	public String getDetailsAsString() {
 		Locale locale = new Locale("en", "US");
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
 		String response =  "Student " 
-						+ getStudentNumber() 
+						+ this.studentNumber 
 						+ " " 
-						+ getName() 
+						+ this.name 
 						+ " takes " 
-						+ getCreditHours() 
+						+ this.creditHours 
 						+ " credit hours, resideny=" 
-						+ getResidencyCode() 
+						+ this.residencyCode 
 						+ ", tuition = "
 						+ currencyFormat.format(getTuition());
 		if (doCreditHoursQualifyForSpecialRate()) {
@@ -117,8 +80,8 @@ public class Student {
 	}
 
 	private boolean doCreditHoursQualifyForSpecialRate() {
-		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
-			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+		return (this.creditHours >= TuitionRates.getCreditHourBonusRate() 
+			   && this.creditHours <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
 	}
 
 	private static String getRandomName() {
