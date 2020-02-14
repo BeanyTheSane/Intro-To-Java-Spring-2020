@@ -124,9 +124,9 @@ public class Lab4 {
                     continue;
                 }
                 loopRunner = true;
-                System.out.println("\nPlease enter the Students credit hours (A whole number between 1 and 22 inclusive)");
+                System.out.println("\nPlease enter the Students credit hours (A whole number between 0 and 22 inclusive)");
                 creditHours = verifyCreditHourInput(loopRunner);
-                if (creditHours == 0) {
+                if (creditHours == -1) {
                     continue;
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
@@ -165,7 +165,7 @@ public class Lab4 {
                 }
                 System.out.println("\nPlease enter the Students credit hours (A whole number between 0 and 22 inclusive");
                 creditHours = verifyCreditHourInput(loopRunner);
-                if (creditHours == 0) {
+                if (creditHours == -1) {
                     continue;
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
@@ -241,7 +241,7 @@ public class Lab4 {
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
-                    return 0;
+                    return -1;
                 }
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);

@@ -134,7 +134,7 @@ public class Student {
 			}
 			return courseList.toString();
 		}
-		courseList.append("This Student has not signed up for any classes yet");
+		courseList.append("		This Student has not signed up for any classes yet");
 		return courseList.toString();
 	}
 
