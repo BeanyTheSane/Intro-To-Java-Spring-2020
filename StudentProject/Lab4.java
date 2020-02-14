@@ -15,7 +15,7 @@ public class Lab4 {
             System.out.println("1.)  Run Full Tuition Chart Test");
             System.out.println("2.)  Run Auto Filled Constructor Test");
             System.out.println("3.)  Run User Filled Constructor Test");
-            System.out.println("4.)  Run Course Adding Test");
+            System.out.println("4.)  Run Course Class Test");
             System.out.println("0.)  Exit the Program");
             System.out.println("Please Enter The Number of Your Selection...");
             mainMenuChoice = myScanner.nextLine();
@@ -33,7 +33,7 @@ public class Lab4 {
                     break;
 
                 case "4":
-                    constructorTest.runCourseAddingTest();
+                    constructorTest.runCourseClassTest();
                     break;
             
                 case "0":
@@ -81,22 +81,24 @@ public class Lab4 {
             final Student constructorTest3 = new Student("Tifa Lockhart", "444444", ResidentialCodes.OOC.toString());
             final Student constructorTest4 = new Student("Aerith Gainsborogh", "111111");
 
-            constructorTest1.addCourseList(Student.buildDefaultCourseList(19));
-            constructorTest2.addCourseList(Student.buildDefaultCourseList(12));
-            constructorTest3.addCourseList(Student.buildDefaultCourseList(4));
-            constructorTest4.addCourseList(Student.buildDefaultCourseList(1));
+            constructorTest1.addCourseList(Course.buildDefaultCourseList(19));
+            constructorTest2.addCourseList(Course.buildDefaultCourseList(12));
+            constructorTest3.addCourseList(Course.buildDefaultCourseList(4));
+            constructorTest4.addCourseList(Course.buildDefaultCourseList(1));
     
             System.out.println("\nThe following Students are created using the new constructors and course lists\n");
             System.out.println(constructorTest1.getDetailsAsString());
+            System.out.println(constructorTest1.getCourseList());
             System.out.println(constructorTest2.getDetailsAsString());
+            System.out.println(constructorTest2.getCourseList());
             System.out.println(constructorTest3.getDetailsAsString());
+            System.out.println(constructorTest3.getCourseList());
             System.out.println(constructorTest4.getDetailsAsString());
+            System.out.println(constructorTest4.getCourseList());
             System.out.println("\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
 
-        // This doesn't work the second time through for some reason.  First pass seemed to be fine. 
-        // after i return to the main menu I can't select three again.  just keeps looping.  other choices work on second pass
         public void runUserFilledConstructorTest() {
             String name = "";
             String studentNumber = "";
@@ -127,7 +129,7 @@ public class Lab4 {
                 if (creditHours == 0) {
                     continue;
                 }
-                courses = Student.buildDefaultCourseList(creditHours);
+                courses = Course.buildDefaultCourseList(creditHours);
                 loopRunner = true;
                 System.out.println("\nPlease enter the students 3 letter residential status code by refering to the following list of options");
                 System.out.println("'INC' -> In County");
@@ -138,7 +140,9 @@ public class Lab4 {
                     continue;
                 }
                 System.out.println("\nHere are the details for the student you just created\n");
-                System.out.println(new Student(name, studentNumber, courses, residentialStatus).getDetailsAsString());
+                Student student = new Student(name, studentNumber, courses, residentialStatus);
+                System.out.println(student.getDetailsAsString());
+                System.out.println(student.getCourseList());
                 
                 System.out.println("\nPress enter to Continue\n");
                 myScanner.nextLine();
@@ -159,14 +163,16 @@ public class Lab4 {
                 if ("exit".equals(studentNumber.toLowerCase())) {
                     continue;
                 }
-                System.out.println("\nPlease enter the Students credit hours (A whole number between 1 and 22 inclusive");
+                System.out.println("\nPlease enter the Students credit hours (A whole number between 0 and 22 inclusive");
                 creditHours = verifyCreditHourInput(loopRunner);
                 if (creditHours == 0) {
                     continue;
                 }
-                courses = Student.buildDefaultCourseList(creditHours);
+                courses = Course.buildDefaultCourseList(creditHours);
                 System.out.println("\nHere are the details for the student you just created\n");
-                System.out.println(new Student(name, studentNumber, courses).getDetailsAsString());
+                Student student2 = new Student(name, studentNumber, courses);
+                System.out.println(student2.getDetailsAsString());
+                System.out.println(student2.getCourseList());
 
                 System.out.println("\nPress enter to return to the main menu\n");
                 myScanner.nextLine();
@@ -174,7 +180,7 @@ public class Lab4 {
             }
         }
 
-        public void runCourseAddingTest() {
+        public void runCourseClassTest() {
             //this test will allow the user to add courses to a student 
         }
 
@@ -242,7 +248,7 @@ public class Lab4 {
                 } catch (final Exception e) {
                     System.out.println("\nPlease enter a number between 1 and 22 inclusive.  Try Again");
                 }
-                if (convertedInput < 1
+                if (convertedInput < 0
                         || convertedInput > 22) {
                     System.out.println("\nPlease enter a positive number between 1 and 22 inclusive.  Try Again");
                     continue;
