@@ -11,30 +11,30 @@ public class Student {
 	
 	Student(){}
 
-	Student(String name, String studentNumber, ArrayList<Course> courses, String residencyCode) {
+	Student(String name, String studentNumber, ArrayList<Course> courses, ResidentialCodes residencyCode) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.residencyCode = residencyCode;
+		this.residencyCode = residencyCode.toString();
 		this.courses = courses;
 	}
 
 	Student(String name, String studentNumber, ArrayList<Course> courses) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.residencyCode = "INC";
+		this.residencyCode = ResidentialCodes.INC.toString();
 		this.courses = courses;
 	}
 
-	Student(String name, String studentNumber, String residencyCode) {
+	Student(String name, String studentNumber, ResidentialCodes residencyCode) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.residencyCode = residencyCode;
+		this.residencyCode = residencyCode.toString();
 	}
 
 	Student(String name, String studentNumber) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.residencyCode = "INC";
+		this.residencyCode = ResidentialCodes.INC.toString();
 	}
 
 	public String getResidencyCode() {
@@ -80,9 +80,9 @@ public class Student {
 	}
 
     public Double getTuition() {
-        double baseRate = this.residencyCode.equals("INC") ? TuitionRates.getInCountyBaseRate()
-                        : this.residencyCode.equals("OOC") ? TuitionRates.getOutOfCountyBaseRate()
-                        : this.residencyCode.equals("OOS") ? TuitionRates.getOutOfStateBaseRate()
+        double baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
+                        : this.residencyCode.equals(ResidentialCodes.OOC.toString()) ? TuitionRates.getOutOfCountyBaseRate()
+                        : this.residencyCode.equals(ResidentialCodes.OOS.toString()) ? TuitionRates.getOutOfStateBaseRate()
                                                            : 0.0;
         if (getCreditHours() <= 13) {
             return baseRate * getCreditHours();
@@ -156,4 +156,43 @@ public class Student {
 		return MyUtilities.getRandomStringFromArray(firstNames) + " " + MyUtilities.getRandomStringFromArray(lastNames);
 			
 	}
+
+	public static enum ResidentialCodes {
+        INC(1),
+        OOC(2),
+		OOS(3);
+		private int value;
+
+		private ResidentialCodes(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public static ResidentialCodes getResidentialCodeById(int id) {
+
+			ResidentialCodes code = null;
+
+			switch (id) {
+				case 1:
+					code = INC;
+					break;
+
+				case 2:
+					code = OOC;
+					break;
+
+				case 3:
+					code = OOS;
+					break;	
+			
+				default:
+					break;
+			}
+
+			return code;
+		}
+    }
 }

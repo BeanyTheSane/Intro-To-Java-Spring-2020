@@ -60,9 +60,9 @@ public class Lab4 {
                 final Student inCountyStudent = new Student();
                 final Student outOfCountyStudent = new Student();
                 final Student outOfStateStudent = new Student();
-                inCountyStudent.buildRandomPerson(ResidentialCodes.INC.toString(), i);
-                outOfCountyStudent.buildRandomPerson(ResidentialCodes.OOC.toString(), i);
-                outOfStateStudent.buildRandomPerson(ResidentialCodes.OOS.toString(), i);
+                inCountyStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), i);
+                outOfCountyStudent.buildRandomPerson(Student.ResidentialCodes.OOC.toString(), i);
+                outOfStateStudent.buildRandomPerson(Student.ResidentialCodes.OOS.toString(), i);
     
                 System.out.println(inCountyStudent.getDetailsAsString());
                 System.out.println(outOfCountyStudent.getDetailsAsString());
@@ -73,18 +73,18 @@ public class Lab4 {
             myScanner.nextLine();
         }
 
-
-        //this is broken getting a nullpointer error somewhere
         public void runAutoFilledConstructorTest() {
-            final Student constructorTest1 = new Student("Cloud Strife", "999999", ResidentialCodes.INC.toString());
-            final Student constructorTest2 = new Student("Cait Sith", "777777", ResidentialCodes.OOS.toString());
-            final Student constructorTest3 = new Student("Tifa Lockhart", "444444", ResidentialCodes.OOC.toString());
+            final Student constructorTest1 = new Student("Cloud Strife", "999999", Student.ResidentialCodes.getResidentialCodeById(1));
+            final Student constructorTest2 = new Student("Cait Sith", "777777", Student.ResidentialCodes.getResidentialCodeById(2));
+            final Student constructorTest3 = new Student("Tifa Lockhart", "444444", Student.ResidentialCodes.getResidentialCodeById(3));
             final Student constructorTest4 = new Student("Aerith Gainsborogh", "111111");
+            final Student constructorTest5 = new Student("Barret Wallace", "123456");
 
             constructorTest1.addCourseList(Course.buildDefaultCourseList(19));
             constructorTest2.addCourseList(Course.buildDefaultCourseList(12));
             constructorTest3.addCourseList(Course.buildDefaultCourseList(4));
             constructorTest4.addCourseList(Course.buildDefaultCourseList(1));
+            constructorTest5.addCourseList(Course.buildDefaultCourseList(0));
     
             System.out.println("\nThe following Students are created using the new constructors and course lists\n");
             System.out.println(constructorTest1.getDetailsAsString());
@@ -95,6 +95,8 @@ public class Lab4 {
             System.out.println(constructorTest3.getCourseList());
             System.out.println(constructorTest4.getDetailsAsString());
             System.out.println(constructorTest4.getCourseList());
+            System.out.println(constructorTest5.getDetailsAsString());
+            System.out.println(constructorTest5.getCourseList());
             System.out.println("\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
@@ -103,7 +105,7 @@ public class Lab4 {
             String name = "";
             String studentNumber = "";
             int creditHours = 0;
-            String residentialStatus = "";
+            int residentialStatus = 0;
             ArrayList<Course> courses = new ArrayList<>();
 
             testIsRunning = true;
@@ -131,16 +133,17 @@ public class Lab4 {
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
                 loopRunner = true;
-                System.out.println("\nPlease enter the students 3 letter residential status code by refering to the following list of options");
-                System.out.println("'INC' -> In County");
-                System.out.println("'OOC' -> Out Of County");
-                System.out.println("'OOS' -> Out Of State");
+                System.out.println("\nPlease select a residential status from the following list of options by entering the corresponding number");
+                System.out.println("1.) 'INC' -> In County");
+                System.out.println("2.) 'OOC' -> Out Of County");
+                System.out.println("3.) 'OOS' -> Out Of State");
                 residentialStatus = verifyResidentialStatusInput(loopRunner);
-                if ("exit".equals(residentialStatus.toLowerCase())) {
+                if (residentialStatus == -1) {
                     continue;
                 }
                 System.out.println("\nHere are the details for the student you just created\n");
-                Student student = new Student(name, studentNumber, courses, residentialStatus);
+                Student.ResidentialCodes code = Student.ResidentialCodes.getResidentialCodeById(residentialStatus);
+                Student student = new Student(name, studentNumber, courses, code);
                 System.out.println(student.getDetailsAsString());
                 System.out.println(student.getCourseList());
                 
@@ -150,7 +153,7 @@ public class Lab4 {
                 name = "";
                 studentNumber = "";
                 creditHours = 0;
-                residentialStatus = "";
+                residentialStatus = 0;
 
                 System.out.println("Now we will test the constructor that sets the default Residential Status to 'INC'");
                 System.out.println("\nPlease enter the Students full name");
@@ -246,11 +249,11 @@ public class Lab4 {
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);
                 } catch (final Exception e) {
-                    System.out.println("\nPlease enter a number between 1 and 22 inclusive.  Try Again");
+                    System.out.println("\nPlease enter a number between 0 and 22 inclusive.  Try Again");
                 }
                 if (convertedInput < 0
                         || convertedInput > 22) {
-                    System.out.println("\nPlease enter a positive number between 1 and 22 inclusive.  Try Again");
+                    System.out.println("\nPlease enter a positive number between 0 and 22 inclusive.  Try Again");
                     continue;
                 }
                 loopRunner = false;
@@ -258,33 +261,27 @@ public class Lab4 {
             return convertedInput;
         }
 
-        public String verifyResidentialStatusInput(boolean loopRunner) {
+        public int verifyResidentialStatusInput(boolean loopRunner) {
             String inputToVerify = "";
+            int convertedInput = 0;
             while(loopRunner) {
-                inputToVerify = myScanner.nextLine().toUpperCase();
+                inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
-                    return "exit";
+                    return -1;
                 }
-                if ("".equals(inputToVerify)) {
-                    System.out.println("\nThe Residential Status cannot be blank.  Try Again");
+                try {
+                    convertedInput = Integer.parseInt(inputToVerify);
+                } catch (final Exception e) {
+                    System.out.println("\nPlease enter the number that corresponds to te residential code you want to select.");
                     continue;
                 }
-                if (ResidentialCodes.INC.toString().equals(inputToVerify)
-                        || ResidentialCodes.OOC.toString().equals(inputToVerify)
-                        || ResidentialCodes.OOS.toString().equals(inputToVerify)) {
-                    loopRunner = false;
-                } else {
-                    System.out.println("\nThe Residential Status must be a 3 letter code from the provided list.  Try Again");
+                if (convertedInput < 1 || convertedInput > 3) {
+                    System.out.println("\nPlease enter the number that corresponds to te residential code you want to select.");
                     continue;
                 }
+                loopRunner = false;
             }
-            return inputToVerify;
+            return convertedInput;
         }
-    }
-
-    enum ResidentialCodes {
-        INC,
-        OOC,
-        OOS
     }
 }
