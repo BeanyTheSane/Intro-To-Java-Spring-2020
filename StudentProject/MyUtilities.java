@@ -28,8 +28,8 @@ public class MyUtilities {
     }
 
     //generates a random number of the given length
-    public static Long generateRandomNumber(int n) {
-        long min = (long) Math.pow(10, n - 1);
+    public static Long generateRandomNumber(int length) {
+        long min = (long) Math.pow(10, length - 1);
         return ThreadLocalRandom.current().nextLong(min, min * 10);
     }
 }
