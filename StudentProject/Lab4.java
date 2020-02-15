@@ -11,12 +11,13 @@ public class Lab4 {
         
         while(interfaceRunning) {
             String mainMenuChoice = "";
-            System.out.println("What would you like to do?");
-            System.out.println("1.)  Run Full Tuition Chart Test");
-            System.out.println("2.)  Run Auto Filled Constructor Test");
-            System.out.println("3.)  Run User Filled Constructor Test");
-            System.out.println("4.)  Run Course Class Test");
-            System.out.println("0.)  Exit the Program");
+            //TODO add intro to program
+            System.out.println("\nWhat would you like to do?");
+            System.out.println("    1.)  Run Full Tuition Chart Test");
+            System.out.println("    2.)  Run Auto Filled Constructor Test");
+            System.out.println("    3.)  Run User Filled Constructor Test");
+            System.out.println("    4.)  Run Course Class Test");
+            System.out.println("    0.)  Exit the Program");
             System.out.println("Please Enter The Number of Your Selection...");
             mainMenuChoice = myScanner.nextLine();
             switch (mainMenuChoice) {
@@ -53,6 +54,8 @@ public class Lab4 {
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
         final int testCaseLimit = 22;//general max number of credit hours reccomended
+        final int minCreditHourPerCourse = 1;
+        final int maxCreditHourPerCourse = 5;
 
         public void runTuitionChartTest() {
             
@@ -135,9 +138,9 @@ public class Lab4 {
                 courses = Course.buildDefaultCourseList(creditHours);
                 loopRunner = true;
                 System.out.println("\nPlease select a residential status from the following list of options by entering the corresponding number");
-                System.out.println("1.) 'INC' -> In County");
-                System.out.println("2.) 'OOC' -> Out Of County");
-                System.out.println("3.) 'OOS' -> Out Of State");
+                System.out.println("    1.) 'INC' -> In County");
+                System.out.println("    2.) 'OOC' -> Out Of County");
+                System.out.println("    3.) 'OOS' -> Out Of State");
                 residentialStatus = verifyResidentialStatusInput(loopRunner);
                 if (residentialStatus == -1) {
                     continue;
@@ -190,9 +193,9 @@ public class Lab4 {
             while (courseInterfaceRunning) {
                 System.out.println("\nYou can test the new Course class by adding and viewing courses for a student");
                 System.out.println("Please select the task you would like to perform");
-                System.out.println("1.) Add courses one by one then view the details");
-                System.out.println("2.) Run automated test with default courses added");
-                System.out.println("0.) Return to The previous menu");
+                System.out.println("    1.) Add courses one by one then view the details");
+                System.out.println("    2.) Run automated test with default courses added");
+                System.out.println("    0.) Return to The previous menu");
                 System.out.println("Please Enter The Number of Your Selection...");
                 courseTestChoice = myScanner.nextLine();
                 switch (courseTestChoice) {
@@ -219,6 +222,8 @@ public class Lab4 {
             testIsRunning = true;
             String courseId = "";
             String courseName = "";
+            String userChoice = ""; 
+            boolean confirmChoice = true;
             int creditHours = -1;
             int creditHourSum = 0;
             int creditHourDiff = 0;
@@ -227,9 +232,9 @@ public class Lab4 {
             
             courseTestStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), 0);
 
-            System.out.println("\nThis test allows you to manually create courses and add them to a students record, \nthen view the students full details");
-            System.out.println("Type in exit at any time to return to the main menu");
-            System.out.println("There is a limit of " + testCaseLimit + " credit hours total per student\n");
+            System.out.println("\nThis test allows you to manually create courses and add them to a students record");
+            System.out.println("  Type in 'exit' at any time to return to the previous menu");
+            System.out.println("    There is a limit of " + testCaseLimit + " credit hours total per student\n");
 
             while (testIsRunning) {
                 loopRunner = true;
@@ -254,13 +259,64 @@ public class Lab4 {
                     creditHourDiff = (creditHourSum + creditHours) - testCaseLimit;
                     System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours.");
                     System.out.println("\nPlease re-enter the course with less credit hours or finalize the list");
-                    continue;
+                    System.out.println("Enter 'r' to re-enter this course with less credit hours");
+                    System.out.println("Enter 's' to skip adding this course and proceed");
+                    userChoice = myScanner.nextLine();
+                    if ("r".equals(userChoice)) {
+                        continue;
+                    }
+                    if ("s".equals(userChoice)) {//TODO doesnt show details anymore. the confiration to build or add needs refactored and called here
+                        testIsRunning = false;
+                        continue;
+                    }
                 }
-                creditHourSum += creditHours;
-                courses.add(new Course(courseId, courseName, creditHours)); 
-//need to add some way to break off early   when user wishes it.
+
+                confirmChoice = true;
+				while (confirmChoice) {
+                    System.out.println("    Course ID: " + courseId);
+                    System.out.println("    Course Namme: " + courseName);
+                    System.out.println("    Credit Hours: " + creditHours);
+                    System.out.println("Are you sure you want to add this course? [y]es, [n]o");
+
+                    userChoice = myScanner.nextLine();
+
+                    if ("y".equals(userChoice)) {
+                        creditHourSum += creditHours;
+                        courses.add(new Course(courseId, courseName, creditHours));
+                        System.out.println("You have successfully added " + courseName + "\n");
+                        break;
+                    }
+                    if ("n".equals(userChoice)) {
+                        break;
+                    }
+                    System.out.println("Enter y to add this course or n to re-enter the details for this course\n");
+                }
+                
+                confirmChoice = true;
+                while (confirmChoice) {
+                    System.out.println("Current course list:");
+                    for (Course course : courses) {
+                        System.out.println("    " + course.getCourseDetailsAsString());
+                    }
+                    System.out.println("\nEnter 'b' to build the student with this course list");
+                    System.out.println("Enter 'a' to add another course");
+                    userChoice = myScanner.nextLine();
+
+                    if ("b".equals(userChoice)) {
+                        courseTestStudent.addCourseList(courses);
+                        System.out.println("These are the Details for the student and their new course list\n");
+                        System.out.println(courseTestStudent.getDetailsAsString());
+                        System.out.println("    " + courseTestStudent.getCourseList());
+                        System.out.println("Press enter to continue");
+                        myScanner.nextLine();
+                        testIsRunning = false;
+                        break;
+                    }
+                    if ("a".equals(userChoice)) {
+                        break;
+                    }
+                }
             }
-            courseTestStudent.addCourseList(courses);
         }
 
         private int verifycreditHoursInput(boolean loopRunner) {
@@ -273,15 +329,24 @@ public class Lab4 {
                 }
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);
+
+                    if (convertedInput < minCreditHourPerCourse
+                        || convertedInput > maxCreditHourPerCourse) {
+                        System.out.println("\nPlease enter a number between " 
+                                        + minCreditHourPerCourse 
+                                        + " and " 
+                                        + maxCreditHourPerCourse 
+                                        + " inclusive.  Try Again");
+                        continue;
+                    }
+                    loopRunner = false;
                 } catch (final Exception e) {
-                    System.out.println("\nPlease enter a number between 1 and 5 inclusive.  Try Again");
+                    System.out.println("\nPlease enter a number between " 
+                                        + minCreditHourPerCourse 
+                                        + " and " 
+                                        + maxCreditHourPerCourse 
+                                        + " inclusive.  Try Again");
                 }
-                if (convertedInput < 0
-                        || convertedInput > 22) {
-                    System.out.println("\nPlease enter a number between 1 and 5 inclusive.  Try Again");
-                    continue;
-                }
-                loopRunner = false;
             }
             return convertedInput;
         }
