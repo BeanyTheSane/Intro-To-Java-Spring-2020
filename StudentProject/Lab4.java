@@ -11,7 +11,7 @@ public class Lab4 {
         
         while(interfaceRunning) {
             String mainMenuChoice = "";
-            //TODO add intro to program
+            //TODO add intro to program.  run program in fullscreen for best effect
             System.out.println("\nWhat would you like to do?");
             System.out.println("    1.)  Run Full Tuition Chart Test");
             System.out.println("    2.)  Run Auto Filled Constructor Test");
