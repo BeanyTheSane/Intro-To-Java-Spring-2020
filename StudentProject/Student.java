@@ -100,6 +100,14 @@ public class Student {
 		this.courses = Course.buildDefaultCourseList(creditHours);
 			
 	}
+	
+	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = courses;
+			
+	}
 
 	public String getDetailsAsString() {
 		Locale locale = new Locale("en", "US");

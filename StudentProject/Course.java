@@ -8,6 +8,12 @@ public class Course {
 
     Course(){}
 
+    Course(String courseId, String courseName, int creditHours) {
+        this.courseId = courseId;
+        this.courseName = courseName;
+        this.creditHours = creditHours;
+    }
+
     public String getCourseId() {
         return this.courseId;
     }

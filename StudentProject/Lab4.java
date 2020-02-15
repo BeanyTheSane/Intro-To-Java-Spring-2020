@@ -52,9 +52,10 @@ public class Lab4 {
         boolean testIsRunning = true;
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
+        final int testCaseLimit = 22;//general max number of credit hours reccomended
 
         public void runTuitionChartTest() {
-            final int testCaseLimit = 22;//general max number of credit hours reccomended
+            
     
             for (int i = 1; i <= testCaseLimit; i++) {
                 final Student inCountyStudent = new Student();
@@ -213,17 +214,24 @@ public class Lab4 {
             }
 
         }
-
-        private void runAddCoursesAutomaticallyTest() {
+        
+        private void runAddCoursesManuallyTest() {
             testIsRunning = true;
             String courseId = "";
             String courseName = "";
             int creditHours = -1;
+            int creditHourSum = 0;
+            int creditHourDiff = 0;
+            Student courseTestStudent = new Student();
+            ArrayList<Course> courses = new ArrayList<>();
+            
+            courseTestStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), 0);
+
+            System.out.println("\nThis test allows you to manually create courses and add them to a students record, \nthen view the students full details");
+            System.out.println("Type in exit at any time to return to the main menu");
+            System.out.println("There is a limit of " + testCaseLimit + " credit hours total per student\n");
 
             while (testIsRunning) {
-                System.out.println("\nThis test allows you to manually create courses and add them to a students record, \nthen view the students full details");
-                System.out.println("Type in exit at any time to return to the main menu\n");
-                //need to take all parameters in.  below is a model.
                 loopRunner = true;
                 System.out.println("\nPlease enter a 3 digit number for the course ID");
                 courseId = verifyCourseIdInput(loopRunner);
@@ -237,31 +245,90 @@ public class Lab4 {
                     continue;
                 }
                 loopRunner = true;
-                System.out.println("\nPlease enter a number 1 through 6 for the credit hours");
+                System.out.println("\nPlease enter a number 1 through 5 for the credit hours");
                 creditHours = verifycreditHoursInput(loopRunner);
                 if (creditHours == -1) {
                     continue;
                 }
-
+                if ((creditHourSum + creditHours) > testCaseLimit) {
+                    creditHourDiff = (creditHourSum + creditHours) - testCaseLimit;
+                    System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours.");
+                    System.out.println("\nPlease re-enter the course with less credit hours or finalize the list");
+                    continue;
+                }
+                creditHourSum += creditHours;
+                courses.add(new Course(courseId, courseName, creditHours)); 
+//need to add some way to break off early   when user wishes it.
             }
+            courseTestStudent.addCourseList(courses);
         }
 
-        private int verifycreditHoursInput(boolean loopRunner2) {
+        private int verifycreditHoursInput(boolean loopRunner) {
+            String inputToVerify = "";
+            int convertedInput = 0;
+            while(loopRunner) {
+                inputToVerify = myScanner.nextLine();
+                if (returnToMainMenu(inputToVerify)) {
+                    return -1;
+                }
+                try {
+                    convertedInput = Integer.parseInt(inputToVerify);
+                } catch (final Exception e) {
+                    System.out.println("\nPlease enter a number between 1 and 5 inclusive.  Try Again");
+                }
+                if (convertedInput < 0
+                        || convertedInput > 22) {
+                    System.out.println("\nPlease enter a number between 1 and 5 inclusive.  Try Again");
+                    continue;
+                }
+                loopRunner = false;
+            }
+            return convertedInput;
+        }
+
+        private String verifyCourseNameInput(boolean loopRunner) {
+            String inputToVerify = "";
+            while(loopRunner) {
+                inputToVerify = myScanner.nextLine();
+                if (returnToMainMenu(inputToVerify)) {
+                    return "exit";
+                }
+                if ("".equals(inputToVerify)) {
+                    System.out.println("\nThe name cannot be blank.  Try Again");
+                    continue;
+                }
+                if (inputToVerify.length() > 32) {
+                    System.out.println("\nPlease limit names to less than 32 characters for this test.  Try Again");
+                    continue;
+                }
+                loopRunner = false;
+            }
+            return inputToVerify;
+        }
+
+        private String verifyCourseIdInput(boolean loopRunner) {
+            String inputToVerify = "";
+            final Pattern threeDigitNumberRegex = Pattern.compile("[0-9]{3}");
+            while(loopRunner) {
+                inputToVerify = myScanner.nextLine();
+                if (returnToMainMenu(inputToVerify)) {
+                    return "exit";
+                }
+                if ("".equals(inputToVerify)) {
+                    System.out.println("\nThe id cannot be blank.  Try Again");
+                    continue;
+                }
+                if (!threeDigitNumberRegex.matcher(inputToVerify).matches()) {
+                    System.out.println("\nThe ID must be 3 digits long.  Try Again");
+                    continue;
+                }
+                loopRunner = false;
+            }
+            return inputToVerify;
+        }
+
+        private void runAddCoursesAutomaticallyTest() {
             //TODO
-            return 0;
-        }
-
-        private String verifyCourseNameInput(boolean loopRunner2) {
-            //TODO
-            return null;
-        }
-
-        private String verifyCourseIdInput(boolean loopRunner2) {
-            //TODO
-            return null;
-        }
-
-        private void runAddCoursesManuallyTest() {
         }
 
         private boolean returnToMainMenu(final String command) {
@@ -296,7 +363,6 @@ public class Lab4 {
         private String verifyStudentNumberInput(boolean loopRunner) {
             String inputToVerify = "";
             final Pattern sixDigitNumberRegex = Pattern.compile("[0-9]{6}");
-
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
