@@ -216,19 +216,49 @@ public class Lab4 {
 
         private void runAddCoursesAutomaticallyTest() {
             testIsRunning = true;
+            String courseId = "";
+            String courseName = "";
+            int creditHours = -1;
 
             while (testIsRunning) {
                 System.out.println("\nThis test allows you to manually create courses and add them to a students record, \nthen view the students full details");
                 System.out.println("Type in exit at any time to return to the main menu\n");
-                //need to take all parameters in.  below is an unfinished model.
+                //need to take all parameters in.  below is a model.
                 loopRunner = true;
-                System.out.println("\nPlease enter the course ID");
-                name = verifyNameInput(loopRunner);
-                if ("exit".equals(name.toLowerCase())) {
+                System.out.println("\nPlease enter a 3 digit number for the course ID");
+                courseId = verifyCourseIdInput(loopRunner);
+                if ("exit".equals(courseId.toLowerCase())) {
+                    continue;
+                }
+                loopRunner = true;
+                System.out.println("\nPlease enter the course name");
+                courseName = verifyCourseNameInput(loopRunner);
+                if ("exit".equals(courseName.toLowerCase())) {
+                    continue;
+                }
+                loopRunner = true;
+                System.out.println("\nPlease enter a number 1 through 6 for the credit hours");
+                creditHours = verifycreditHoursInput(loopRunner);
+                if (creditHours == -1) {
                     continue;
                 }
 
             }
+        }
+
+        private int verifycreditHoursInput(boolean loopRunner2) {
+            //TODO
+            return 0;
+        }
+
+        private String verifyCourseNameInput(boolean loopRunner2) {
+            //TODO
+            return null;
+        }
+
+        private String verifyCourseIdInput(boolean loopRunner2) {
+            //TODO
+            return null;
         }
 
         private void runAddCoursesManuallyTest() {
