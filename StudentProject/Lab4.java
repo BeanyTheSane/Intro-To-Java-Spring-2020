@@ -12,7 +12,8 @@ public class Lab4 {
         while(interfaceRunning) {
             String mainMenuChoice = "";
             //TODO add intro to program.  run program in fullscreen for best effect
-            System.out.println("\nWhat would you like to do?");
+            
+            System.out.println("\n");
             System.out.println("    1.)  Run Full Tuition Chart Test");
             System.out.println("    2.)  Run Auto Filled Constructor Test");
             System.out.println("    3.)  Run User Filled Constructor Test");
@@ -56,6 +57,7 @@ public class Lab4 {
         final int testCaseLimit = 22;//general max number of credit hours reccomended
         final int minCreditHourPerCourse = 1;
         final int maxCreditHourPerCourse = 5;
+//TODO add seperator lines to make console items stand out.  make a variable and drop it where needed
 
         public void runTuitionChartTest() {
             
@@ -192,7 +194,6 @@ public class Lab4 {
             boolean courseInterfaceRunning = true;
             while (courseInterfaceRunning) {
                 System.out.println("\nYou can test the new Course class by adding and viewing courses for a student");
-                System.out.println("Please select the task you would like to perform");
                 System.out.println("    1.) Add courses one by one then view the details");
                 System.out.println("    2.) Run automated test with default courses added");
                 System.out.println("    0.) Return to The previous menu");
@@ -258,15 +259,15 @@ public class Lab4 {
                 if ((creditHourSum + creditHours) > testCaseLimit) {
                     creditHourDiff = (creditHourSum + creditHours) - testCaseLimit;
                     System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours.");
-                    System.out.println("\nPlease re-enter the course with less credit hours or finalize the list");
-                    System.out.println("Enter 'r' to re-enter this course with less credit hours");
-                    System.out.println("Enter 's' to skip adding this course and proceed");
+                    System.out.println("  Please re-enter the course with less credit hours or finalize the list");
+                    System.out.println("    Enter 'r' to re-enter this course with less credit hours");
+                    System.out.println("    Enter 's' to skip adding this course and proceed");
                     userChoice = myScanner.nextLine();
                     if ("r".equals(userChoice)) {
                         continue;
                     }
-                    if ("s".equals(userChoice)) {//TODO doesnt show details anymore. the confiration to build or add needs refactored and called here
-                        testIsRunning = false;
+                    if ("s".equals(userChoice)) {
+                        buildOrAddMoreCourses(courseTestStudent, courses);
                         continue;
                     }
                 }
@@ -293,28 +294,38 @@ public class Lab4 {
                 }
                 
                 confirmChoice = true;
-                while (confirmChoice) {
-                    System.out.println("Current course list:");
-                    for (Course course : courses) {
-                        System.out.println("    " + course.getCourseDetailsAsString());
-                    }
-                    System.out.println("\nEnter 'b' to build the student with this course list");
-                    System.out.println("Enter 'a' to add another course");
-                    userChoice = myScanner.nextLine();
+                buildOrAddMoreCourses(courseTestStudent, courses);
+            }
+        }
 
-                    if ("b".equals(userChoice)) {
-                        courseTestStudent.addCourseList(courses);
-                        System.out.println("These are the Details for the student and their new course list\n");
-                        System.out.println(courseTestStudent.getDetailsAsString());
-                        System.out.println("    " + courseTestStudent.getCourseList());
-                        System.out.println("Press enter to continue");
-                        myScanner.nextLine();
-                        testIsRunning = false;
-                        break;
-                    }
-                    if ("a".equals(userChoice)) {
-                        break;
-                    }
+        private void buildOrAddMoreCourses(Student courseTestStudent, ArrayList<Course> courses) {
+            boolean confirmChoice = true;
+            String userChoice;
+            int totalCreditHours = 0;
+            while (confirmChoice) {
+                System.out.println("Current course list:");
+                totalCreditHours = 0;
+                for (Course course : courses) {
+                    System.out.println("    " + course.getCourseDetailsAsString());
+                    totalCreditHours += course.getCreditHours();
+                }
+                System.out.println("Total Credit Hours: " + totalCreditHours);
+                System.out.println("\nEnter 'b' to build the student with this course list");
+                System.out.println("Enter 'a' to add another course");
+                userChoice = myScanner.nextLine();
+
+                if ("b".equals(userChoice)) {
+                    courseTestStudent.addCourseList(courses);
+                    System.out.println("These are the Details for the student and their new course list\n");
+                    System.out.println(courseTestStudent.getDetailsAsString());
+                    System.out.println("    " + courseTestStudent.getCourseList());
+                    System.out.println("Press enter to continue");
+                    myScanner.nextLine();
+                    testIsRunning = false;
+                    break;
+                }
+                if ("a".equals(userChoice)) {
+                    break;
                 }
             }
         }
