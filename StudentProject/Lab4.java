@@ -1,3 +1,4 @@
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -360,6 +361,26 @@ public class Lab4 {
                 }
             }
             return convertedInput;
+        }
+
+        private String verifyStringInput(boolean loopRunner, StringInput inputType) {
+            String inputToVerify = "";
+            while(loopRunner) {
+                inputToVerify = myScanner.nextLine();
+                if (returnToMainMenu(inputToVerify)) {
+                    return "exit";
+                }
+                if ("".equals(inputToVerify)) {
+                    System.out.println("\nThe " + inputType.getName() + " cannot be blank.  Try Again");
+                    continue;
+                }
+                if (inputToVerify.length() > inputType.getMaxLength()) {//TODO make  field or method or something on the StringInput Object so we can call it here
+                    System.out.println("\nPlease limit names to less than " + inputType.getMaxLength() + " characters for this test.  Try Again"); //this whole message my need to be on the StringInput object.
+                    continue;
+                }
+                loopRunner = false;
+            }
+            return inputToVerify;
         }
 
         private String verifyCourseNameInput(boolean loopRunner) {
