@@ -1,4 +1,3 @@
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -363,6 +362,7 @@ public class Lab4 {
             return convertedInput;
         }
 
+        //TODO finish this generic method and build a simliar one for integers
         private String verifyStringInput(boolean loopRunner, StringInput inputType) {
             String inputToVerify = "";
             while(loopRunner) {
@@ -374,10 +374,7 @@ public class Lab4 {
                     System.out.println("\nThe " + inputType.getName() + " cannot be blank.  Try Again");
                     continue;
                 }
-                if (inputToVerify.length() > inputType.getMaxLength()) {//TODO make  field or method or something on the StringInput Object so we can call it here
-                    System.out.println("\nPlease limit names to less than " + inputType.getMaxLength() + " characters for this test.  Try Again"); //this whole message my need to be on the StringInput object.
-                    continue;
-                }
+                //one check using regex ang display error messagwe
                 loopRunner = false;
             }
             return inputToVerify;
@@ -425,7 +422,7 @@ public class Lab4 {
         }
 
         private void runAddCoursesAutomaticallyTest() {
-            //TODO
+            //TODO build the auto test still
         }
 
         private boolean returnToMainMenu(final String command) {
