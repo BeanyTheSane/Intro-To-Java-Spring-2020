@@ -6,17 +6,19 @@ public class Lab4 {
 
     public static void main(final String[] args) {
         final Scanner myScanner = new Scanner(System.in);
-        boolean interfaceRunning = true;
         final TestScenarios constructorTest = new TestScenarios();
+        final String styledSeperator = "<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>";
+        boolean interfaceRunning = true;
 
-
-        //TODO add intro to program.  run program in fullscreen for best effect
-        System.out.println("CISS 226"
+        System.out.println(styledSeperator
+                          +"\nCISS 226"
                           + "\nLab 4"
                           + "\nAdam Knitter"
                           + "\nThis version now contains two tests for the new course class"
+                          + "\n(Select option '4' on the main menu)"
                           + "\nas well as all of the previous tests"
-                          + "\nPlease run this full screen for best results"  
+                          + "\nPlease run this full screen for best results" 
+                          + "\n" + styledSeperator 
                           + "\nPress enter to begin");
                           myScanner.nextLine();
         
@@ -24,11 +26,14 @@ public class Lab4 {
             String mainMenuChoice = "";
 
             System.out.println("\n"
+                                + "\n Welcome to the Student App Test Interface"
+                                + "\n" + styledSeperator
                                 + "\n    1.)  Run Full Tuition Chart Test"
                                 + "\n    2.)  Run Auto Filled Constructor Test"
                                 + "\n    3.)  Run User Filled Constructor Test"
                                 + "\n    4.)  Run Course Class Test"
                                 + "\n    0.)  Exit the Program"
+                                + "\n" + styledSeperator
                                 + "\nPlease Enter The Number of Your Selection...");
             mainMenuChoice = myScanner.nextLine();
             switch (mainMenuChoice) {
@@ -65,6 +70,7 @@ public class Lab4 {
         boolean testIsRunning = true;
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
+        final String styledSeperator = "<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>";
         final int testCaseLimit = 22;//general max number of credit hours reccomended
         final int minCreditHourPerCourse = 1;
         final int maxCreditHourPerCourse = 5;
@@ -82,7 +88,7 @@ public class Lab4 {
 
         public void runTuitionChartTest() {
             
-    
+            System.out.println(styledSeperator);
             for (int i = 1; i <= testCaseLimit; i++) {
                 final Student inCountyStudent = new Student();
                 final Student outOfCountyStudent = new Student();
@@ -96,6 +102,7 @@ public class Lab4 {
                                     + "\n" + outOfStateStudent.getDetailsAsString());
             }
             
+            System.out.println(styledSeperator);
             System.out.println("\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
@@ -114,6 +121,7 @@ public class Lab4 {
             constructorTest5.addCourseList(Course.buildDefaultCourseList(0));
     
             System.out.println("\nThe following Students are created using the new constructors and course lists\n"
+                                + "\n" + styledSeperator
                                 + "\n" + constructorTest1.getDetailsAsString()
                                 + "\n" + constructorTest1.getCourseList()
                                 + "\n" + constructorTest2.getDetailsAsString()
@@ -124,6 +132,7 @@ public class Lab4 {
                                 + "\n" + constructorTest4.getCourseList()
                                 + "\n" + constructorTest5.getDetailsAsString()
                                 + "\n" + constructorTest5.getCourseList()
+                                + "\n" + styledSeperator
                                 + "\n\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
@@ -137,7 +146,8 @@ public class Lab4 {
 
             testIsRunning = true;
             while (testIsRunning) {
-                System.out.println("\nYou can test the new constructors with your own criteria now"
+                System.out.println("\n" + styledSeperator
+                                    +"\nYou can test the new constructors with your own criteria now"
                                     + "\nType in exit at any time to return to the main menu\n"
                                     + "\nFirst we will test the constructor that accepts an input for all arguments");
                 loopRunner = true;
