@@ -8,11 +8,21 @@ public class Lab4 {
         final Scanner myScanner = new Scanner(System.in);
         boolean interfaceRunning = true;
         final TestScenarios constructorTest = new TestScenarios();
+
+
+        //TODO add intro to program.  run program in fullscreen for best effect
+        System.out.println("CISS 226"
+                          + "\nLab 4"
+                          + "\nAdam Knitter"
+                          + "\nThis version now contains two tests for the new course class"
+                          + "\nas well as all of the previous tests"
+                          + "\nPlease run this full screen for best results"  
+                          + "\nPress enter to begin");
+                          myScanner.nextLine();
         
         while(interfaceRunning) {
             String mainMenuChoice = "";
-            //TODO add intro to program.  run program in fullscreen for best effect
-            
+
             System.out.println("\n"
                                 + "\n    1.)  Run Full Tuition Chart Test"
                                 + "\n    2.)  Run Auto Filled Constructor Test"
