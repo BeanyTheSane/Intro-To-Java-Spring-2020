@@ -1,8 +1,13 @@
-public class StringInput {
+public class InputVerifierModel {
     private String name;
-    private int maxLength;
     private String regexPattern;
     private String errorMessage;
+    
+    public InputVerifierModel(String name, String regexPattern, String errorMessage) {
+        this.name = name;
+        this.regexPattern = regexPattern;
+        this.errorMessage = errorMessage;
+    }
 
     public String getErrorMessage() {
         return this.errorMessage;
@@ -24,16 +29,7 @@ public class StringInput {
         return this.name;
     }
 
-    public int getMaxLength() {
-        return this.maxLength;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
-
-    public void setMaxLength(int maxLength) {
-        this.maxLength = maxLength;
-    } 
-
 }

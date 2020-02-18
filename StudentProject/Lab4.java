@@ -13,13 +13,13 @@ public class Lab4 {
             String mainMenuChoice = "";
             //TODO add intro to program.  run program in fullscreen for best effect
             
-            System.out.println("\n");
-            System.out.println("    1.)  Run Full Tuition Chart Test");
-            System.out.println("    2.)  Run Auto Filled Constructor Test");
-            System.out.println("    3.)  Run User Filled Constructor Test");
-            System.out.println("    4.)  Run Course Class Test");
-            System.out.println("    0.)  Exit the Program");
-            System.out.println("Please Enter The Number of Your Selection...");
+            System.out.println("\n"
+                                + "\n    1.)  Run Full Tuition Chart Test"
+                                + "\n    2.)  Run Auto Filled Constructor Test"
+                                + "\n    3.)  Run User Filled Constructor Test"
+                                + "\n    4.)  Run Course Class Test"
+                                + "\n    0.)  Exit the Program"
+                                + "\nPlease Enter The Number of Your Selection...");
             mainMenuChoice = myScanner.nextLine();
             switch (mainMenuChoice) {
                 case "1":
@@ -51,13 +51,24 @@ public class Lab4 {
     }
 
     private static class TestScenarios {
+        //TODO add seperator lines to make console items stand out.  make a variable and drop it where needed
         boolean testIsRunning = true;
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
         final int testCaseLimit = 22;//general max number of credit hours reccomended
         final int minCreditHourPerCourse = 1;
         final int maxCreditHourPerCourse = 5;
-//TODO add seperator lines to make console items stand out.  make a variable and drop it where needed
+        String CreditHourPerCourseRegex = buildCreditHourPerCourseRegex();
+        InputVerifierModel nameVerifier = new InputVerifierModel("name", "^.{1,32}$", "\nPlease limit names to less than 32 characters for this test.  Try Again");
+        InputVerifierModel courseIdVerifier = new InputVerifierModel("Id", "^[0-9]{3}$", "\nThe ID must be 3 digits long.  Try Again");
+        InputVerifierModel studentNumberVerifier = new InputVerifierModel("Student Number", "^[0-9]{6}$", "\nPlease enter a 6 digit number.  Try Again");
+        InputVerifierModel residentialStatusVerifier = new InputVerifierModel("Residential Status", "^[1-3]{1}$", "\nPlease enter the number that corresponds to te residential code you want to select.");
+        InputVerifierModel creditHourVerifier = new InputVerifierModel("Credit Hour", "^([0-9]|[1-2][0-2])$", "\nPlease enter a number between 0 and 22 inclusive.  Try Again");
+        InputVerifierModel creditHourperClassVerifier = new InputVerifierModel("Credit Hour per Class", CreditHourPerCourseRegex, "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
+
+        private String buildCreditHourPerCourseRegex() {
+            return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "]$";
+        }
 
         public void runTuitionChartTest() {
             
@@ -70,9 +81,9 @@ public class Lab4 {
                 outOfCountyStudent.buildRandomPerson(Student.ResidentialCodes.OOC.toString(), i);
                 outOfStateStudent.buildRandomPerson(Student.ResidentialCodes.OOS.toString(), i);
     
-                System.out.println(inCountyStudent.getDetailsAsString());
-                System.out.println(outOfCountyStudent.getDetailsAsString());
-                System.out.println(outOfStateStudent.getDetailsAsString());
+                System.out.println(inCountyStudent.getDetailsAsString()
+                                    + "\n" + outOfCountyStudent.getDetailsAsString()
+                                    + "\n" + outOfStateStudent.getDetailsAsString());
             }
             
             System.out.println("\nPress enter to return to the main menu\n");
@@ -92,18 +103,18 @@ public class Lab4 {
             constructorTest4.addCourseList(Course.buildDefaultCourseList(1));
             constructorTest5.addCourseList(Course.buildDefaultCourseList(0));
     
-            System.out.println("\nThe following Students are created using the new constructors and course lists\n");
-            System.out.println(constructorTest1.getDetailsAsString());
-            System.out.println(constructorTest1.getCourseList());
-            System.out.println(constructorTest2.getDetailsAsString());
-            System.out.println(constructorTest2.getCourseList());
-            System.out.println(constructorTest3.getDetailsAsString());
-            System.out.println(constructorTest3.getCourseList());
-            System.out.println(constructorTest4.getDetailsAsString());
-            System.out.println(constructorTest4.getCourseList());
-            System.out.println(constructorTest5.getDetailsAsString());
-            System.out.println(constructorTest5.getCourseList());
-            System.out.println("\nPress enter to return to the main menu\n");
+            System.out.println("\nThe following Students are created using the new constructors and course lists\n"
+                                + "\n" + constructorTest1.getDetailsAsString()
+                                + "\n" + constructorTest1.getCourseList()
+                                + "\n" + constructorTest2.getDetailsAsString()
+                                + "\n" + constructorTest2.getCourseList()
+                                + "\n" + constructorTest3.getDetailsAsString()
+                                + "\n" + constructorTest3.getCourseList()
+                                + "\n" + constructorTest4.getDetailsAsString()
+                                + "\n" + constructorTest4.getCourseList()
+                                + "\n" + constructorTest5.getDetailsAsString()
+                                + "\n" + constructorTest5.getCourseList()
+                                + "\n\nPress enter to return to the main menu\n");
             myScanner.nextLine();
         }
 
@@ -116,42 +127,42 @@ public class Lab4 {
 
             testIsRunning = true;
             while (testIsRunning) {
-                System.out.println("\nYou can test the new constructors with your own criteria now");
-                System.out.println("Type in exit at any time to return to the main menu\n");
-                System.out.println("First we will test the constructor that accepts an input for all arguments");
+                System.out.println("\nYou can test the new constructors with your own criteria now"
+                                    + "\nType in exit at any time to return to the main menu\n"
+                                    + "\nFirst we will test the constructor that accepts an input for all arguments");
                 loopRunner = true;
                 System.out.println("\nPlease enter the Students full name");
-                name = verifyNameInput(loopRunner);
+                name = verifyStringInput(loopRunner, nameVerifier);
                 if ("exit".equals(name.toLowerCase())) {
                     continue;
                 }
                 loopRunner = true;
                 System.out.println("\nPlease enter the Students student Number (any 6 digit number)");
-                studentNumber = verifyStudentNumberInput(loopRunner);
+                studentNumber = verifyStringInput(loopRunner, studentNumberVerifier);
                 if ("exit".equals(studentNumber.toLowerCase())) {
                     continue;
                 }
                 loopRunner = true;
                 System.out.println("\nPlease enter the Students credit hours (A whole number between 0 and 22 inclusive)");
-                creditHours = verifyCreditHourInput(loopRunner);
+                creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
                 if (creditHours == -1) {
                     continue;
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
                 loopRunner = true;
-                System.out.println("\nPlease select a residential status from the following list of options by entering the corresponding number");
-                System.out.println("    1.) 'INC' -> In County");
-                System.out.println("    2.) 'OOC' -> Out Of County");
-                System.out.println("    3.) 'OOS' -> Out Of State");
-                residentialStatus = verifyResidentialStatusInput(loopRunner);
+                System.out.println("\nPlease select a residential status from the following list of options by entering the corresponding number"
+                                    + "\n    1.) 'INC' -> In County"
+                                    + "\n    2.) 'OOC' -> Out Of County"
+                                    + "\n    3.) 'OOS' -> Out Of State");
+                residentialStatus = verifyIntegerInput(loopRunner, residentialStatusVerifier);
                 if (residentialStatus == -1) {
                     continue;
                 }
                 System.out.println("\nHere are the details for the student you just created\n");
                 Student.ResidentialCodes code = Student.ResidentialCodes.getResidentialCodeById(residentialStatus);
                 Student student = new Student(name, studentNumber, courses, code);
-                System.out.println(student.getDetailsAsString());
-                System.out.println(student.getCourseList());
+                System.out.println(student.getDetailsAsString()
+                                    + "\n" + student.getCourseList());
                 
                 System.out.println("\nPress enter to Continue\n");
                 myScanner.nextLine();
@@ -161,27 +172,27 @@ public class Lab4 {
                 creditHours = 0;
                 residentialStatus = 0;
 
-                System.out.println("Now we will test the constructor that sets the default Residential Status to 'INC'");
-                System.out.println("\nPlease enter the Students full name");
-                name = verifyNameInput(loopRunner);
+                System.out.println("Now we will test the constructor that sets the default Residential Status to 'INC'"
+                                    + "\n\nPlease enter the Students full name");
+                name = verifyStringInput(loopRunner, nameVerifier);
                 if ("exit".equals(name.toLowerCase())) {
                     continue;
                 }
                 System.out.println("\nPlease enter the Students student Number (any 6 digit number)");
-                studentNumber = verifyStudentNumberInput(loopRunner);
+                studentNumber = verifyStringInput(loopRunner, studentNumberVerifier);
                 if ("exit".equals(studentNumber.toLowerCase())) {
                     continue;
                 }
                 System.out.println("\nPlease enter the Students credit hours (A whole number between 0 and 22 inclusive");
-                creditHours = verifyCreditHourInput(loopRunner);
+                creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
                 if (creditHours == -1) {
                     continue;
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
                 System.out.println("\nHere are the details for the student you just created\n");
                 Student student2 = new Student(name, studentNumber, courses);
-                System.out.println(student2.getDetailsAsString());
-                System.out.println(student2.getCourseList());
+                System.out.println(student2.getDetailsAsString()
+                                    + "\n" + student2.getCourseList());
 
                 System.out.println("\nPress enter to return to the main menu\n");
                 myScanner.nextLine();
@@ -193,11 +204,11 @@ public class Lab4 {
             String courseTestChoice = "";
             boolean courseInterfaceRunning = true;
             while (courseInterfaceRunning) {
-                System.out.println("\nYou can test the new Course class by adding and viewing courses for a student");
-                System.out.println("    1.) Add courses one by one then view the details");
-                System.out.println("    2.) Run automated test with default courses added");
-                System.out.println("    0.) Return to The previous menu");
-                System.out.println("Please Enter The Number of Your Selection...");
+                System.out.println("\nYou can test the new Course class by adding and viewing courses for a student"
+                                    + "\n    1.) Add courses one by one then view the details"
+                                    + "\n    2.) Run automated test with default courses added"
+                                    + "\n    0.) Return to The previous menu"
+                                    + "\nPlease Enter The Number of Your Selection...");
                 courseTestChoice = myScanner.nextLine();
                 switch (courseTestChoice) {
                     case "1":
@@ -233,35 +244,35 @@ public class Lab4 {
             
             courseTestStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), 0);
 
-            System.out.println("\nThis test allows you to manually create courses and add them to a students record");
-            System.out.println("  Type in 'exit' at any time to return to the previous menu");
-            System.out.println("    There is a limit of " + testCaseLimit + " credit hours total per student\n");
+            System.out.println("\nThis test allows you to manually create courses and add them to a students record"
+                              + "\n  Type in 'exit' at any time to return to the previous menu"
+                              + "\n    There is a limit of " + testCaseLimit + " credit hours total per student\n");
 
             while (testIsRunning) {
                 loopRunner = true;
                 System.out.println("\nPlease enter a 3 digit number for the course ID");
-                courseId = verifyCourseIdInput(loopRunner);
+                courseId = verifyStringInput(loopRunner, courseIdVerifier);
                 if ("exit".equals(courseId.toLowerCase())) {
                     continue;
                 }
                 loopRunner = true;
                 System.out.println("\nPlease enter the course name");
-                courseName = verifyCourseNameInput(loopRunner);
+                courseName = verifyStringInput(loopRunner, nameVerifier);
                 if ("exit".equals(courseName.toLowerCase())) {
                     continue;
                 }
                 loopRunner = true;
                 System.out.println("\nPlease enter a number 1 through 5 for the credit hours");
-                creditHours = verifycreditHoursInput(loopRunner);
+                creditHours = verifyIntegerInput(loopRunner, creditHourperClassVerifier);
                 if (creditHours == -1) {
                     continue;
                 }
                 if ((creditHourSum + creditHours) > testCaseLimit) {
                     creditHourDiff = (creditHourSum + creditHours) - testCaseLimit;
-                    System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours.");
-                    System.out.println("  Please re-enter the course with less credit hours or finalize the list");
-                    System.out.println("    Enter 'r' to re-enter this course with less credit hours");
-                    System.out.println("    Enter 's' to skip adding this course and proceed");
+                    System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours."
+                                        + "\n  Please re-enter the course with less credit hours or finalize the list"
+                                        + "\n    Enter 'r' to re-enter this course with less credit hours"
+                                        + "\n    Enter 's' to skip adding this course and proceed");
                     userChoice = myScanner.nextLine();
                     if ("r".equals(userChoice)) {
                         continue;
@@ -274,10 +285,10 @@ public class Lab4 {
 
                 confirmChoice = true;
 				while (confirmChoice) {
-                    System.out.println("    Course ID: " + courseId);
-                    System.out.println("    Course Namme: " + courseName);
-                    System.out.println("    Credit Hours: " + creditHours);
-                    System.out.println("Are you sure you want to add this course? [y]es, [n]o");
+                    System.out.println("    Course ID: " + courseId
+                                        + "\n    Course Namme: " + courseName
+                                        + "\n    Credit Hours: " + creditHours
+                                        + "\nAre you sure you want to add this course? [y]es, [n]o");
 
                     userChoice = myScanner.nextLine();
 
@@ -309,17 +320,17 @@ public class Lab4 {
                     System.out.println("    " + course.getCourseDetailsAsString());
                     totalCreditHours += course.getCreditHours();
                 }
-                System.out.println("Total Credit Hours: " + totalCreditHours);
-                System.out.println("\nEnter 'b' to build the student with this course list");
-                System.out.println("Enter 'a' to add another course");
+                System.out.println("Total Credit Hours: " + totalCreditHours
+                                  + "\n\nEnter 'b' to build the student with this course list"
+                                  + "\nEnter 'a' to add another course");
                 userChoice = myScanner.nextLine();
 
                 if ("b".equals(userChoice)) {
                     courseTestStudent.addCourseList(courses);
-                    System.out.println("These are the Details for the student and their new course list\n");
-                    System.out.println(courseTestStudent.getDetailsAsString());
-                    System.out.println("    " + courseTestStudent.getCourseList());
-                    System.out.println("Press enter to continue");
+                    System.out.println("These are the Details for the student and their new course list\n\n"
+                                      + courseTestStudent.getDetailsAsString()
+                                      + "\n    " + courseTestStudent.getCourseList()
+                                      + "\nPress enter to continue");
                     myScanner.nextLine();
                     testIsRunning = false;
                     break;
@@ -330,41 +341,9 @@ public class Lab4 {
             }
         }
 
-        private int verifycreditHoursInput(boolean loopRunner) {
+        private String verifyStringInput(boolean loopRunner, InputVerifierModel inputType) {
             String inputToVerify = "";
-            int convertedInput = 0;
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return -1;
-                }
-                try {
-                    convertedInput = Integer.parseInt(inputToVerify);
-
-                    if (convertedInput < minCreditHourPerCourse
-                        || convertedInput > maxCreditHourPerCourse) {
-                        System.out.println("\nPlease enter a number between " 
-                                        + minCreditHourPerCourse 
-                                        + " and " 
-                                        + maxCreditHourPerCourse 
-                                        + " inclusive.  Try Again");
-                        continue;
-                    }
-                    loopRunner = false;
-                } catch (final Exception e) {
-                    System.out.println("\nPlease enter a number between " 
-                                        + minCreditHourPerCourse 
-                                        + " and " 
-                                        + maxCreditHourPerCourse 
-                                        + " inclusive.  Try Again");
-                }
-            }
-            return convertedInput;
-        }
-
-        //TODO finish this generic method and build a simliar one for integers
-        private String verifyStringInput(boolean loopRunner, StringInput inputType) {
-            String inputToVerify = "";
+            final Pattern regexPattern = Pattern.compile(inputType.getRegexPattern());
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
@@ -374,46 +353,8 @@ public class Lab4 {
                     System.out.println("\nThe " + inputType.getName() + " cannot be blank.  Try Again");
                     continue;
                 }
-                //one check using regex ang display error messagwe
-                loopRunner = false;
-            }
-            return inputToVerify;
-        }
-
-        private String verifyCourseNameInput(boolean loopRunner) {
-            String inputToVerify = "";
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return "exit";
-                }
-                if ("".equals(inputToVerify)) {
-                    System.out.println("\nThe name cannot be blank.  Try Again");
-                    continue;
-                }
-                if (inputToVerify.length() > 32) {
-                    System.out.println("\nPlease limit names to less than 32 characters for this test.  Try Again");
-                    continue;
-                }
-                loopRunner = false;
-            }
-            return inputToVerify;
-        }
-
-        private String verifyCourseIdInput(boolean loopRunner) {
-            String inputToVerify = "";
-            final Pattern threeDigitNumberRegex = Pattern.compile("[0-9]{3}");
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return "exit";
-                }
-                if ("".equals(inputToVerify)) {
-                    System.out.println("\nThe id cannot be blank.  Try Again");
-                    continue;
-                }
-                if (!threeDigitNumberRegex.matcher(inputToVerify).matches()) {
-                    System.out.println("\nThe ID must be 3 digits long.  Try Again");
+                if (!regexPattern.matcher(inputToVerify).matches()) {
+                    System.out.println(inputType.getErrorMessage());
                     continue;
                 }
                 loopRunner = false;
@@ -434,86 +375,23 @@ public class Lab4 {
             return false;
         }
 
-        private String verifyNameInput(boolean loopRunner) {
-            String inputToVerify = "";
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return "exit";
-                }
-                if ("".equals(inputToVerify)) {
-                    System.out.println("\nThe name cannot be blank.  Try Again");
-                    continue;
-                }
-                if (inputToVerify.length() > 64) {
-                    System.out.println("\nPlease limit names to less than 64 characters for this test.  Try Again");
-                    continue;
-                }
-                loopRunner = false;
-            }
-            return inputToVerify;
-        }
-
-        private String verifyStudentNumberInput(boolean loopRunner) {
-            String inputToVerify = "";
-            final Pattern sixDigitNumberRegex = Pattern.compile("[0-9]{6}");
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return "exit";
-                }
-                if ("".equals(inputToVerify)) {
-                    System.out.println("\nThe Student Number cannot be blank.  Try Again");
-                    continue;
-                }
-                if (!sixDigitNumberRegex.matcher(inputToVerify).matches()) {
-                    System.out.println("\nPlease enter a 6 digit number.  Try Again");
-                    continue;
-                }
-                loopRunner = false;
-            }
-            return inputToVerify;
-        }
-
-        private int verifyCreditHourInput(boolean loopRunner) {
+        private int verifyIntegerInput(boolean loopRunner, InputVerifierModel inputType) {
             String inputToVerify = "";
             int convertedInput = 0;
+            final Pattern regexPattern = Pattern.compile(inputType.getRegexPattern());
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
                     return -1;
                 }
-                try {
-                    convertedInput = Integer.parseInt(inputToVerify);
-                } catch (final Exception e) {
-                    System.out.println("\nPlease enter a number between 0 and 22 inclusive.  Try Again");
-                }
-                if (convertedInput < 0
-                        || convertedInput > 22) {
-                    System.out.println("\nPlease enter a positive number between 0 and 22 inclusive.  Try Again");
+                if (!regexPattern.matcher(inputToVerify).matches()) {
+                    System.out.println(inputType.getErrorMessage());
                     continue;
-                }
-                loopRunner = false;
-            }
-            return convertedInput;
-        }
-
-        private int verifyResidentialStatusInput(boolean loopRunner) {
-            String inputToVerify = "";
-            int convertedInput = 0;
-            while(loopRunner) {
-                inputToVerify = myScanner.nextLine();
-                if (returnToMainMenu(inputToVerify)) {
-                    return -1;
                 }
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);
                 } catch (final Exception e) {
-                    System.out.println("\nPlease enter the number that corresponds to te residential code you want to select.");
-                    continue;
-                }
-                if (convertedInput < 1 || convertedInput > 3) {
-                    System.out.println("\nPlease enter the number that corresponds to te residential code you want to select.");
+                    System.out.println(inputType.getErrorMessage());
                     continue;
                 }
                 loopRunner = false;
