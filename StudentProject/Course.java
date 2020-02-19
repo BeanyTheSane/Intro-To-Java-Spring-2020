@@ -57,7 +57,7 @@ public class Course {
 		ArrayList<Course> defaultCourseList = new ArrayList<>();
         
         if (creditHours == 0) {
-            //this will end up returning an empty List
+            return defaultCourseList;
         }
         else if (creditHours == 1) {
 			Course course = new Course();
