@@ -135,11 +135,14 @@ public class Student {
 
 	public String getCourseList() {
 		StringBuilder courseList = new StringBuilder();
+		int runningTotal = 0;
 		courseList.append("		Course List:\n");
 		if (!this.courses.isEmpty()) {
 			for (Course course : this.courses) {
 				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
+				runningTotal += course.getCreditHours();
 			}
+			courseList.append("			Total Credit Hours: " + runningTotal);
 			return courseList.toString();
 		}
 		courseList.append("		This Student has not signed up for any classes yet");
@@ -201,6 +204,23 @@ public class Student {
 			}
 
 			return code;
+		}
+
+		public static String getResidentialCodeAsString(ResidentialCodes code) {
+
+			switch (code) {
+				case INC:
+					return "INC";
+
+				case OOC:
+					return "OOC";
+
+				case OOS:
+					return "OOS";
+			
+				default:
+				return null;
+			}
 		}
     }
 }
