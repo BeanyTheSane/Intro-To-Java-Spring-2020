@@ -1,30 +1,44 @@
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class Student {
     private String name;
     private String studentNumber;
-    private int creditHours;
 	private String residencyCode;
+	private ArrayList<Course> courses = new ArrayList<>();  
 	
 	Student(){}
 
-	Student(String name, String studentNumber,  int creditHours, String residencyCode) {
+	Student(String name, String studentNumber, ArrayList<Course> courses, ResidentialCodes residencyCode) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.creditHours = creditHours;
-		this.residencyCode = residencyCode;
+		this.residencyCode = residencyCode.toString();
+		this.courses = courses;
 	}
 
-	Student(String name, String studentNumber, int creditHours) {
+	Student(String name, String studentNumber, ArrayList<Course> courses) {
 		this.name = name;
 		this.studentNumber = studentNumber;
-		this.creditHours = creditHours;
-		this.residencyCode = "INC";
+		this.residencyCode = ResidentialCodes.INC.toString();
+		this.courses = courses;
+	}
+
+	Student(String name, String studentNumber, ResidentialCodes residencyCode) {
+		this.name = name;
+		this.studentNumber = studentNumber;
+		this.residencyCode = residencyCode.toString();
+	}
+
+	Student(String name, String studentNumber) {
+		this.name = name;
+		this.studentNumber = studentNumber;
+		this.residencyCode = ResidentialCodes.INC.toString();
 	}
 
 	public String getResidencyCode() {
-		return this.residencyCode;
+		return this.residencyCode; 
 	}
 
 	public void setResidencyCode(String residencyCode) {
@@ -48,45 +62,64 @@ public class Student {
 	}
 
 	public int getCreditHours() {
-		return this.creditHours;
+		int creditHours = 0;
+		for (Course course : courses) {
+			creditHours += course.getCreditHours();
+		}
+		return creditHours;
 	}
 
-	public void setCreditHours(int creditHours) {
-		this.creditHours = creditHours;
+	public void addCourse(Course course) {
+		this.courses.add(course);
+	}
+
+	public void addCourseList(List<Course> courses) {
+		for (Course course : courses) {
+			addCourse(course);
+		}
 	}
 
     public Double getTuition() {
-        double baseRate = this.residencyCode.equals("INC") ? TuitionRates.getInCountyBaseRate()
-                        : this.residencyCode.equals("OOC") ? TuitionRates.getOutOfCountyBaseRate()
-                        : this.residencyCode.equals("OOS") ? TuitionRates.getOutOfStateBaseRate()
+        double baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
+                        : this.residencyCode.equals(ResidentialCodes.OOC.toString()) ? TuitionRates.getOutOfCountyBaseRate()
+                        : this.residencyCode.equals(ResidentialCodes.OOS.toString()) ? TuitionRates.getOutOfStateBaseRate()
                                                            : 0.0;
-        if (this.creditHours <= 13) {
-            return baseRate * this.creditHours;
-        } else if (this.creditHours >= 13 && this.creditHours <= 18) {
+        if (getCreditHours() <= 13) {
+            return baseRate * getCreditHours();
+        } else if (getCreditHours() >= 13 && getCreditHours() <= 18) {
             return baseRate * TuitionRates.getCreditHourBonusRate();
         }
         
-        return (this.creditHours - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
+        return (getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
 	}
 	
 	public void buildRandomPerson(String residencyCode, int creditHours) {
 		this.name = getRandomName();
 		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.creditHours = creditHours;
 		this.residencyCode = residencyCode;
+		this.courses = Course.buildDefaultCourseList(creditHours);
+			
+	}
+	
+	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = courses;
+			
 	}
 
 	public String getDetailsAsString() {
 		Locale locale = new Locale("en", "US");
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(locale);
 		String response =  "Student " 
-						+ this.studentNumber 
+						+ getStudentNumber() 
 						+ " " 
-						+ this.name 
+						+ getName() 
 						+ " takes " 
-						+ this.creditHours 
-						+ " credit hours, resideny=" 
-						+ this.residencyCode 
+						+ getCreditHours() 
+						+ " credit hours, residency=" 
+						+ getResidencyCode() 
 						+ ", tuition = "
 						+ currencyFormat.format(getTuition());
 		if (doCreditHoursQualifyForSpecialRate()) {
@@ -96,8 +129,24 @@ public class Student {
 	}
 
 	private boolean doCreditHoursQualifyForSpecialRate() {
-		return (this.creditHours >= TuitionRates.getCreditHourBonusRate() 
-			   && this.creditHours <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
+			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+	}
+
+	public String getCourseList() {
+		StringBuilder courseList = new StringBuilder();
+		int runningTotal = 0;
+		courseList.append("		Course List:\n");
+		if (!this.courses.isEmpty()) {
+			for (Course course : this.courses) {
+				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
+				runningTotal += course.getCreditHours();
+			}
+			courseList.append("			Total Credit Hours: " + runningTotal);
+			return courseList.toString();
+		}
+		courseList.append("		This Student has not signed up for any classes yet");
+		return courseList.toString();
 	}
 
 	private static String getRandomName() {
@@ -118,4 +167,60 @@ public class Student {
 		return MyUtilities.getRandomStringFromArray(firstNames) + " " + MyUtilities.getRandomStringFromArray(lastNames);
 			
 	}
+
+	public static enum ResidentialCodes {
+        INC(1),
+        OOC(2),
+		OOS(3);
+		private int value;
+
+		private ResidentialCodes(int value) {
+			this.value = value;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public static ResidentialCodes getResidentialCodeById(int id) {
+
+			ResidentialCodes code = null;
+
+			switch (id) {
+				case 1:
+					code = INC;
+					break;
+
+				case 2:
+					code = OOC;
+					break;
+
+				case 3:
+					code = OOS;
+					break;	
+			
+				default:
+					break;
+			}
+
+			return code;
+		}
+
+		public static String getResidentialCodeAsString(ResidentialCodes code) {
+
+			switch (code) {
+				case INC:
+					return "INC";
+
+				case OOC:
+					return "OOC";
+
+				case OOS:
+					return "OOS";
+			
+				default:
+				return null;
+			}
+		}
+    }
 }

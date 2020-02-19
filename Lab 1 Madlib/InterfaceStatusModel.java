@@ -8,6 +8,4 @@ public class InterfaceStatusModel {
     String editMenuProInput = "";
     String itemToAdd = "";
     String subEditMenuInput = "";
-
-
 }
