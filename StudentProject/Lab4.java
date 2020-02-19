@@ -83,7 +83,7 @@ public class Lab4 {
         InputVerifierModel creditHourperClassVerifier = new InputVerifierModel("Credit Hour per Class", CreditHourPerCourseRegex, "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
 
         private String buildCreditHourPerCourseRegex() {
-            return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "]$";
+            return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "])$";
         }
 
         public void runTuitionChartTest() {
@@ -254,11 +254,12 @@ public class Lab4 {
             testIsRunning = true;
             String courseId = "";
             String courseName = "";
-            String userChoice = ""; 
+            String userChoice = "";
+            String exitCheck = ""; 
             boolean confirmChoice = true;
             int creditHours = -1;
             int creditHourSum = 0;
-            int creditHourDiff = 0;
+            int pendingTotal = 0;
             Student courseTestStudent = new Student();
             ArrayList<Course> courses = new ArrayList<>();
             
@@ -287,17 +288,16 @@ public class Lab4 {
                 if (creditHours == -1) {
                     continue;
                 }
-                if ((creditHourSum + creditHours) > testCaseLimit) {
-                    creditHourDiff = (creditHourSum + creditHours) - testCaseLimit;
-                    System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours."
-                                        + "\n  Please re-enter the course with less credit hours or finalize the list"
-                                        + "\n    Enter 'r' to re-enter this course with less credit hours"
-                                        + "\n    Enter 's' to skip adding this course and proceed");
-                    userChoice = myScanner.nextLine();
-                    if ("r".equals(userChoice)) {
+                loopRunner = true;
+                pendingTotal = (creditHourSum + creditHours);
+                if (pendingTotal > testCaseLimit) {
+                    exitCheck = creditHourLimitWarning(loopRunner, pendingTotal);
+                    if ("exit".equals(exitCheck.toLowerCase())) {
                         continue;
-                    }
-                    if ("s".equals(userChoice)) {
+                    } else if ("redo".equals(exitCheck.toLowerCase())) {
+                        continue;
+                        
+                    } else if ("skip".equals(exitCheck.toLowerCase())) {
                         buildOrAddMoreCourses(courseTestStudent, courses);
                         continue;
                     }
@@ -312,13 +312,13 @@ public class Lab4 {
 
                     userChoice = myScanner.nextLine();
 
-                    if ("y".equals(userChoice)) {
+                    if ("y".equals(userChoice.toLowerCase())) {
                         creditHourSum += creditHours;
                         courses.add(new Course(courseId, courseName, creditHours));
                         System.out.println("You have successfully added " + courseName + "\n");
                         break;
                     }
-                    if ("n".equals(userChoice)) {
+                    if ("n".equals(userChoice.toLowerCase())) {
                         break;
                     }
                     System.out.println("Enter y to add this course or n to re-enter the details for this course\n");
@@ -327,6 +327,35 @@ public class Lab4 {
                 confirmChoice = true;
                 buildOrAddMoreCourses(courseTestStudent, courses);
             }
+        }
+
+        private String creditHourLimitWarning(boolean loopRunner, int pendingTotal) {
+            int creditHourDiff = 0;
+            String userChoice = "";
+            if (pendingTotal > testCaseLimit) {
+                creditHourDiff = pendingTotal - testCaseLimit;
+                System.out.println("\nThis Course will exceed the credit hour limit by " + creditHourDiff + " hours."
+                                    + "\n  Please re-enter the course with less credit hours or finalize the list"
+                                    + "\n    Enter 'r' to re-enter this course with less credit hours"
+                                    + "\n    Enter 's' to skip adding this course and proceed");
+                while (loopRunner) {
+                    userChoice = myScanner.nextLine();
+                    if (returnToMainMenu(userChoice)) {
+                        return "exit";
+                    }
+                    if ("r".equals(userChoice)) {
+                        return "redo";
+                    }
+                    else if ("s".equals(userChoice)) {
+                        return "skip";
+                    }
+                    else {
+                        System.out.println("Please enter 'r' or 's'");
+                        continue;
+                    }
+                }
+            }
+            return "";
         }
 
         private void buildOrAddMoreCourses(Student courseTestStudent, ArrayList<Course> courses) {
@@ -383,7 +412,7 @@ public class Lab4 {
         }
 
         private void runAddCoursesAutomaticallyTest() {
-            //TODO build the auto test still
+            
         }
 
         private boolean returnToMainMenu(final String command) {
