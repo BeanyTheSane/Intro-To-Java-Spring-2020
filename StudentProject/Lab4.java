@@ -66,7 +66,6 @@ public class Lab4 {
     }
 
     private static class TestScenarios {
-        //TODO add seperator lines to make console items stand out.  make a variable and drop it where needed
         boolean testIsRunning = true;
         Scanner myScanner = new Scanner(System.in);
         boolean loopRunner = true;
@@ -75,12 +74,32 @@ public class Lab4 {
         final int minCreditHourPerCourse = 1;
         final int maxCreditHourPerCourse = 5;
         String CreditHourPerCourseRegex = buildCreditHourPerCourseRegex();
-        InputVerifierModel nameVerifier = new InputVerifierModel("name", "^.{1,32}$", "\nPlease limit names to less than 32 characters for this test.  Try Again");
-        InputVerifierModel courseIdVerifier = new InputVerifierModel("Id", "^[0-9]{3}$", "\nThe ID must be 3 digits long.  Try Again");
-        InputVerifierModel studentNumberVerifier = new InputVerifierModel("Student Number", "^[0-9]{6}$", "\nPlease enter a 6 digit number.  Try Again");
-        InputVerifierModel residentialStatusVerifier = new InputVerifierModel("Residential Status", "^[1-3]{1}$", "\nPlease enter the number that corresponds to te residential code you want to select.");
-        InputVerifierModel creditHourVerifier = new InputVerifierModel("Credit Hour", "^([0-9]|[1-2][0-2])$", "\nPlease enter a number between 0 and 22 inclusive.  Try Again");
-        InputVerifierModel creditHourperClassVerifier = new InputVerifierModel("Credit Hour per Class", CreditHourPerCourseRegex, "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
+        //The following models are used to verify different user inputs.  They are objects containing details to pass to a generic method.
+        //They utilize a regex string to validate a desired criteria.
+        InputVerifierModel nameVerifier = 
+                            new InputVerifierModel("name", 
+                                                    "^.{1,32}$", 
+                                                    "\nPlease limit names to less than 32 characters for this test.  Try Again");
+        InputVerifierModel courseIdVerifier = 
+                            new InputVerifierModel("Id", 
+                                                    "^[0-9]{3}$", 
+                                                    "\nThe ID must be 3 digits long.  Try Again");
+        InputVerifierModel studentNumberVerifier = 
+                            new InputVerifierModel("Student Number", 
+                                                    "^[0-9]{6}$", 
+                                                    "\nPlease enter a 6 digit number.  Try Again");
+        InputVerifierModel residentialStatusVerifier = 
+                            new InputVerifierModel("Residential Status", 
+                                                    "^[1-3]{1}$", 
+                                                    "\nPlease enter the number that corresponds to te residential code you want to select.");
+        InputVerifierModel creditHourVerifier = 
+                            new InputVerifierModel("Credit Hour", 
+                                                    "^([0-9]|[1-2][0-2])$", 
+                                                    "\nPlease enter a number between 0 and 22 inclusive.  Try Again");
+        InputVerifierModel creditHourperClassVerifier = 
+                            new InputVerifierModel("Credit Hour per Class", 
+                                                    CreditHourPerCourseRegex, 
+                                                    "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
 
         private String buildCreditHourPerCourseRegex() {
             return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "])$";
@@ -446,15 +465,6 @@ public class Lab4 {
             return inputToVerify;
         }
 
-        private boolean returnToMainMenu(final String command) {
-            if ("exit".equals(command.toLowerCase())) {
-                testIsRunning = false;
-                loopRunner = false;
-                return true;
-            }
-            return false;
-        }
-
         private int verifyIntegerInput(boolean loopRunner, InputVerifierModel inputType) {
             String inputToVerify = "";
             int convertedInput = 0;
@@ -477,6 +487,15 @@ public class Lab4 {
                 loopRunner = false;
             }
             return convertedInput;
+        }
+
+        private boolean returnToMainMenu(final String command) {
+            if ("exit".equals(command.toLowerCase())) {
+                testIsRunning = false;
+                loopRunner = false;
+                return true;
+            }
+            return false;
         }
     }
 }
