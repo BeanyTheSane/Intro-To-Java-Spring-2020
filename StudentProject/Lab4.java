@@ -249,6 +249,41 @@ public class Lab4 {
             }
 
         }
+
+        private void runAddCoursesAutomaticallyTest() {
+            final Student courseTestStudent1 = new Student("Vivi Orunitia", "666666");
+            final Student courseTestStudent2 = new Student("Zidane Tribal", "777777");
+            final Student courseTestStudent3 = new Student("Garnet Til Alexandros XVII", "111111");
+            final Student courseTestStudent4 = new Student("Adelbert Steiner", "123456");
+            final Student courseTestStudent5 = new Student("Freya Crescent", "987654");
+
+            courseTestStudent1.addCourseList(Course.buildDefaultCourseList(22));
+            courseTestStudent2.addCourseList(Course.buildDefaultCourseList(12));
+            courseTestStudent3.addCourseList(Course.buildDefaultCourseList(4));
+            courseTestStudent4.addCourseList(Course.buildDefaultCourseList(1));
+            courseTestStudent5.addCourseList(Course.buildDefaultCourseList(0));
+
+            System.out.println("\nThe following Students were created using the new course class.\n"
+                                + "\n" + styledSeperator
+                                + "\n" + courseTestStudent1.getDetailsAsString()
+                                + "\n" + courseTestStudent1.getCourseList()
+                                + "\n" + styledSeperator
+                                + "\n" + courseTestStudent2.getDetailsAsString()
+                                + "\n" + courseTestStudent2.getCourseList()
+                                + "\n" + styledSeperator
+                                + "\n" + courseTestStudent3.getDetailsAsString()
+                                + "\n" + courseTestStudent3.getCourseList()
+                                + "\n" + styledSeperator
+                                + "\n" + courseTestStudent4.getDetailsAsString()
+                                + "\n" + courseTestStudent4.getCourseList()
+                                + "\n" + styledSeperator
+                                + "\n" + courseTestStudent5.getDetailsAsString()
+                                + "\n" + courseTestStudent5.getCourseList()
+                                + "\n" + styledSeperator
+                                + "\n\nPress enter to return to the main menu\n");
+            myScanner.nextLine();
+
+        }
         
         private void runAddCoursesManuallyTest() {
             testIsRunning = true;
@@ -409,10 +444,6 @@ public class Lab4 {
                 loopRunner = false;
             }
             return inputToVerify;
-        }
-
-        private void runAddCoursesAutomaticallyTest() {
-            
         }
 
         private boolean returnToMainMenu(final String command) {
