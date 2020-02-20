@@ -12,10 +12,10 @@ public class Lab5 {
 
         System.out.println(styledSeperator
                           +"\nCISS 226"
-                          + "\nLab 4"
+                          + "\nLab 5"
                           + "\nAdam Knitter"
-                          + "\nThis version now contains two tests for the new course class"
-                          + "\n(Select option '4' on the main menu)"
+                          + "\nThis version now contains two tests for the new payments class"
+                          + "\n(Select option '5' on the main menu)"
                           + "\nas well as all of the previous tests"
                           + "\nPlease run this full screen for best results" 
                           + "\n" + styledSeperator 
@@ -32,6 +32,7 @@ public class Lab5 {
                                 + "\n    2.)  Run Auto Filled Constructor Test"
                                 + "\n    3.)  Run User Filled Constructor Test"
                                 + "\n    4.)  Run Course Class Test"
+                                + "\n    5.)  Run Payments Class Test"
                                 + "\n    0.)  Exit the Program"
                                 + "\n" + styledSeperator
                                 + "\nPlease Enter The Number of Your Selection...");
@@ -51,6 +52,10 @@ public class Lab5 {
 
                 case "4":
                     constructorTest.runCourseClassTest();
+                    break;
+
+                case "5":
+                    constructorTest.runPaymentsClassTest();
                     break;
             
                 case "0":
@@ -103,6 +108,10 @@ public class Lab5 {
 
         private String buildCreditHourPerCourseRegex() {
             return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "])$";
+        }
+
+        public void runPaymentsClassTest() {
+            //TODO build the menu interface here
         }
 
         public void runTuitionChartTest() {
