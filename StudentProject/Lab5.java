@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Lab4 {
+public class Lab5 {
 
     public static void main(final String[] args) {
         final Scanner myScanner = new Scanner(System.in);
