@@ -1,4 +1,8 @@
+import java.sql.Date;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +12,7 @@ public class Student {
     private String studentNumber;
 	private String residencyCode;
 	private ArrayList<Course> courses = new ArrayList<>();  
+	private ArrayList<Payment> payments = new ArrayList<>();
 	
 	Student(){}
 
@@ -131,6 +136,31 @@ public class Student {
 	private boolean doCreditHoursQualifyForSpecialRate() {
 		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
 			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+	}
+
+	public Double getTotalPayments() {
+		double totalPayments = 0;
+
+		for (Payment payment : this.payments) {
+			totalPayments += payment.getPaymentAmount();
+		}
+
+		return totalPayments;
+	}
+
+	public void makePayment(Double paymentAmount, String description) {
+		LocalDateTime dateOfPayment = LocalDateTime.now();
+
+		Payment payment = new Payment(paymentAmount, dateOfPayment, description);
+		this.payments.add(payment);
+	}
+
+	public ArrayList<Payment> getListOfPayments() {
+		return this.payments;
+	}
+
+	public Double getTotalDue() {
+		return getTuition() - getTotalPayments();
 	}
 
 	public String getCourseList() {

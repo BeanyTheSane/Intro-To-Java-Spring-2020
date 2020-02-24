@@ -1,29 +1,29 @@
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Payment {
-    private int paymentAmount;
-    private Date dateOfPayment;
+    private Double paymentAmount;
+    private LocalDateTime dateOfPayment;
     private String description;
 
-    public Payment(int paymentAmount, Date dateOfPayment, String description) {
+    public Payment(Double paymentAmount, LocalDateTime dateOfPayment, String description) {
         this.paymentAmount = paymentAmount;
         this.dateOfPayment = dateOfPayment;
         this.description = description;
     }
 
-    public int getPaymentAmount() {
+    public Double getPaymentAmount() {
         return this.paymentAmount;
     }
 
-    public void setPaymentAmount(int paymentAmount) {
+    public void setPaymentAmount(Double paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
-    public Date getDateOfPayment() {
+    public LocalDateTime getDateOfPayment() {
         return this.dateOfPayment;
     }
 
-    public void setDateOfPayment(Date dateOfPayment) {
+    public void setDateOfPayment(LocalDateTime dateOfPayment) {
         this.dateOfPayment = dateOfPayment;
     }
 
