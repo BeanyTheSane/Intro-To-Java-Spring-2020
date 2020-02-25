@@ -1,8 +1,6 @@
-import java.sql.Date;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -84,18 +82,18 @@ public class Student {
 		}
 	}
 
-    public Double getTuition() {
-        double baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
+    public BigDecimal getTuition() {
+        BigDecimal baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
                         : this.residencyCode.equals(ResidentialCodes.OOC.toString()) ? TuitionRates.getOutOfCountyBaseRate()
                         : this.residencyCode.equals(ResidentialCodes.OOS.toString()) ? TuitionRates.getOutOfStateBaseRate()
-                                                           : 0.0;
+                                                           : BigDecimal.valueOf(0);
         if (getCreditHours() <= 13) {
-            return baseRate * getCreditHours();
+            return baseRate.multiply(BigDecimal.valueOf(getCreditHours()));
         } else if (getCreditHours() >= 13 && getCreditHours() <= 18) {
-            return baseRate * TuitionRates.getCreditHourBonusRate();
+            return baseRate.multiply(BigDecimal.valueOf(TuitionRates.getCreditHourBonusRate()));
         }
         
-        return (getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
+        return BigDecimal.valueOf(getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()).multiply(baseRate);
 	}
 	
 	public void buildRandomPerson(String residencyCode, int creditHours) {
@@ -138,17 +136,17 @@ public class Student {
 			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
 	}
 
-	public Double getTotalPayments() {
-		double totalPayments = 0;
+	public BigDecimal getTotalPayments() {
+		BigDecimal totalPayments =  BigDecimal.valueOf(0);
 
 		for (Payment payment : this.payments) {
-			totalPayments += payment.getPaymentAmount();
+			totalPayments.add(payment.getPaymentAmount());
 		}
 
 		return totalPayments;
 	}
 
-	public void makePayment(Double paymentAmount, String description) {
+	public void makePayment(BigDecimal paymentAmount, String description) {
 		LocalDateTime dateOfPayment = LocalDateTime.now();
 
 		Payment payment = new Payment(paymentAmount, dateOfPayment, description);
@@ -159,8 +157,8 @@ public class Student {
 		return this.payments;
 	}
 
-	public Double getTotalDue() {
-		return getTuition() - getTotalPayments();
+	public BigDecimal getTotalDue() {
+		return getTuition().subtract(getTotalPayments());
 	}
 
 	public String getCourseList() {

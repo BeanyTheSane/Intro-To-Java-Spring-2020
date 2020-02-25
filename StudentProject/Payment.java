@@ -1,21 +1,22 @@
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private Double paymentAmount;
+    private BigDecimal paymentAmount;
     private LocalDateTime dateOfPayment;
     private String description;
 
-    public Payment(Double paymentAmount, LocalDateTime dateOfPayment, String description) {
+    public Payment(BigDecimal paymentAmount, LocalDateTime dateOfPayment, String description) {
         this.paymentAmount = paymentAmount;
         this.dateOfPayment = dateOfPayment;
         this.description = description;
     }
 
-    public Double getPaymentAmount() {
+    public BigDecimal getPaymentAmount() {
         return this.paymentAmount;
     }
 
-    public void setPaymentAmount(Double paymentAmount) {
+    public void setPaymentAmount(BigDecimal paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 

@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -124,9 +125,9 @@ public class Lab5 {
 
         public void runPaymentsClassTest() {
             String paymentsTestChoice = "";
-            boolean courseInterfaceRunning = true;
             int creditHours = 0;
-            Double paymentAmount = 0.0;
+            boolean courseInterfaceRunning = true;
+            BigDecimal paymentAmount =  BigDecimal.valueOf(0);
             Student paymentTestStudent = new Student();
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
@@ -148,6 +149,7 @@ public class Lab5 {
                                 + "\nPress enter to continue to the payments menu");
             myScanner.nextLine();
 
+            courseInterfaceRunning = true;
             while (courseInterfaceRunning) {
                 System.out.println("\nYou can test the new Payments class by making payments towards "
                                     + paymentTestStudent.getName()
@@ -161,16 +163,8 @@ public class Lab5 {
                 paymentsTestChoice = myScanner.nextLine();
                 switch (paymentsTestChoice) {
                     case "1":
-                        System.out.println("\nPlease enter an amount of credit hours between 0 and 22 and a new student will be created for you\n");
-                        loopRunner = true;
-                        creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
-                        if (creditHours == -1) {
-                            break;
-                        }
-
-                        paymentTestStudent = new Student();
-                        paymentTestStudent.buildRandomPerson("INC", creditHours);
-
+                    
+                        paymentTestStudent = createNewPaymentTestStudent(paymentTestStudent);
                         break;
 
                     case "2":
@@ -186,9 +180,9 @@ public class Lab5 {
                             System.out.println("Current Balance: "
                                                 + currencyFormatter.format(paymentTestStudent.getTotalDue()) 
                                                 + "\nPlease enter the amount of the payment\n");
-                            paymentAmount = verifyDoubleInput(loopRunner, paymentVerifier);
-                            if (creditHours == -1.0) {
-                                break;
+                            paymentAmount = verifyBigDecimalInput(loopRunner, paymentVerifier);
+                            if (paymentAmount == BigDecimal.valueOf(-1)) {
+                                continue;
                             }
                             
                             if (overPaymentCheck(paymentTestStudent, paymentAmount)) {
@@ -262,27 +256,53 @@ public class Lab5 {
             }
         }
 
+        private Student createNewPaymentTestStudent(Student paymentTestStudent) {
+            int creditHours = 0;
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
+            System.out.println("\nPlease enter an amount of credit hours between 0 and 22 and a new student will be created for you\n");
+            testIsRunning = true;
+            while (testIsRunning) {
+                loopRunner = true;
+                creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
+                if (creditHours == -1) {
+                    continue;
+                }
+            
+                paymentTestStudent = new Student();
+                paymentTestStudent.buildRandomPerson("INC", creditHours);
+
+                System.out.println("\nWelcome "
+                        + paymentTestStudent.getName()
+                        + "!  Your Current remaining tuition balance is "
+                        + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                        + "\nPress enter to continue to the payments menu");
+                myScanner.nextLine();
+                break;
+            }
+            return paymentTestStudent;
+        }
+
         private Boolean checkIfAnyPaymentsHaveBeenMade(Student testStudent) {
             ArrayList<Payment> listOfPayments = testStudent.getListOfPayments();
             if (listOfPayments.size() == 0) {
                 System.out.println(testStudent.getName() + " Has not made any payments"
                                     + "\nPress enter to continue");
-                myScanner.nextLine();
                 return false;
             }
             return true;
         }
 
-        private Boolean overPaymentCheck(Student testStudent, Double paymentAmount) {
+        private Boolean overPaymentCheck(Student testStudent, BigDecimal paymentAmount) {
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-            Double difference = testStudent.getTotalDue() - paymentAmount;//TODO need to round the first value to 2 digits to avoid error
-            if (difference < 0.00) {
+            BigDecimal difference = testStudent.getTotalDue().subtract(paymentAmount);//TODO need to round the first value to 2 digits to avoid error
+            if (difference.compareTo( BigDecimal.valueOf(0)) == -1) {
                 System.out.println("The payment of "
                                     + currencyFormatter.format(paymentAmount)
                                     + " exceeds the remaining balance for " 
                                     + testStudent.getName()
                                     + " By "
-                                    + currencyFormatter.format(difference * -1)
+                                    + currencyFormatter.format(difference.multiply(BigDecimal.valueOf(-1)))
                                     + "\nThis payment will not be applied"
                                     + "\nPress enter to continue"); 
                 myScanner.nextLine(); 
@@ -292,7 +312,7 @@ public class Lab5 {
         }
 
         private Boolean zeroBalanceCheck(Student testStudent) {
-            if (testStudent.getTotalDue() == 0) {
+            if (testStudent.getTotalDue().compareTo(BigDecimal.valueOf(0)) == 0) {
                 //display to user there is no current balance
                 System.out.println("The remaining balance for " + testStudent.getName() + " is currently zero"
                                     + "\nPlease create a new student with one or more credit hours to continue testing this feature"
@@ -687,21 +707,21 @@ public class Lab5 {
             return convertedInput;
         }
 
-        private Double verifyDoubleInput(boolean loopRunner, InputVerifierModel inputType) {
+        private BigDecimal verifyBigDecimalInput(boolean loopRunner, InputVerifierModel inputType) {
             String inputToVerify = "";
-            Double convertedInput = 0.0;
+            BigDecimal convertedInput = BigDecimal.valueOf(0);
             final Pattern regexPattern = Pattern.compile(inputType.getRegexPattern());
             while(loopRunner) {
                 inputToVerify = myScanner.nextLine();
                 if (returnToMainMenu(inputToVerify)) {
-                    return -1.0;
+                    return  BigDecimal.valueOf(-1);
                 }
                 if (!regexPattern.matcher(inputToVerify).matches()) {
                     System.out.println(inputType.getErrorMessage());
                     continue;
                 }
                 try {
-                    convertedInput = Double.parseDouble(inputToVerify);
+                    convertedInput = BigDecimal.valueOf(Double.parseDouble(inputToVerify));
                 } catch (final Exception e) {
                     System.out.println(inputType.getErrorMessage());
                     continue;
