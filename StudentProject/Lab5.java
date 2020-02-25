@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import javax.swing.text.NumberFormatter;
 
 public class Lab5 {
 
@@ -102,7 +101,7 @@ public class Lab5 {
                                                     "\nPlease enter the number that corresponds to the residential code you want to select.");
         InputVerifierModel creditHourVerifier = 
                             new InputVerifierModel("Credit Hour", 
-                                                    "^([0-9]|[1-2][0-2])$", 
+                                                    "^([0-9]|1[0-9]|2[0-2])$", 
                                                     "\nPlease enter a number between 0 and 22 inclusive.  Try Again");
         InputVerifierModel creditHourperClassVerifier = 
                             new InputVerifierModel("Credit Hour per Class", 
@@ -110,23 +109,29 @@ public class Lab5 {
                                                     "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
         InputVerifierModel paymentVerifier = 
                             new InputVerifierModel("Payment", 
-                                                    regexPattern, 
-                                                    errorMessage) 
+                                                    "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{2})?$", 
+                                                    "\nPlease enter a payment amount equal to a dollar or more using the following format XXXX.XX"); 
+
+
+        InputVerifierModel descriptionVerifier =
+                            new InputVerifierModel("Description", 
+                                                    "^.{0,255}$", 
+                                                    "Please limit your description to 255 characters or less");
 
         private String buildCreditHourPerCourseRegex() {
             return "^([" + minCreditHourPerCourse + "-" + maxCreditHourPerCourse + "])$";
         }
 
         public void runPaymentsClassTest() {
-            //TODO build the menu interface here
             String paymentsTestChoice = "";
             boolean courseInterfaceRunning = true;
             int creditHours = 0;
+            Double paymentAmount = 0.0;
             Student paymentTestStudent = new Student();
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
             System.out.println("This test requires you to create a test student to be created"
-                               + "\n Please enter an amount of credit hours between 0 and 22 and a student will be created for you");
+                               + "\nPlease enter an amount of credit hours between 0 and 22 and a student will be created for you\n");
                             
             loopRunner = true;
             creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
@@ -136,6 +141,8 @@ public class Lab5 {
 
             paymentTestStudent.buildRandomPerson("INC", creditHours);
 
+            
+
             while (courseInterfaceRunning) {
                 System.out.println("\nYou can test the new Payments class by making payments towards a students tuition and viewing tuition details"
                                     + "\n    1.) Create a new test student"
@@ -143,71 +150,94 @@ public class Lab5 {
                                     + "\n    3.) See Total Tuition due"
                                     + "\n    4.) See Total Payments made"
                                     + "\n    0.) Return to The previous menu"
-                                    + "\nPlease Enter The Number of Your Selection...");
+                                    + "\n\nPlease Enter The Number of Your Selection...\n");
                 paymentsTestChoice = myScanner.nextLine();
                 switch (paymentsTestChoice) {
                     case "1":
-                        System.out.println("Please enter an amount of credit hours between 0 and 22 and a new student will be created for you");
+                        System.out.println("\nPlease enter an amount of credit hours between 0 and 22 and a new student will be created for you\n");
                         loopRunner = true;
                         creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
                         if (creditHours == -1) {
                             break;
                         }
 
+                        paymentTestStudent = new Student();
                         paymentTestStudent.buildRandomPerson("INC", creditHours);
 
                         break;
 
                     case "2":
-                        Double paymentAmount = 0.0;
                         String description = "";
                         
                         testIsRunning = true;
                         while (testIsRunning) {
-                            if (!zeroBalanceCheck(paymentTestStudent)) {
+                            if (zeroBalanceCheck(paymentTestStudent)) {
                                 testIsRunning = false;
                                 continue;
                             }
 
                             loopRunner = true;
-                            System.out.println("Please enter the amount of the payment");
-                            creditHours = verifyDoubleInput(loopRunner, paymentVerifier);
+                            System.out.println("\nPlease enter the amount of the payment\n");
+                            paymentAmount = verifyDoubleInput(loopRunner, paymentVerifier);
                             if (creditHours == -1.0) {
                                 break;
                             }
                             
-                            overPaymentCheck();
+                            if (overPaymentCheck(paymentTestStudent, paymentAmount)) {
+                                testIsRunning = false;
+                                continue;
+                            }
 
                             loopRunner = true;
-                            System.out.println("Please enter a brief description of the payment (optional)");
-                            description = verifyStringInput(loopRunner, descriptionVerifier)
+                            System.out.println("\nPlease enter a brief description of the payment\n");
+                            description = verifyStringInput(loopRunner, descriptionVerifier);
                             if ("exit".equals(description.toLowerCase())) {
                                 continue;
                             }
 
                             paymentTestStudent.makePayment(paymentAmount, description);
+                            System.out.println("Thank you " 
+                                                + paymentTestStudent.getName() 
+                                                + " for your payment of " 
+                                                + currencyFormatter.format(paymentAmount)
+                                                + "\nYour remaining balance is "
+                                                + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                                                + "\nPress enter to continue");
+                            myScanner.nextLine();
+                            testIsRunning = false;
                         }
                         break;
 
                     case "3":
                         String formattedTotal = currencyFormatter.format(paymentTestStudent.getTotalDue());
 
-                        System.out.println(paymentTestStudent.getName() + " has a remaining balance of " + formattedTotal);
+                        System.out.println(paymentTestStudent.getName() + " has a remaining balance of " + formattedTotal
+                                            + "\nPress enter to continue");
+                        myScanner.nextLine();
                         break;
 
                     case "4":
                         StringBuilder listOfPayments = new StringBuilder();
 
-                        checkIfAnyPaymentsHaveBeenMade(paymentTestStudent);
+                        testIsRunning = true;
+                        while (testIsRunning) {
+                            if (!checkIfAnyPaymentsHaveBeenMade(paymentTestStudent)){
+                                testIsRunning = false;
+                                continue;
+                            }                            
 
-                        listOfPayments.append(paymentTestStudent.getName() + "Has made the following payments");
+                            listOfPayments.append(paymentTestStudent.getName() + " has made the following payments:\n");
 
-                        for (Payment payment : paymentTestStudent.getListOfPayments()) {
-                            listOfPayments.append(currencyFormatter.format(payment.getPaymentAmount()) + "\n");
-                            listOfPayments.append("     " + payment.getDescription() + "\n");
+                            for (Payment payment : paymentTestStudent.getListOfPayments()) {
+                                listOfPayments.append(currencyFormatter.format(payment.getPaymentAmount()) + " --> ");
+                                listOfPayments.append("     " + payment.getDescription() + "\n");
+                            }
+
+                            listOfPayments.append("For a total of: " + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                                                    + "\nPress enter to continue");
+                            myScanner.nextLine();
+                            testIsRunning = false;
                         }
-
-                        listOfPayments.append("For a total of: " + currencyFormatter.format(paymentTestStudent.getTotalDue()));
 
                         System.out.println(listOfPayments);
                         
@@ -224,16 +254,45 @@ public class Lab5 {
             }
         }
 
+        private Boolean checkIfAnyPaymentsHaveBeenMade(Student testStudent) {
+            ArrayList<Payment> listOfPayments = testStudent.getListOfPayments();
+            if (listOfPayments.size() == 0) {
+                System.out.println(testStudent.getName() + " Has not made any payments"
+                                    + "\nPress enter to continue");
+                myScanner.nextLine();
+                return false;
+            }
+            return true;
+        }
+
+        private Boolean overPaymentCheck(Student testStudent, Double paymentAmount) {
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+            Double difference = testStudent.getTotalDue() - paymentAmount;
+            if (difference < 0.00) {
+                System.out.println("The payment of "
+                                    + currencyFormatter.format(paymentAmount)
+                                    + " exceeds the remaining balance for " 
+                                    + testStudent.getName()
+                                    + " By "
+                                    + currencyFormatter.format(difference * -1)
+                                    + "\nThis payment will not be applied"
+                                    + "\nPress enter to continue"); 
+                myScanner.nextLine(); 
+                return true;
+            }
+            return false;
+        }
+
         private Boolean zeroBalanceCheck(Student testStudent) {
             if (testStudent.getTotalDue() == 0) {
                 //display to user there is no current balance
                 System.out.println("The remaining balance for " + testStudent.getName() + " is currently zero"
                                     + "\nPlease create a new student with one or more credit hours to continue testing this feature"
-                                    + "\nPress enter to return to the previouse menu");
+                                    + "\nPress enter to return to the previous menu");
                 myScanner.nextLine();
-                return false;
+                return true;
             }
-            return true;
+            return false;
         }
 
         public void runTuitionChartTest() {
@@ -611,6 +670,30 @@ public class Lab5 {
                 }
                 try {
                     convertedInput = Integer.parseInt(inputToVerify);
+                } catch (final Exception e) {
+                    System.out.println(inputType.getErrorMessage());
+                    continue;
+                }
+                loopRunner = false;
+            }
+            return convertedInput;
+        }
+
+        private Double verifyDoubleInput(boolean loopRunner, InputVerifierModel inputType) {
+            String inputToVerify = "";
+            Double convertedInput = 0.0;
+            final Pattern regexPattern = Pattern.compile(inputType.getRegexPattern());
+            while(loopRunner) {
+                inputToVerify = myScanner.nextLine();
+                if (returnToMainMenu(inputToVerify)) {
+                    return -1.0;
+                }
+                if (!regexPattern.matcher(inputToVerify).matches()) {
+                    System.out.println(inputType.getErrorMessage());
+                    continue;
+                }
+                try {
+                    convertedInput = Double.parseDouble(inputToVerify);
                 } catch (final Exception e) {
                     System.out.println(inputType.getErrorMessage());
                     continue;
