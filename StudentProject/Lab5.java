@@ -130,8 +130,8 @@ public class Lab5 {
             Student paymentTestStudent = new Student();
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
-            System.out.println("This test requires you to create a test student to be created"
-                               + "\nPlease enter an amount of credit hours between 0 and 22 and a student will be created for you\n");
+            System.out.println("\nThis test requires you to create a test student"
+                               + "\nPlease enter an amount of credit hours between 0 and 22 and one will be created for you\n");
                             
             loopRunner = true;
             creditHours = verifyIntegerInput(loopRunner, creditHourVerifier);
@@ -141,10 +141,17 @@ public class Lab5 {
 
             paymentTestStudent.buildRandomPerson("INC", creditHours);
 
-            
+            System.out.println("\nWelcome "
+                                + paymentTestStudent.getName()
+                                + "!  Your Current remaining tuition balance is "
+                                + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                                + "\nPress enter to continue to the payments menu");
+            myScanner.nextLine();
 
             while (courseInterfaceRunning) {
-                System.out.println("\nYou can test the new Payments class by making payments towards a students tuition and viewing tuition details"
+                System.out.println("\nYou can test the new Payments class by making payments towards "
+                                    + paymentTestStudent.getName()
+                                    + "s tuition and viewing payment details"
                                     + "\n    1.) Create a new test student"
                                     + "\n    2.) Make a payment"
                                     + "\n    3.) See Total Tuition due"
@@ -175,9 +182,10 @@ public class Lab5 {
                                 testIsRunning = false;
                                 continue;
                             }
-
                             loopRunner = true;
-                            System.out.println("\nPlease enter the amount of the payment\n");
+                            System.out.println("Current Balance: "
+                                                + currencyFormatter.format(paymentTestStudent.getTotalDue()) 
+                                                + "\nPlease enter the amount of the payment\n");
                             paymentAmount = verifyDoubleInput(loopRunner, paymentVerifier);
                             if (creditHours == -1.0) {
                                 break;
@@ -230,16 +238,16 @@ public class Lab5 {
 
                             for (Payment payment : paymentTestStudent.getListOfPayments()) {
                                 listOfPayments.append(currencyFormatter.format(payment.getPaymentAmount()) + " --> ");
-                                listOfPayments.append("     " + payment.getDescription() + "\n");
+                                listOfPayments.append(payment.getDescription() + "\n");
                             }
 
                             listOfPayments.append("For a total of: " + currencyFormatter.format(paymentTestStudent.getTotalDue())
                                                     + "\nPress enter to continue");
-                            myScanner.nextLine();
                             testIsRunning = false;
                         }
 
                         System.out.println(listOfPayments);
+                        myScanner.nextLine();
                         
                         break;
                 
@@ -267,7 +275,7 @@ public class Lab5 {
 
         private Boolean overPaymentCheck(Student testStudent, Double paymentAmount) {
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-            Double difference = testStudent.getTotalDue() - paymentAmount;
+            Double difference = testStudent.getTotalDue() - paymentAmount;//TODO need to round the first value to 2 digits to avoid error
             if (difference < 0.00) {
                 System.out.println("The payment of "
                                     + currencyFormatter.format(paymentAmount)
