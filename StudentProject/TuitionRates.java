@@ -1,8 +1,10 @@
+import java.math.BigDecimal;
+
 public class TuitionRates {
     
-    final static Double inCountyBaseRate = 139.04;
-    final static Double outOfCountyBaseRate = 164.22;
-    final static Double outOfStateBaseRate = 315.79;
+    final static BigDecimal inCountyBaseRate = BigDecimal.valueOf(139.04);
+    final static BigDecimal outOfCountyBaseRate = BigDecimal.valueOf(164.22);
+    final static BigDecimal outOfStateBaseRate = BigDecimal.valueOf(315.79);
     final static int creditHourBonusRate = 13;
     final static int creditHourBonusRateOffset = 5;
 
@@ -14,15 +16,15 @@ public class TuitionRates {
         return creditHourBonusRate;
     }
 
-    public static Double getInCountyBaseRate() {
+    public static BigDecimal getInCountyBaseRate() {
         return inCountyBaseRate;
     }
 
-    public static Double getOutOfCountyBaseRate() {
+    public static BigDecimal getOutOfCountyBaseRate() {
         return outOfCountyBaseRate;
     }
 
-    public static Double getOutOfStateBaseRate() {
+    public static BigDecimal getOutOfStateBaseRate() {
         return outOfStateBaseRate;
     } 
 

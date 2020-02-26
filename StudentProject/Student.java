@@ -1,4 +1,6 @@
+import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -8,6 +10,7 @@ public class Student {
     private String studentNumber;
 	private String residencyCode;
 	private ArrayList<Course> courses = new ArrayList<>();  
+	private ArrayList<Payment> payments = new ArrayList<>();
 	
 	Student(){}
 
@@ -61,6 +64,10 @@ public class Student {
 		this.studentNumber = studentNumber;
 	}
 
+	public ArrayList<Payment> getListOfPayments() {
+		return this.payments;
+	}
+
 	public int getCreditHours() {
 		int creditHours = 0;
 		for (Course course : courses) {
@@ -69,44 +76,48 @@ public class Student {
 		return creditHours;
 	}
 
-	public void addCourse(Course course) {
-		this.courses.add(course);
+	public BigDecimal getTotalDue() {
+		return getTuition().subtract(getTotalPayments());
 	}
 
-	public void addCourseList(List<Course> courses) {
-		for (Course course : courses) {
-			addCourse(course);
+	public String getCourseList() {
+		StringBuilder courseList = new StringBuilder();
+		int runningTotal = 0;
+		courseList.append("		Course List:\n");
+		if (!this.courses.isEmpty()) {
+			for (Course course : this.courses) {
+				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
+				runningTotal += course.getCreditHours();
+			}
+			courseList.append("			Total Credit Hours: " + runningTotal);
+			return courseList.toString();
 		}
+		courseList.append("		This Student has not signed up for any classes yet");
+		return courseList.toString();
 	}
 
-    public Double getTuition() {
-        double baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
+    public BigDecimal getTuition() {
+        BigDecimal baseRate = this.residencyCode.equals(ResidentialCodes.INC.toString()) ? TuitionRates.getInCountyBaseRate()
                         : this.residencyCode.equals(ResidentialCodes.OOC.toString()) ? TuitionRates.getOutOfCountyBaseRate()
                         : this.residencyCode.equals(ResidentialCodes.OOS.toString()) ? TuitionRates.getOutOfStateBaseRate()
-                                                           : 0.0;
+                                                           : BigDecimal.valueOf(0);
         if (getCreditHours() <= 13) {
-            return baseRate * getCreditHours();
+            return baseRate.multiply(BigDecimal.valueOf(getCreditHours()));
         } else if (getCreditHours() >= 13 && getCreditHours() <= 18) {
-            return baseRate * TuitionRates.getCreditHourBonusRate();
+            return baseRate.multiply(BigDecimal.valueOf(TuitionRates.getCreditHourBonusRate()));
         }
         
-        return (getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()) * baseRate;
+        return BigDecimal.valueOf(getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()).multiply(baseRate);
 	}
 	
-	public void buildRandomPerson(String residencyCode, int creditHours) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = Course.buildDefaultCourseList(creditHours);
-			
-	}
-	
-	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = courses;
-			
+	public BigDecimal getTotalPayments() {
+		BigDecimal totalPayments =  BigDecimal.valueOf(0);
+
+		for (Payment payment : this.payments) {
+			totalPayments = totalPayments.add(payment.getPaymentAmount());
+		}
+
+		return totalPayments;
 	}
 
 	public String getDetailsAsString() {
@@ -128,25 +139,42 @@ public class Student {
 		return response;
 	}
 
+	public void addCourse(Course course) {
+		this.courses.add(course);
+	}
+
+	public void addCourseList(List<Course> courses) {
+		for (Course course : courses) {
+			addCourse(course);
+		}
+	}
+
+	public void buildRandomPerson(String residencyCode, int creditHours) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = Course.buildDefaultCourseList(creditHours);
+			
+	}
+	
+	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = courses;
+			
+	}
+
+	public void makePayment(BigDecimal paymentAmount, String description) {
+		LocalDateTime dateOfPayment = LocalDateTime.now();
+
+		Payment payment = new Payment(paymentAmount, dateOfPayment, description);
+		this.payments.add(payment);
+	}
+
 	private boolean doCreditHoursQualifyForSpecialRate() {
 		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
 			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
-	}
-
-	public String getCourseList() {
-		StringBuilder courseList = new StringBuilder();
-		int runningTotal = 0;
-		courseList.append("		Course List:\n");
-		if (!this.courses.isEmpty()) {
-			for (Course course : this.courses) {
-				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
-				runningTotal += course.getCreditHours();
-			}
-			courseList.append("			Total Credit Hours: " + runningTotal);
-			return courseList.toString();
-		}
-		courseList.append("		This Student has not signed up for any classes yet");
-		return courseList.toString();
 	}
 
 	private static String getRandomName() {
