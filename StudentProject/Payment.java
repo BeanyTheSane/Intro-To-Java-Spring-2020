@@ -6,7 +6,7 @@ public class Payment {
     private LocalDateTime dateOfPayment;
     private String description;
 
-    public Payment(BigDecimal paymentAmount, LocalDateTime dateOfPayment, String description) {
+    Payment(BigDecimal paymentAmount, LocalDateTime dateOfPayment, String description) {
         this.paymentAmount = paymentAmount;
         this.dateOfPayment = dateOfPayment;
         this.description = description;

@@ -64,6 +64,10 @@ public class Student {
 		this.studentNumber = studentNumber;
 	}
 
+	public ArrayList<Payment> getListOfPayments() {
+		return this.payments;
+	}
+
 	public int getCreditHours() {
 		int creditHours = 0;
 		for (Course course : courses) {
@@ -72,14 +76,24 @@ public class Student {
 		return creditHours;
 	}
 
-	public void addCourse(Course course) {
-		this.courses.add(course);
+	public BigDecimal getTotalDue() {
+		return getTuition().subtract(getTotalPayments());
 	}
 
-	public void addCourseList(List<Course> courses) {
-		for (Course course : courses) {
-			addCourse(course);
+	public String getCourseList() {
+		StringBuilder courseList = new StringBuilder();
+		int runningTotal = 0;
+		courseList.append("		Course List:\n");
+		if (!this.courses.isEmpty()) {
+			for (Course course : this.courses) {
+				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
+				runningTotal += course.getCreditHours();
+			}
+			courseList.append("			Total Credit Hours: " + runningTotal);
+			return courseList.toString();
 		}
+		courseList.append("		This Student has not signed up for any classes yet");
+		return courseList.toString();
 	}
 
     public BigDecimal getTuition() {
@@ -96,20 +110,14 @@ public class Student {
         return BigDecimal.valueOf(getCreditHours() - TuitionRates.getCreditHourBonusRateOffset()).multiply(baseRate);
 	}
 	
-	public void buildRandomPerson(String residencyCode, int creditHours) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = Course.buildDefaultCourseList(creditHours);
-			
-	}
-	
-	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = courses;
-			
+	public BigDecimal getTotalPayments() {
+		BigDecimal totalPayments =  BigDecimal.valueOf(0);
+
+		for (Payment payment : this.payments) {
+			totalPayments = totalPayments.add(payment.getPaymentAmount());
+		}
+
+		return totalPayments;
 	}
 
 	public String getDetailsAsString() {
@@ -131,19 +139,30 @@ public class Student {
 		return response;
 	}
 
-	private boolean doCreditHoursQualifyForSpecialRate() {
-		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
-			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
+	public void addCourse(Course course) {
+		this.courses.add(course);
 	}
 
-	public BigDecimal getTotalPayments() {
-		BigDecimal totalPayments =  BigDecimal.valueOf(0);
-
-		for (Payment payment : this.payments) {
-			totalPayments = totalPayments.add(payment.getPaymentAmount());
+	public void addCourseList(List<Course> courses) {
+		for (Course course : courses) {
+			addCourse(course);
 		}
+	}
 
-		return totalPayments;
+	public void buildRandomPerson(String residencyCode, int creditHours) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = Course.buildDefaultCourseList(creditHours);
+			
+	}
+	
+	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
+		this.name = getRandomName();
+		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
+		this.residencyCode = residencyCode;
+		this.courses = courses;
+			
 	}
 
 	public void makePayment(BigDecimal paymentAmount, String description) {
@@ -153,28 +172,9 @@ public class Student {
 		this.payments.add(payment);
 	}
 
-	public ArrayList<Payment> getListOfPayments() {
-		return this.payments;
-	}
-
-	public BigDecimal getTotalDue() {
-		return getTuition().subtract(getTotalPayments());
-	}
-
-	public String getCourseList() {
-		StringBuilder courseList = new StringBuilder();
-		int runningTotal = 0;
-		courseList.append("		Course List:\n");
-		if (!this.courses.isEmpty()) {
-			for (Course course : this.courses) {
-				courseList.append("		" + course.getCourseDetailsAsString() + "\n");
-				runningTotal += course.getCreditHours();
-			}
-			courseList.append("			Total Credit Hours: " + runningTotal);
-			return courseList.toString();
-		}
-		courseList.append("		This Student has not signed up for any classes yet");
-		return courseList.toString();
+	private boolean doCreditHoursQualifyForSpecialRate() {
+		return (getCreditHours() >= TuitionRates.getCreditHourBonusRate() 
+			   && getCreditHours() <= TuitionRates.getCreditHourBonusRate() + TuitionRates.getCreditHourBonusRateOffset());
 	}
 
 	private static String getRandomName() {
