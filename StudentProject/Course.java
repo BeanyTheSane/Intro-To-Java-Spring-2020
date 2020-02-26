@@ -43,6 +43,7 @@ public class Course {
         this.courseName = "Test Course";
         this.creditHours = creditHours;
     }
+    
     public String getCourseDetailsAsString() {
         StringBuilder courseDetails = new StringBuilder();
 

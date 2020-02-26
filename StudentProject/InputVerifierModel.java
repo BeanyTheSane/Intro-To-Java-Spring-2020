@@ -3,7 +3,7 @@ public class InputVerifierModel {
     private String regexPattern;
     private String errorMessage;
     
-    public InputVerifierModel(String name, String regexPattern, String errorMessage) {
+    InputVerifierModel(String name, String regexPattern, String errorMessage) {
         this.name = name;
         this.regexPattern = regexPattern;
         this.errorMessage = errorMessage;
