@@ -140,7 +140,7 @@ public class Student {
 		BigDecimal totalPayments =  BigDecimal.valueOf(0);
 
 		for (Payment payment : this.payments) {
-			totalPayments.add(payment.getPaymentAmount());
+			totalPayments = totalPayments.add(payment.getPaymentAmount());
 		}
 
 		return totalPayments;

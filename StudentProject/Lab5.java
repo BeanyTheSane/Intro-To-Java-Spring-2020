@@ -1,5 +1,6 @@
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -127,7 +128,6 @@ public class Lab5 {
             String paymentsTestChoice = "";
             int creditHours = 0;
             boolean courseInterfaceRunning = true;
-            BigDecimal paymentAmount =  BigDecimal.valueOf(0);
             Student paymentTestStudent = new Student();
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
 
@@ -163,86 +163,19 @@ public class Lab5 {
                 paymentsTestChoice = myScanner.nextLine();
                 switch (paymentsTestChoice) {
                     case "1":
-                    
                         paymentTestStudent = createNewPaymentTestStudent(paymentTestStudent);
                         break;
 
                     case "2":
-                        String description = "";
-                        
-                        testIsRunning = true;
-                        while (testIsRunning) {
-                            if (zeroBalanceCheck(paymentTestStudent)) {
-                                testIsRunning = false;
-                                continue;
-                            }
-                            loopRunner = true;
-                            System.out.println("Current Balance: "
-                                                + currencyFormatter.format(paymentTestStudent.getTotalDue()) 
-                                                + "\nPlease enter the amount of the payment\n");
-                            paymentAmount = verifyBigDecimalInput(loopRunner, paymentVerifier);
-                            if (paymentAmount == BigDecimal.valueOf(-1)) {
-                                continue;
-                            }
-                            
-                            if (overPaymentCheck(paymentTestStudent, paymentAmount)) {
-                                testIsRunning = false;
-                                continue;
-                            }
-
-                            loopRunner = true;
-                            System.out.println("\nPlease enter a brief description of the payment\n");
-                            description = verifyStringInput(loopRunner, descriptionVerifier);
-                            if ("exit".equals(description.toLowerCase())) {
-                                continue;
-                            }
-
-                            paymentTestStudent.makePayment(paymentAmount, description);
-                            System.out.println("Thank you " 
-                                                + paymentTestStudent.getName() 
-                                                + " for your payment of " 
-                                                + currencyFormatter.format(paymentAmount)
-                                                + "\nYour remaining balance is "
-                                                + currencyFormatter.format(paymentTestStudent.getTotalDue())
-                                                + "\nPress enter to continue");
-                            myScanner.nextLine();
-                            testIsRunning = false;
-                        }
+                        promptForPayment(paymentTestStudent);
                         break;
 
                     case "3":
-                        String formattedTotal = currencyFormatter.format(paymentTestStudent.getTotalDue());
-
-                        System.out.println(paymentTestStudent.getName() + " has a remaining balance of " + formattedTotal
-                                            + "\nPress enter to continue");
-                        myScanner.nextLine();
+                        showRemainingBalance(paymentTestStudent);
                         break;
 
                     case "4":
-                        StringBuilder listOfPayments = new StringBuilder();
-
-                        testIsRunning = true;
-                        while (testIsRunning) {
-                            if (!checkIfAnyPaymentsHaveBeenMade(paymentTestStudent)){
-                                testIsRunning = false;
-                                continue;
-                            }                            
-
-                            listOfPayments.append(paymentTestStudent.getName() + " has made the following payments:\n");
-
-                            for (Payment payment : paymentTestStudent.getListOfPayments()) {
-                                listOfPayments.append(currencyFormatter.format(payment.getPaymentAmount()) + " --> ");
-                                listOfPayments.append(payment.getDescription() + "\n");
-                            }
-
-                            listOfPayments.append("For a total of: " + currencyFormatter.format(paymentTestStudent.getTotalDue())
-                                                    + "\nPress enter to continue");
-                            testIsRunning = false;
-                        }
-
-                        System.out.println(listOfPayments);
-                        myScanner.nextLine();
-                        
+                        showListOfPayments(paymentTestStudent);
                         break;
                 
                     case "0":
@@ -253,6 +186,91 @@ public class Lab5 {
                         System.out.println("Please Enter The Number of Your Selection!");
                         break;
                 }
+            }
+        }
+
+        private void showListOfPayments(Student paymentTestStudent) {
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+            StringBuilder listOfPayments = new StringBuilder();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+
+            testIsRunning = true;
+            while (testIsRunning) {
+                if (!checkIfAnyPaymentsHaveBeenMade(paymentTestStudent)){
+                    testIsRunning = false;
+                    continue;
+                }                            
+
+                listOfPayments.append(paymentTestStudent.getName() + " has made the following payments:\n");
+
+                for (Payment payment : paymentTestStudent.getListOfPayments()) {
+                    listOfPayments.append(payment.getDateOfPayment().format(formatter) + "  ...  ");
+                    listOfPayments.append(currencyFormatter.format(payment.getPaymentAmount()) + " --> ");
+                    listOfPayments.append(payment.getDescription() + "\n");
+                }
+
+                listOfPayments.append("For a total of: " + currencyFormatter.format(paymentTestStudent.getTotalPayments())
+                                        + "\nPress enter to continue");
+                testIsRunning = false;
+            }
+
+            System.out.println(listOfPayments);
+            myScanner.nextLine();
+        }
+
+        private void showRemainingBalance(Student paymentTestStudent) {
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
+            String formattedTotal = currencyFormatter.format(paymentTestStudent.getTotalDue());
+
+            System.out.println(paymentTestStudent.getName() + " has a remaining balance of " + formattedTotal
+                                + "\nPress enter to continue");
+            myScanner.nextLine();
+        }
+
+        private void promptForPayment(Student paymentTestStudent) {
+
+            BigDecimal paymentAmount =  BigDecimal.valueOf(0);
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+            String description = "";
+                        
+            testIsRunning = true;
+            while (testIsRunning) {
+                if (zeroBalanceCheck(paymentTestStudent)) {
+                    testIsRunning = false;
+                    continue;
+                }
+                loopRunner = true;
+                System.out.println("Current Balance: "
+                                    + currencyFormatter.format(paymentTestStudent.getTotalDue()) 
+                                    + "\nPlease enter the amount of the payment\n");
+                paymentAmount = verifyBigDecimalInput(loopRunner, paymentVerifier);
+                if (paymentAmount.equals(BigDecimal.valueOf(-1))) {
+                    continue;
+                }
+                
+                if (overPaymentCheck(paymentTestStudent, paymentAmount)) {
+                    testIsRunning = false;
+                    continue;
+                }
+
+                loopRunner = true;
+                System.out.println("\nPlease enter a brief description of the payment\n");
+                description = verifyStringInput(loopRunner, descriptionVerifier);
+                if ("exit".equals(description.toLowerCase())) {
+                    continue;
+                }
+
+                paymentTestStudent.makePayment(paymentAmount, description);
+                System.out.println("Thank you " 
+                                    + paymentTestStudent.getName() 
+                                    + " for your payment of " 
+                                    + currencyFormatter.format(paymentAmount)
+                                    + "\nYour remaining balance is "
+                                    + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                                    + "\nPress enter to continue");
+                myScanner.nextLine();
+                testIsRunning = false;
             }
         }
 
@@ -295,7 +313,7 @@ public class Lab5 {
 
         private Boolean overPaymentCheck(Student testStudent, BigDecimal paymentAmount) {
             NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-            BigDecimal difference = testStudent.getTotalDue().subtract(paymentAmount);//TODO need to round the first value to 2 digits to avoid error
+            BigDecimal difference = testStudent.getTotalDue().subtract(paymentAmount);
             if (difference.compareTo( BigDecimal.valueOf(0)) == -1) {
                 System.out.println("The payment of "
                                     + currencyFormatter.format(paymentAmount)
