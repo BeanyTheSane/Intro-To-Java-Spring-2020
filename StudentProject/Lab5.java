@@ -113,8 +113,6 @@ public class Lab5 {
                             new InputVerifierModel("Payment", 
                                                     "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{2})?$", 
                                                     "\nPlease enter a payment amount equal to a dollar or more using the following format XXXX.XX"); 
-
-
         InputVerifierModel descriptionVerifier =
                             new InputVerifierModel("Description", 
                                                     "^.{0,255}$", 
@@ -262,6 +260,7 @@ public class Lab5 {
                 }
 
                 paymentTestStudent.makePayment(paymentAmount, description);
+
                 System.out.println("Thank you " 
                                     + paymentTestStudent.getName() 
                                     + " for your payment of " 
@@ -270,6 +269,7 @@ public class Lab5 {
                                     + currencyFormatter.format(paymentTestStudent.getTotalDue())
                                     + "\nPress enter to continue");
                 myScanner.nextLine();
+                
                 testIsRunning = false;
             }
         }
