@@ -34,6 +34,6 @@ public class Subscription {
 
     public String foramttedCostOfRenewal() {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-        return currencyFormatter.format(this.cost);
+        return currencyFormatter.format(costOfRenewalRaw());
     }
 }
