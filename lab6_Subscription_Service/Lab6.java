@@ -15,7 +15,7 @@ public class Lab6 {
                           + "\nPress enter to begin");
                           myScanner.nextLine();
 
-        
+        TestCases.runQuickTest();
 
         myScanner.close();
     }

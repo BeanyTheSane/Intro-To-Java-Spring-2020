@@ -8,4 +8,21 @@ public class StudentSubscriber extends Subscriber{
         this.studentId = studentId;
     }
 
+
+    public String getSchoolName() {
+        return this.schoolName;
+    }
+
+    public void setSchoolName(String schoolName) {
+        this.schoolName = schoolName;
+    }
+
+    public String getStudentId() {
+        return this.studentId;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
 }
