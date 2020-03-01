@@ -19,8 +19,8 @@ public class Dvd extends MediaItem {
         this.rating = rating;
     }
     
-    public String getFine(LocalDateTime returnDate) {
-        return super.getFine(returnDate, this.lateFeePerDay, this.checkoutLengthInDays);
+    public BigDecimal getFine() {
+        return super.getFine(this.lateFeePerDay, this.checkoutLengthInDays);
     }
 
     public String getDueDate() {     

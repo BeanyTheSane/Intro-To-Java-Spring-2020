@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Book extends MediaItem {
     private String author;
@@ -19,8 +18,8 @@ public class Book extends MediaItem {
         this.author = author;
     }
     
-    public String getFine(LocalDateTime returnDate) {
-        return super.getFine(returnDate, this.lateFeePerDay, this.checkoutLengthInDays);
+    public BigDecimal getFine() {
+        return super.getFine(this.lateFeePerDay, this.checkoutLengthInDays);
     }
 
     public String getDueDate() {     

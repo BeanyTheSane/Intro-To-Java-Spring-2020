@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -7,35 +6,57 @@ public abstract class MediaItem {
     protected String        title;
     protected String        id;
     protected LocalDateTime checkoutDate;
+    protected LocalDateTime returnDate;
+    protected Boolean       checkedOut;
 
     MediaItem(String title, String id) {
         this.title = title;
         this.id = id;
-        this.checkoutDate = LocalDateTime.now();
+        this.checkoutDate = null;
+        this.returnDate = null;
+        this.checkedOut = false;
     }
 
-    public String getTitle() {
+    protected String getTitle() {
         return this.title;
     }
 
-    public void setTitle(String title) {
+    protected void setTitle(String title) {
         this.title = title;
     }
 
-    public String getId() {
+    protected String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    protected void setId(String id) {
         this.id = id;
     }
 
-    public LocalDateTime getCheckoutDate() {
+    protected LocalDateTime getCheckoutDate() {
         return this.checkoutDate;
     }
 
-    public void setCheckoutDate(LocalDateTime checkoutDate) {
-        this.checkoutDate = checkoutDate;
+    protected LocalDateTime getReturnDate() {
+        return this.returnDate;
+    }
+
+    protected Boolean checkoutMedia(LocalDateTime checkoutDate) {
+        if (!this.checkedOut) {
+            this.checkoutDate = checkoutDate;
+            this.checkedOut = true;
+            return true;
+        }
+        return false;
+    }
+
+    protected Boolean returnMedia(LocalDateTime returnDate) {
+        if (this.checkedOut) {
+            this.returnDate = returnDate;
+            this.checkedOut = false;
+            return true;
+        }
+        return false;
     }
 
     protected String getDueDate(long checkoutLengthInDays) {
@@ -52,16 +73,14 @@ public abstract class MediaItem {
         return false;
     };
 
-    protected String getFine(LocalDateTime returnDate, BigDecimal lateFeePerDay, long checkoutLengthInDays) {
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+    protected BigDecimal getFine(BigDecimal lateFeePerDay, long checkoutLengthInDays) {
         int differenceInDays = 0;
-        BigDecimal fine = BigDecimal.valueOf(0);
 
-        if (returnDate.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays))) {
-            differenceInDays = returnDate.getDayOfYear() - checkoutDate.getDayOfYear();
-            fine = lateFeePerDay.multiply(BigDecimal.valueOf(differenceInDays));
+        if (this.returnDate.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays))) {
+            differenceInDays = this.returnDate.getDayOfYear() - this.checkoutDate.getDayOfYear();
+            return lateFeePerDay.multiply(BigDecimal.valueOf(differenceInDays));
         }
-        return currencyFormatter.format(fine);
+        return BigDecimal.valueOf(0);
     }
     
 }
