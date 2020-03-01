@@ -5,16 +5,26 @@ import java.time.format.DateTimeFormatter;
 public abstract class MediaItem {
     protected String        title;
     protected String        id;
+    protected String        mediaType;
     protected LocalDateTime checkoutDate;
     protected LocalDateTime returnDate;
     protected Boolean       checkedOut;
 
-    MediaItem(String title, String id) {
+    MediaItem(String title, String id, String mediaType) {
         this.title = title;
         this.id = id;
+        this.mediaType = mediaType;
         this.checkoutDate = null;
         this.returnDate = null;
         this.checkedOut = false;
+    }
+
+    public String getMediaType() {
+        return this.mediaType;
+    }
+
+    public Boolean isCheckedOut() {
+        return this.checkedOut;
     }
 
     protected String getTitle() {

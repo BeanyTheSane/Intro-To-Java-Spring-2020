@@ -1,5 +1,4 @@
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public class Dvd extends MediaItem {
     private String rating;
@@ -7,7 +6,7 @@ public class Dvd extends MediaItem {
     final private BigDecimal lateFeePerDay = BigDecimal.valueOf(1);
 
     Dvd (String title, String id, String rating) {
-        super(title, id);
+        super(title, id, "dvd");
         this.rating = rating;    
     }
 

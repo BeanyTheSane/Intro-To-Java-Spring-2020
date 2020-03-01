@@ -1,12 +1,12 @@
 import java.math.BigDecimal;
 
 public class Book extends MediaItem {
-    private String author;
-    final private long checkoutLengthInDays = 28;
-    final private BigDecimal lateFeePerDay = BigDecimal.valueOf(0.25);
+    private String              author;
+    final private long          checkoutLengthInDays    = 28;
+    final private BigDecimal    lateFeePerDay           = BigDecimal.valueOf(0.25);
 
     Book(String title, String id, String author) {
-        super(title, id);
+        super(title, id, "book");
         this.author = author;
     }
 

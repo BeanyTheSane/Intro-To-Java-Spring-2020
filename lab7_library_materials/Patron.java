@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -63,6 +64,7 @@ public class Patron {
     }
 
     public String getTotalFine() {
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
         BigDecimal totalFine = BigDecimal.valueOf(0);
 
         for (MediaItem mediaItem : this.checkoutList) {
@@ -78,7 +80,6 @@ public class Patron {
                 }
             }
         }
-        
-        return"";
+        return currencyFormatter.format(totalFine);
     }
 }
