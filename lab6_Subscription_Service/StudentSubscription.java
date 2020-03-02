@@ -3,19 +3,17 @@ import java.text.NumberFormat;
 
 public class StudentSubscription extends Subscription {
     final private BigDecimal studentRate = BigDecimal.valueOf(.75);
-    private StudentSubscriber studentSubscriber;
 
-    public StudentSubscription(StudentSubscriber studentSubscriber) {
-        super();
-        this.studentSubscriber = studentSubscriber;
+    public StudentSubscription(Subscriber studentSubscriber) {
+        super(studentSubscriber);
     }
 
     public StudentSubscriber getSubscriber() {
-        return this.studentSubscriber;
+        return (StudentSubscriber) this.subscriber;
     }
 
     public void setSubscriber(StudentSubscriber studentSubscriber) {
-        this.studentSubscriber = studentSubscriber;
+        this.subscriber = studentSubscriber;
     }
 
     public BigDecimal costOfRenewalRaw() {
@@ -26,5 +24,8 @@ public class StudentSubscription extends Subscription {
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
         return currencyFormatter.format(costOfRenewalRaw());
     }
-    
+
+    public BigDecimal getRate() {
+        return this.studentRate;
+    }
 }

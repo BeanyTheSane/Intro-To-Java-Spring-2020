@@ -23,4 +23,12 @@ public class PremiumSubscription extends Subscription {
         DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         return this.startDate.plusYears(premiumSubscriptionLengthInYears).format(shortDate);
     }
+    
+    public BigDecimal getRate() {
+        return this.premiumRate;
+    }
+
+    public Long getSubscriptionLength() {
+        return this.premiumSubscriptionLengthInYears;
+    }
 }

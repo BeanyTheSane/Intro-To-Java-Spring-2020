@@ -9,10 +9,6 @@ public class Subscription {
     final protected BigDecimal cost = BigDecimal.valueOf(20);  
     final protected Long subscriptionLengthInYears = (long) 1;
 
-    Subscription() {
-        this.startDate = LocalDateTime.now();
-    }
-
     Subscription(Subscriber subscriber) {
         this.subscriber = subscriber;
         this.startDate = LocalDateTime.now();
@@ -46,5 +42,9 @@ public class Subscription {
     public String getExpirationDate() {
         DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         return this.startDate.plusYears(this.subscriptionLengthInYears).format(shortDate);
+    }
+
+    public Long getSubscriptionLength() {
+        return this.subscriptionLengthInYears;
     }
 }
