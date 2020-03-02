@@ -31,6 +31,11 @@ public class TestCases {
         premiumSubscriptionClassTest();
     }
 
+	public static void runBuildAndOutputTest() {
+        buildSubscriberList();
+        buildSubscriptionList();
+	}
+
     private static void subscriberClassTests() {
         System.out.println("\nSubscriber Class Test"
                        + "\nTest 1: All fields constructor test"

@@ -21,6 +21,7 @@ public class Lab6 {
             System.out.println("Please enter the number for your selection:"
                            + "\n1.) Run Quick Test"
                            + "\n2.) Run Full Details Test"
+                           + "\n3.) Run Build and Output Test"
                            + "\n0.) Exit the program");
 
             userChoice = myScanner.nextLine();
@@ -34,6 +35,12 @@ public class Lab6 {
             
                 case "2":
                     TestCases.runAllTestsWithDetails();
+                    System.out.println("Press Enter to return to the main menu");
+                    myScanner.nextLine();
+                    break;
+
+                case "3":
+                    TestCases.runBuildAndOutputTest();
                     System.out.println("Press Enter to return to the main menu");
                     myScanner.nextLine();
                     break;
