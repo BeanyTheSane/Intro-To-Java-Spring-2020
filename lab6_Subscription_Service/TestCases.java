@@ -1,7 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
-
 public class TestCases {
     final static Scanner myScanner = new Scanner(System.in);
     final static String styledSeperator = "<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>";
@@ -15,6 +14,7 @@ public class TestCases {
         System.out.println("Subscription Class Tests:");
         System.out.println("    Test 1: Constructor sets current date                               ->      " + constructor_sets_current_date_when_initiated_Subscription());
         System.out.println("    Test 2: formattedCostOfRenewal returns the correct foramtted cost   ->      " + constructor_sets_current_date_when_initiated_Subscription());
+        System.out.println("    Test 3: getExpirationDate returns the correct foramtted date        ->      " + getExpirationDate_returns_the_correct_formatted_date());
     }
 
     public static void runAllTestsWithDetails() {
@@ -52,6 +52,12 @@ public class TestCases {
                        + "\nGIVEN I Have a subscription"
                        + "\nWHEN I check the formattedCostOfRenewal"
                        + "\nTHEN It returns the correct formatted cost");
+
+        System.out.println(styledSeperator);
+        System.out.println(getExpirationDate_returns_the_correct_formatted_date());
+        System.out.println(styledSeperator);
+        System.out.println("Press Enter To Continue...");
+        myScanner.nextLine();
     }
 
     private static void subscriberClassTests() {
@@ -92,6 +98,19 @@ public class TestCases {
                       System.out.println(styledSeperator);
                       System.out.println("Press Enter To Continue...");
                       myScanner.nextLine();
+    }
+
+    private static String getExpirationDate_returns_the_correct_formatted_date() {
+        Subscriber subscriber = new Subscriber("Luke", "Skywalker", "123 Sandy Way", "Mos Eisley", "Tatooine", "44052");
+        Subscription subscription = new Subscription(subscriber);
+        DateTimeFormatter shortDate = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+        LocalDateTime dateTest = LocalDateTime.now();
+
+        if (subscription.getExpirationDate().equals(dateTest.plusYears(1).format(shortDate))) {
+            return "PASSED";
+        } else {
+            return "FAILED";
+        }
     }
 
     private static String formattedCostOfRenewal_returns_the_correct_formatted_cost() {
