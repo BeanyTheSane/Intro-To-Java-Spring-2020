@@ -41,8 +41,6 @@ public class TestCases {
         System.out.println("Basic: " + basic.toString());
         System.out.println("Premium: " + premium.toString());
         System.out.println("Student: " + student.toString());
-        System.out.println("Press Enter To Continue...");
-        myScanner.nextLine();
     }
 
     private static void subscriberClassTests() {
