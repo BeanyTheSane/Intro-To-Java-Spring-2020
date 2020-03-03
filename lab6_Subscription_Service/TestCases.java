@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 public class TestCases {
     final static Scanner myScanner = new Scanner(System.in);
@@ -32,9 +33,18 @@ public class TestCases {
     }
 
 	public static void runBuildAndOutputTest() {
-        buildSubscriberList();
-        buildSubscriptionList();
-	}
+        Subscriber basicSubscriber = new Subscriber("Luke", "Skywalker", "123 Space Lane", "Mos Eisley", "Tattooine", "44052");
+        Subscriber premiumSubscriber = new Subscriber("Han", "Solo", "Bay 12", "Jedha Space Port", "Jedha", "54987");
+        Subscriber studentSubscriber = new StudentSubscriber("Imperial Flight Academy", "759863", "Wedge", "Antilles", "Barracks 764", "Coronet City", "Corellia", "88587");
+        Subscription basic = new Subscription(basicSubscriber);
+        Subscription premium = new PremiumSubscription(premiumSubscriber);
+        Subscription student = new StudentSubscription(studentSubscriber);
+        System.out.println("Basic: " + basic.toString());
+        System.out.println("Premium: " + premium.toString());
+        System.out.println("Student: " + student.toString());
+        System.out.println("Press Enter To Continue...");
+        myScanner.nextLine();
+    }
 
     private static void subscriberClassTests() {
         System.out.println("\nSubscriber Class Test"
