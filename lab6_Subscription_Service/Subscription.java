@@ -51,7 +51,7 @@ public class Subscription {
     public String toString() {
         StringBuilder subscriptionDetails = new StringBuilder();
         subscriptionDetails.append(this.getSubscriber().getFullName());
-        subscriptionDetails.append(": Subscription Expires ");
+        subscriptionDetails.append("; Subscription Expires ");
         subscriptionDetails.append(this.getExpirationDate());
         subscriptionDetails.append(". Cost To Renew: ");
         subscriptionDetails.append(this.foramttedCostOfRenewal());

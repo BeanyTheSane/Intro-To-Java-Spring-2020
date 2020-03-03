@@ -28,4 +28,16 @@ public class StudentSubscription extends Subscription {
     public BigDecimal getRate() {
         return this.studentRate;
     }
+    
+    public String toString() {
+        StringBuilder subscriptionDetails = new StringBuilder();
+        subscriptionDetails.append(this.getSubscriber().getFullName());
+        subscriptionDetails.append("; School: ");
+        subscriptionDetails.append(this.getSubscriber().getSchoolName());
+        subscriptionDetails.append("; Subscription Expires ");
+        subscriptionDetails.append(this.getExpirationDate());
+        subscriptionDetails.append(". Cost To Renew: ");
+        subscriptionDetails.append(this.foramttedCostOfRenewal());
+        return subscriptionDetails.toString();
+    }
 }
