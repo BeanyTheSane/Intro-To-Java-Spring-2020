@@ -14,8 +14,8 @@ public abstract class MediaItem {
         this.title = title;
         this.id = id;
         this.mediaType = mediaType;
-        this.checkoutDate = null;
-        this.returnDate = null;
+        this.checkoutDate = LocalDateTime.of(1777, 02, 02, 02, 02, 02);
+        this.returnDate = LocalDateTime.of(1777, 02, 02, 02, 02, 02);
         this.checkedOut = false;
     }
 
@@ -49,6 +49,14 @@ public abstract class MediaItem {
 
     protected LocalDateTime getReturnDate() {
         return this.returnDate;
+    }
+
+	protected void setCheckoutDate(LocalDateTime checkoutDate) {
+        this.checkoutDate = checkoutDate;
+    }
+
+    protected void setReturnDate(LocalDateTime returnDate) {
+        this.returnDate = returnDate;
     }
 
     protected Boolean checkoutMedia(LocalDateTime checkoutDate) {

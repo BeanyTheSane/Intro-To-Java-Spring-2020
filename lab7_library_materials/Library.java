@@ -28,10 +28,12 @@ public class Library {
 
     public Boolean addMediaItem(MediaItem mediaItem) {
         String key = mediaItem.getMediaType();
-        ArrayList<MediaItem> newList = new ArrayList<>();
-        newList = this.ineventory.get(key);
-        if (!newList.contains(mediaItem)) {
+        ArrayList<MediaItem> newList = this.ineventory.get(key) != null 
+                                     ? this.ineventory.get(key) 
+                                     : new ArrayList<MediaItem>();
+        if (newList == null || !newList.contains(mediaItem)) {
             newList.add(mediaItem);
+            this.ineventory.put(key, newList);
             return true;
         }
         this.ineventory.put(key, newList);
@@ -40,9 +42,10 @@ public class Library {
 
     public Boolean removeMediaItem(MediaItem mediaItem) {
         String key = mediaItem.getMediaType();
-        ArrayList<MediaItem> newList = new ArrayList<>();
-        newList = this.ineventory.get(key);
-        if (newList.contains(mediaItem)){
+        ArrayList<MediaItem> newList = this.ineventory.get(key) != null 
+                                     ? this.ineventory.get(key) 
+                                     : new ArrayList<MediaItem>();
+        if (newList != null || newList.contains(mediaItem)){
             newList.remove(mediaItem);
             return true;
         }

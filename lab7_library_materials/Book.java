@@ -30,4 +30,8 @@ public class Book extends MediaItem {
         return super.isOverdue(this.checkoutLengthInDays);
     }
 
+    public long getCheckoutLengthInDays() {
+        return this.checkoutLengthInDays;
+    }
+
 }
