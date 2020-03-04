@@ -42,10 +42,10 @@ public class Test {
         System.out.println("\nBook Class Tests\n");
         System.out.println("gets correct fine                   ->      " + gets_correct_fine());
         System.out.println("gets correct due date               ->      " + gets_correct_due_date());
-        System.out.println("checks if overdue                   ->      " + checks_if_overdue());
-        System.out.println("can checkout                        ->      " + can_check_out());
-        System.out.println("can return                          ->      " + can_return());
-        System.out.println("sets the correct return date        ->      " + sets_the_correct_return_date());
+        System.out.println("checks if overdue or not            ->      " + checks_if_overdue_or_not());
+        // System.out.println("can checkout                        ->      " + can_check_out());
+        // System.out.println("can return                          ->      " + can_return());
+        // System.out.println("sets the correct return date        ->      " + sets_the_correct_return_date());
         System.out.println("");
         System.out.println("");
 
@@ -53,9 +53,40 @@ public class Test {
         myScanner.nextLine();
     }
 
+    private String checks_if_overdue_or_not() {
+        cleanseGlobals();
+        Long checkoutLengthInDays = ((Book) this.testBook).getCheckoutLengthInDays();
+        this.checkoutDate = LocalDateTime.of(2020, 01, 01, 9, 00);
+        ArrayList<LocalDateTime> overdueDates = new ArrayList<>();
+        ArrayList<LocalDateTime> notOverdueDates = new ArrayList<>();
+        notOverdueDates.add(LocalDateTime.now().minusDays(1));
+        notOverdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays));
+        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays + 1));
+        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays +10));
+
+        for (LocalDateTime checkoutDate : notOverdueDates) {
+            this.testBook.checkoutMedia(checkoutDate);
+            if (!((Book) this.testBook).isOverdue()) {
+                this.testBook = new Book("Test Book", "1234", "Author Test");
+            } else {
+                return "FAILED";
+            }
+        }
+        for (LocalDateTime checkoutDate : overdueDates) {
+            this.testBook.checkoutMedia(checkoutDate);
+            if (((Book) this.testBook).isOverdue()) {
+                this.testBook = new Book("Test Book", "1234", "Author Test");
+            } else {
+                return "FAILED";
+            }
+        }
+        return "PASSED";
+    }
+
     private String gets_correct_due_date() {
         cleanseGlobals();
         this.checkoutDate = LocalDateTime.now();
+        this.testBook.checkoutMedia(checkoutDate);
         LocalDateTime compareDate = this.checkoutDate.plusDays(((Book) this.testBook).getCheckoutLengthInDays());
         if (((Book) this.testBook).getDueDate().equals(this.formatter.format(compareDate))) {
             return "PASSED";
@@ -70,7 +101,7 @@ public class Test {
         this.testBook.setCheckoutDate(this.checkoutDate);
         this.testBook.setReturnDate(this.returnDate);
         BigDecimal testFine = ((Book) this.testBook).getFine();
-        if (testFine.equals(BigDecimal.valueOf(2.5))) {
+        if (testFine.equals(BigDecimal.valueOf(((long)250), 2))) {
             return "PASSED";
         }
         return "FAILED";

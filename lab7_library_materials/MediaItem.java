@@ -83,9 +83,13 @@ public abstract class MediaItem {
         return formatter.format(dueDate);
     };
 
+    protected LocalDateTime getDueDateRaw(long checkoutLengthInDays) {
+        return this.checkoutDate.plusDays(checkoutLengthInDays);
+    };
+
     protected Boolean isOverdue(long checkoutLengthInDays) {
         LocalDateTime today = LocalDateTime.now();
-        if (today.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays))) {
+        if (today.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays + 1))) {
             return true;
         } 
         return false;
@@ -95,7 +99,7 @@ public abstract class MediaItem {
         int differenceInDays = 0;
 
         if (this.returnDate.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays))) {
-            differenceInDays = this.returnDate.getDayOfYear() - this.checkoutDate.getDayOfYear();
+            differenceInDays = this.returnDate.getDayOfYear() - this.getDueDateRaw(checkoutLengthInDays).getDayOfYear();
             return lateFeePerDay.multiply(BigDecimal.valueOf(differenceInDays));
         }
         return BigDecimal.valueOf(0);
