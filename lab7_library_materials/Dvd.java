@@ -29,4 +29,8 @@ public class Dvd extends MediaItem {
     public Boolean isOverdue() {
         return super.isOverdue(this.checkoutLengthInDays);
     }
+
+    public long getCheckoutLengthInDays() {
+        return this.checkoutLengthInDays;
+    }
 }

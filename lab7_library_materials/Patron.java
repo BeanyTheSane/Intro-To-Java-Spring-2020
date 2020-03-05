@@ -1,11 +1,18 @@
 import java.math.BigDecimal;
-import java.text.NumberFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Patron {
     private String id;
     private String name;
     private ArrayList<MediaItem> checkoutList = new ArrayList<>();
+    private BigDecimal totalFine;
+
+    Patron() {
+        this.id = "1234";
+        this.name = "Tester";
+        this.totalFine = BigDecimal.valueOf(0);
+    }
 
     public String getId() {
         return this.id;
@@ -29,7 +36,8 @@ public class Patron {
 
     //The bool that these return can be used to determine if the addition or deltion is succesful
     public Boolean checkoutMedia(MediaItem mediaItem) {
-        if (!this.checkoutList.contains(mediaItem)) {
+        if (!mediaItem.isCheckedOut() && !this.checkoutList.contains(mediaItem)) {
+            mediaItem.checkoutMedia(LocalDateTime.now());
             this.checkoutList.add(mediaItem);
             return true;
         }
@@ -37,7 +45,15 @@ public class Patron {
     }
 
     public Boolean returnMedia(MediaItem mediaItem) {
-        if (this.checkoutList.contains(mediaItem)) {
+        if (mediaItem.isCheckedOut() && this.checkoutList.contains(mediaItem)) {
+            mediaItem.returnMedia(LocalDateTime.now());
+            if (mediaItem instanceof Book
+            && ((Book) mediaItem).isOverdue()) {
+                this.totalFine = this.totalFine.add(((Book) mediaItem).getFine());
+            } else if (mediaItem instanceof Dvd
+            && ((Dvd) mediaItem).isOverdue()) {
+                this.totalFine = this.totalFine.add(((Dvd) mediaItem).getFine());
+            }
             this.checkoutList.remove(mediaItem);
             return true;
         }
@@ -62,23 +78,7 @@ public class Patron {
         return overdueMedia;
     }
 
-    public String getTotalFine() {
-        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
-        BigDecimal totalFine = BigDecimal.valueOf(0);
-
-        for (MediaItem mediaItem : this.checkoutList) {
-            if (mediaItem instanceof Book) {
-                Book book = ((Book) mediaItem);
-                if (book.isOverdue()) {
-                    totalFine.add(book.getFine());
-                }
-            } else if (mediaItem instanceof Dvd) {
-                Dvd dvd = ((Dvd) mediaItem);
-                if (dvd.isOverdue()) {
-                    totalFine.add(dvd.getFine());
-                }
-            }
-        }
-        return currencyFormatter.format(totalFine);
+    public BigDecimal getTotalFine() {
+        return this.totalFine;
     }
 }
