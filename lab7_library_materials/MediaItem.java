@@ -15,7 +15,7 @@ public abstract class MediaItem {
         this.id = id;
         this.mediaType = mediaType;
         this.checkoutDate = LocalDateTime.of(1777, 02, 02, 02, 02, 02);
-        this.returnDate = LocalDateTime.of(1777, 02, 02, 02, 02, 02);
+        this.returnDate = null;
         this.checkedOut = false;
     }
 
@@ -62,6 +62,7 @@ public abstract class MediaItem {
     protected Boolean checkoutMedia(LocalDateTime checkoutDate) {
         if (!this.checkedOut) {
             this.checkoutDate = checkoutDate;
+            this.returnDate = null;
             this.checkedOut = true;
             return true;
         }
@@ -85,14 +86,6 @@ public abstract class MediaItem {
 
     protected LocalDateTime getDueDateRaw(long checkoutLengthInDays) {
         return this.checkoutDate.plusDays(checkoutLengthInDays);
-    };
-
-    protected Boolean isOverdue(long checkoutLengthInDays) {
-        LocalDateTime today = LocalDateTime.now();
-        if (today.isAfter(this.checkoutDate.plusDays(checkoutLengthInDays + 1))) {
-            return true;
-        } 
-        return false;
     };
 
     protected BigDecimal getFine(BigDecimal lateFeePerDay, long checkoutLengthInDays) {

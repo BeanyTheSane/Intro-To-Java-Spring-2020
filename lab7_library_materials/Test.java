@@ -125,21 +125,24 @@ public class Test {
         notOverdueDates.add(LocalDateTime.now().minusDays(1));
         notOverdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays));
         overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays + 1));
-        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays +10));
+        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays + 10));
+        Dvd dvd = ((Dvd) this.testDvd);
 
         for (LocalDateTime checkoutDate : notOverdueDates) {
-            this.testDvd.checkoutMedia(checkoutDate);
-            if (!((Dvd) this.testDvd).isOverdue()) {
-                this.testDvd = new Dvd("Test DVD", "9876", "PG");
+            dvd.checkoutMedia(checkoutDate);
+            if (!dvd.isOverdue()) {
+                dvd = new Dvd("Test DVD", "9876", "PG");
             } else {
+                // System.out.println("Not Over" + !dvd.isOverdue());
                 return "FAILED";
             }
         }
         for (LocalDateTime checkoutDate : overdueDates) {
-            this.testDvd.checkoutMedia(checkoutDate);
-            if (((Dvd) this.testDvd).isOverdue()) {
-                this.testDvd = new Dvd("Test DVD", "9876", "PG");
+            dvd.checkoutMedia(checkoutDate);
+            if (dvd.isOverdue()) {
+                dvd = new Dvd("Test DVD", "9876", "PG");
             } else {
+                // System.out.println("Over" + " " + dvd.isOverdue() + " " + dvd.getCheckoutDate());
                 return "FAILED";
             }
         }
@@ -197,20 +200,21 @@ public class Test {
         notOverdueDates.add(LocalDateTime.now().minusDays(1));
         notOverdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays));
         overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays + 1));
-        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays +10));
+        overdueDates.add(LocalDateTime.now().minusDays(checkoutLengthInDays + 10));
+        Book book = ((Book) this.testBook);
 
         for (LocalDateTime checkoutDate : notOverdueDates) {
-            this.testBook.checkoutMedia(checkoutDate);
-            if (!((Book) this.testBook).isOverdue()) {
-                this.testBook = new Book("Test Book", "1234", "Author Test");
+            book.checkoutMedia(checkoutDate);
+            if (!book.isOverdue()) {
+                book = new Book("Test Book", "1234", "Author Test");
             } else {
                 return "FAILED";
             }
         }
         for (LocalDateTime checkoutDate : overdueDates) {
-            this.testBook.checkoutMedia(checkoutDate);
-            if (((Book) this.testBook).isOverdue()) {
-                this.testBook = new Book("Test Book", "1234", "Author Test");
+            book.checkoutMedia(checkoutDate);
+            if (book.isOverdue()) {
+                book = new Book("Test Book", "1234", "Author Test");
             } else {
                 return "FAILED";
             }

@@ -1,4 +1,5 @@
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Book extends MediaItem {
     private String              author;
@@ -26,8 +27,18 @@ public class Book extends MediaItem {
         return super.getDueDate(this.checkoutLengthInDays);
     }
 
-    public Boolean isOverdue() {
-        return super.isOverdue(this.checkoutLengthInDays);
+    public boolean isOverdue() {
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime compareDate = this.checkoutDate.plusDays(this.checkoutLengthInDays + 1);
+        int todaysDayCount = today.getDayOfYear();
+        int compareDayCount = compareDate.getDayOfYear();
+        if (todaysDayCount >= compareDayCount) {
+            // System.out.println("MediaItem is overdue " + compareDate);
+            return true;
+        } else { 
+            // System.out.println("MediaItem is NOT overdue " + compareDate + " " + this.getCheckoutDate());
+            return false;
+        }
     }
 
     public long getCheckoutLengthInDays() {
