@@ -45,7 +45,7 @@ public class Library {
         ArrayList<MediaItem> newList = this.ineventory.get(key) != null 
                                      ? this.ineventory.get(key) 
                                      : new ArrayList<MediaItem>();
-        if (newList != null || newList.contains(mediaItem)){
+        if (newList != null && newList.contains(mediaItem)){
             newList.remove(mediaItem);
             return true;
         }
