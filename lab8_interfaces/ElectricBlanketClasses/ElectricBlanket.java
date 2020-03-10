@@ -2,7 +2,7 @@ package ElectricBlanketClasses;
 
 import java.math.BigDecimal;
 
-public class ElectricBlanket {
+public abstract class ElectricBlanket {
     private BigDecimal setting;
     private String size;
 

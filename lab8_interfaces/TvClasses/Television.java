@@ -2,7 +2,7 @@ package TvClasses;
 
 import java.math.BigDecimal;
 
-public class Television {
+public abstract class Television {
     private String type;
     private BigDecimal sizeInInches;
 

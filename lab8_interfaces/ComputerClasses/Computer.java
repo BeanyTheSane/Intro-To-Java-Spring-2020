@@ -1,8 +1,12 @@
 package ComputerClasses;
 
-public class Computer {
+public abstract class Computer {
     private String type;
 
+
+    public Computer(String type) {
+        this.type = type;
+    }
 
     public String getType() {
         return this.type;
