@@ -1,17 +1,20 @@
 package ElectricBlanketClasses;
 
-import java.math.BigDecimal;
-
 public abstract class ElectricBlanket {
-    private BigDecimal setting;
+    private Double setting;
     private String size;
+    final private String parentType = "Electric Blanket";
 
+    ElectricBlanket(Double setting, String size) {
+        this.setting = setting;
+        this.size = size;
+    }
 
-    public BigDecimal getSetting() {
+    public Double getSetting() {
         return this.setting;
     }
 
-    public void setSetting(BigDecimal setting) {
+    public void setSetting(Double setting) {
         this.setting = setting;
     }
 
@@ -21,6 +24,10 @@ public abstract class ElectricBlanket {
 
     public void setSize(String size) {
         this.size = size;
+    }
+
+    public String getParentType() {
+        return this.parentType;
     }
 
 }

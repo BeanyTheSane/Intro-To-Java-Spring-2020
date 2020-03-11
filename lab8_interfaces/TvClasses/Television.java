@@ -1,11 +1,14 @@
 package TvClasses;
 
-import java.math.BigDecimal;
-
 public abstract class Television {
     private String type;
-    private BigDecimal sizeInInches;
+    private int sizeInInches;
+    final private String parentType = "Television";
 
+    Television(String type, int sizeInInches) {
+        this.type = type;
+        this.sizeInInches = sizeInInches;
+    }
 
     public String getType() {
         return this.type;
@@ -15,12 +18,16 @@ public abstract class Television {
         this.type = type;
     }
 
-    public BigDecimal getSizeInInches() {
+    public int getSizeInInches() {
         return this.sizeInInches;
     }
 
-    public void setSizeInInches(BigDecimal sizeInInches) {
+    public void setSizeInInches(int sizeInInches) {
         this.sizeInInches = sizeInInches;
+    }
+
+    public String getParentType() {
+        return this.parentType;
     }
 
 }

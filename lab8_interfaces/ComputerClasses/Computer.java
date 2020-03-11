@@ -2,9 +2,9 @@ package ComputerClasses;
 
 public abstract class Computer {
     private String type;
+    final private String parentType = "Computer";
 
-
-    public Computer(String type) {
+    Computer(String type) {
         this.type = type;
     }
 
@@ -14,6 +14,10 @@ public abstract class Computer {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getParentType() {
+        return this.parentType;
     }
 
 }

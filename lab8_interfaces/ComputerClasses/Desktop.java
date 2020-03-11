@@ -3,19 +3,20 @@ package ComputerClasses;
 import Interfaces.AcPoweredDevices;
 
 public class Desktop extends Computer implements AcPoweredDevices {
+    final private Double kwHConstant = 0.175;
 
     Desktop() {
-        super("deskptop");
+        super("Deskptop");
     }
 
     @Override
     public Double getKWH() {
-        return null;
+        return this.kwHConstant;
     }
     
     @Override
     public String toString() {
-        return "";
+        return this.getParentType() + ", " + this.getType();
     }
 
 }
