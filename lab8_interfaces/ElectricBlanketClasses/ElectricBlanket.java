@@ -5,7 +5,7 @@ public abstract class ElectricBlanket {
     private String size;
     final private String parentType = "Electric Blanket";
 
-    ElectricBlanket(Double setting, String size) {
+    public ElectricBlanket(Double setting, String size) {
         this.setting = setting;
         this.size = size;
     }

@@ -4,7 +4,7 @@ public abstract class Computer {
     private String type;
     final private String parentType = "Computer";
 
-    Computer(String type) {
+    public Computer(String type) {
         this.type = type;
     }
 

@@ -5,7 +5,7 @@ public abstract class Television {
     private int sizeInInches;
     final private String parentType = "Television";
 
-    Television(String type, int sizeInInches) {
+    public Television(String type, int sizeInInches) {
         this.type = type;
         this.sizeInInches = sizeInInches;
     }

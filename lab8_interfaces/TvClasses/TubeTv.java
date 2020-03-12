@@ -6,7 +6,7 @@ public class TubeTv extends Television implements AcPoweredDevices {
     final private Double kwHConstantLarge = 0.12;
     final private Double kwHConstantSmall = 0.09;
 
-    TubeTv(int sizeInInches) {
+    public TubeTv(int sizeInInches) {
         super("Tube TV", sizeInInches);
     }
 

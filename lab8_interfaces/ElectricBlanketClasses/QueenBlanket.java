@@ -5,8 +5,12 @@ import Interfaces.AcPoweredDevices;
 public class QueenBlanket extends ElectricBlanket implements AcPoweredDevices {
     final private Double kwHConstant = 150.00;
 
-    QueenBlanket() {
+    public QueenBlanket() {
         super(10.00, "Queen");//blanket setting is defaulted to 10
+    }
+
+    public QueenBlanket(Double setting) {
+        super(setting, "Queen");//blanket setting is defaulted to 10
     }
 
     @Override

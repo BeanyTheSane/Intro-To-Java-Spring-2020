@@ -1,10 +1,12 @@
 package LightbulbClasses;
 
-public class Lightbulb {
+import Interfaces.AcPoweredDevices;
+
+public class Lightbulb implements AcPoweredDevices {
     private int wattage;
     final private String type = "Lightbulb";
 
-    Lightbulb(int wattage) {
+    public Lightbulb(int wattage) {
         this.wattage = wattage;
     }
 

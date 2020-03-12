@@ -6,7 +6,7 @@ public class LcdTv extends Television implements AcPoweredDevices {
     final private Double kwHConstantLarge = 0.016;
     final private Double kwHConstantSmall = 0.012;
 
-    LcdTv(int sizeInInches) {
+    public LcdTv(int sizeInInches) {
         super("LCD TV", sizeInInches);
     }
 

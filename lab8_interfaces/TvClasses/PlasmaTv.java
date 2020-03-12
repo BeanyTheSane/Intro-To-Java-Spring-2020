@@ -6,7 +6,7 @@ public class PlasmaTv extends Television implements AcPoweredDevices {
     final private Double kwHConstantLarge = 0.48;
     final private Double kwHConstantSmall = 0.4;
 
-    PlasmaTv(int sizeInInches) {
+    public PlasmaTv(int sizeInInches) {
         super("Plasma TV", sizeInInches);
     }
 

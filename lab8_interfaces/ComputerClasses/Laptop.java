@@ -5,7 +5,7 @@ import Interfaces.AcPoweredDevices;
 public class Laptop extends Computer implements AcPoweredDevices {
     final private Double kwHConstant = 0.06;
 
-    Laptop() {
+    public Laptop() {
         super("Laptop");
     }
 
