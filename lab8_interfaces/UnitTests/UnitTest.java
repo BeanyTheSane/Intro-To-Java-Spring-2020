@@ -1,6 +1,7 @@
 package UnitTests;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import ComputerClasses.Desktop;
 import ComputerClasses.Laptop;
@@ -39,6 +40,8 @@ public class UnitTest {
         PlasmaTv plasmaTvSmall = new PlasmaTv(32);
         TubeTv tubeTvLarge = new TubeTv(32);
         TubeTv tubeTvSmall = new TubeTv(16);
+        int fiveAtaTime = 0;
+        final Scanner myScanner = new Scanner(System.in);
 
         deviceList.add(desktop);
         deviceList.add(laptop);
@@ -61,5 +64,20 @@ public class UnitTest {
         deviceList.add(plasmaTvSmall);
         deviceList.add(tubeTvLarge);
         deviceList.add(tubeTvSmall);
+
+        for (AcPoweredDevices device : deviceList) {
+            System.out.println("> " + device.toString());
+            System.out.println("    KwH: " + device.getKWH() + "\n");
+            fiveAtaTime += 1;
+            if (fiveAtaTime == 5) {
+                System.out.println("Press Enter to Continue");
+                myScanner.nextLine();
+                fiveAtaTime = 0;
+            }
+        }
+
+        System.out.println("Press Enter to Continue");
+        myScanner.nextLine();
+        myScanner.close();
     }
 }

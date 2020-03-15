@@ -20,7 +20,7 @@ public class QueenBlanket extends ElectricBlanket implements AcPoweredDevices {
     
     @Override
     public String toString() {
-        return this.getParentType() + ", " + this.getSize() + "at " + this.getSetting();
+        return this.getParentType() + ", " + this.getSize() + " at " + this.getSetting();
     }
     
 }
