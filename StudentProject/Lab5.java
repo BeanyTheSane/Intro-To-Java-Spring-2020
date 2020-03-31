@@ -18,8 +18,8 @@ public class Lab5 {
                           +"\nCISS 226"
                           + "\nLab 5"
                           + "\nAdam Knitter"
-                          + "\nThis version now contains two tests for the new payments class"
-                          + "\n(Select option '5' on the main menu)"
+                          + "\nThis version now contains exceptions and a new menu option to test them"
+                          + "\n(Select option '6' on the main menu)"
                           + "\nas well as all of the previous tests"
                           + "\nPlease run this full screen for best results" 
                           + "\n" + styledSeperator 
@@ -37,6 +37,7 @@ public class Lab5 {
                                 + "\n    3.)  Run User Filled Constructor Test"
                                 + "\n    4.)  Run Course Class Test"
                                 + "\n    5.)  Run Payments Class Test"
+                                + "\n    6.)  Run Exceptions Test"
                                 + "\n    0.)  Exit the Program"
                                 + "\n" + styledSeperator
                                 + "\nPlease Enter The Number of Your Selection...");
@@ -60,6 +61,10 @@ public class Lab5 {
 
                 case "5":
                     constructorTest.runPaymentsClassTest();
+                    break;
+
+                case "6":
+                    constructorTest.runExceptionsTest();
                     break;
             
                 case "0":
@@ -135,7 +140,20 @@ public class Lab5 {
                 return;
             }
 
-            paymentTestStudent.buildRandomPerson("INC", creditHours);
+            try {
+                paymentTestStudent.buildRandomPerson(Student.ResidentialCodes.INC, creditHours);
+            } catch (NullPointerException e){
+				System.out.println(e.toString());
+            }
+            catch (NumberFormatException e){
+                    System.out.println(e.toString());
+            }
+            catch (StudentException e){
+                    System.out.println(e.toString());
+            }
+            catch (Exception e){
+                    System.out.println(e.toString());
+            }
 
             System.out.println("\nWelcome "
                                 + paymentTestStudent.getName()
@@ -184,6 +202,9 @@ public class Lab5 {
             }
         }
 
+        public void runExceptionsTest() {
+        }
+
         public void runTuitionChartTest() {
             
             System.out.println(styledSeperator);
@@ -191,9 +212,23 @@ public class Lab5 {
                 final Student inCountyStudent = new Student();
                 final Student outOfCountyStudent = new Student();
                 final Student outOfStateStudent = new Student();
-                inCountyStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), i);
-                outOfCountyStudent.buildRandomPerson(Student.ResidentialCodes.OOC.toString(), i);
-                outOfStateStudent.buildRandomPerson(Student.ResidentialCodes.OOS.toString(), i);
+
+                try {
+                    inCountyStudent.buildRandomPerson(Student.ResidentialCodes.INC, i);
+                    outOfCountyStudent.buildRandomPerson(Student.ResidentialCodes.OOC, i);
+                    outOfStateStudent.buildRandomPerson(Student.ResidentialCodes.OOS, i);
+                } catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+                catch (NumberFormatException e){
+                        System.out.println(e.toString());
+                }
+                catch (StudentException e){
+                        System.out.println(e.toString());
+                }
+                catch (Exception e){
+                        System.out.println(e.toString());
+                }
     
                 System.out.println(inCountyStudent.getDetailsAsString()
                                     + "\n" + outOfCountyStudent.getDetailsAsString()
@@ -206,32 +241,48 @@ public class Lab5 {
         }
 
         public void runAutoFilledConstructorTest() {
-            final Student constructorTest1 = new Student("Cloud Strife", "999999", Student.ResidentialCodes.getResidentialCodeById(1));
-            final Student constructorTest2 = new Student("Cait Sith", "777777", Student.ResidentialCodes.getResidentialCodeById(2));
-            final Student constructorTest3 = new Student("Tifa Lockhart", "444444", Student.ResidentialCodes.getResidentialCodeById(3));
-            final Student constructorTest4 = new Student("Aerith Gainsborogh", "111111");
-            final Student constructorTest5 = new Student("Barret Wallace", "123456");
+            try {
+                final Student constructorTest1 = new Student("Cloud Strife", "999999", Student.ResidentialCodes.getResidentialCodeById(1));
+                final Student constructorTest2 = new Student("Cait Sith", "777777", Student.ResidentialCodes.getResidentialCodeById(2));
+                final Student constructorTest3 = new Student("Tifa Lockhart", "444444", Student.ResidentialCodes.getResidentialCodeById(3));
+                final Student constructorTest4 = new Student("Aerith Gainsborogh", "111111");
+                final Student constructorTest5 = new Student("Barret Wallace", "123456");
 
-            constructorTest1.addCourseList(Course.buildDefaultCourseList(19));
-            constructorTest2.addCourseList(Course.buildDefaultCourseList(12));
-            constructorTest3.addCourseList(Course.buildDefaultCourseList(4));
-            constructorTest4.addCourseList(Course.buildDefaultCourseList(1));
-            constructorTest5.addCourseList(Course.buildDefaultCourseList(0));
-    
-            System.out.println("\nThe following Students are created using the new constructors and course lists\n"
-                                + "\n" + styledSeperator
-                                + "\n" + constructorTest1.getDetailsAsString()
-                                + "\n" + constructorTest1.getCourseList()
-                                + "\n" + constructorTest2.getDetailsAsString()
-                                + "\n" + constructorTest2.getCourseList()
-                                + "\n" + constructorTest3.getDetailsAsString()
-                                + "\n" + constructorTest3.getCourseList()
-                                + "\n" + constructorTest4.getDetailsAsString()
-                                + "\n" + constructorTest4.getCourseList()
-                                + "\n" + constructorTest5.getDetailsAsString()
-                                + "\n" + constructorTest5.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n\nPress enter to return to the main menu\n");
+                constructorTest1.addCourseList(Course.buildDefaultCourseList(19));
+                constructorTest2.addCourseList(Course.buildDefaultCourseList(12));
+                constructorTest3.addCourseList(Course.buildDefaultCourseList(4));
+                constructorTest4.addCourseList(Course.buildDefaultCourseList(1));
+                constructorTest5.addCourseList(Course.buildDefaultCourseList(0));
+        
+                System.out.println("\nThe following Students are created using the new constructors and course lists\n"
+                                    + "\n" + styledSeperator
+                                    + "\n" + constructorTest1.getDetailsAsString()
+                                    + "\n" + constructorTest1.getCourseList()
+                                    + "\n" + constructorTest2.getDetailsAsString()
+                                    + "\n" + constructorTest2.getCourseList()
+                                    + "\n" + constructorTest3.getDetailsAsString()
+                                    + "\n" + constructorTest3.getCourseList()
+                                    + "\n" + constructorTest4.getDetailsAsString()
+                                    + "\n" + constructorTest4.getCourseList()
+                                    + "\n" + constructorTest5.getDetailsAsString()
+                                    + "\n" + constructorTest5.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n\nPress enter to return to the main menu\n");
+
+            
+            } catch (NullPointerException e){
+                System.out.println(e.toString());
+            }
+            catch (NumberFormatException e){
+                    System.out.println(e.toString());
+            }
+            catch (StudentException e){
+                    System.out.println(e.toString());
+            }
+            catch (Exception e){
+                    System.out.println(e.toString());
+            }
+
             myScanner.nextLine();
         }
 
@@ -278,12 +329,26 @@ public class Lab5 {
                 }
                 System.out.println("\nHere are the details for the student you just created\n");
                 Student.ResidentialCodes code = Student.ResidentialCodes.getResidentialCodeById(residentialStatus);
-                Student student = new Student(name, studentNumber, courses, code);
-                System.out.println(student.getDetailsAsString()
-                                    + "\n" + student.getCourseList());
-                
-                System.out.println("\nPress enter to Continue\n");
-                myScanner.nextLine();
+                try {
+                    Student student = new Student(name, studentNumber, courses, code);
+                    System.out.println(student.getDetailsAsString()
+                                        + "\n" + student.getCourseList());
+                    
+                    System.out.println("\nPress enter to Continue\n");
+                    myScanner.nextLine();
+                } catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+                catch (NumberFormatException e){
+                        System.out.println(e.toString());
+                }
+                catch (StudentException e){
+                        System.out.println(e.toString());
+                }
+                catch (Exception e){
+                        System.out.println(e.toString());
+                }
+
 
                 name = "";
                 studentNumber = "";
@@ -308,13 +373,26 @@ public class Lab5 {
                 }
                 courses = Course.buildDefaultCourseList(creditHours);
                 System.out.println("\nHere are the details for the student you just created\n");
-                Student student2 = new Student(name, studentNumber, courses);
-                System.out.println(student2.getDetailsAsString()
-                                    + "\n" + student2.getCourseList());
+                try {
+                    Student student2 = new Student(name, studentNumber, courses);
+                    System.out.println(student2.getDetailsAsString()
+                                        + "\n" + student2.getCourseList());
 
-                System.out.println("\nPress enter to return to the main menu\n");
-                myScanner.nextLine();
-                testIsRunning = false;
+                    System.out.println("\nPress enter to return to the main menu\n");
+                    myScanner.nextLine();
+                    testIsRunning = false;
+                } catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+                catch (NumberFormatException e){
+                        System.out.println(e.toString());
+                }
+                catch (StudentException e){
+                        System.out.println(e.toString());
+                }
+                catch (Exception e){
+                        System.out.println(e.toString());
+                }
             }
         }
 
@@ -349,38 +427,51 @@ public class Lab5 {
         }
 
         private void runAddCoursesAutomaticallyTest() {
-            final Student courseTestStudent1 = new Student("Vivi Orunitia", "666666");
-            final Student courseTestStudent2 = new Student("Zidane Tribal", "777777");
-            final Student courseTestStudent3 = new Student("Garnet Til Alexandros XVII", "111111");
-            final Student courseTestStudent4 = new Student("Adelbert Steiner", "123456");
-            final Student courseTestStudent5 = new Student("Freya Crescent", "987654");
+            try {
+                final Student courseTestStudent1 = new Student("Vivi Orunitia", "666666");
+                final Student courseTestStudent2 = new Student("Zidane Tribal", "777777");
+                final Student courseTestStudent3 = new Student("Garnet Til Alexandros XVII", "111111");
+                final Student courseTestStudent4 = new Student("Adelbert Steiner", "123456");
+                final Student courseTestStudent5 = new Student("Freya Crescent", "987654");
 
-            courseTestStudent1.addCourseList(Course.buildDefaultCourseList(22));
-            courseTestStudent2.addCourseList(Course.buildDefaultCourseList(12));
-            courseTestStudent3.addCourseList(Course.buildDefaultCourseList(4));
-            courseTestStudent4.addCourseList(Course.buildDefaultCourseList(1));
-            courseTestStudent5.addCourseList(Course.buildDefaultCourseList(0));
+                courseTestStudent1.addCourseList(Course.buildDefaultCourseList(22));
+                courseTestStudent2.addCourseList(Course.buildDefaultCourseList(12));
+                courseTestStudent3.addCourseList(Course.buildDefaultCourseList(4));
+                courseTestStudent4.addCourseList(Course.buildDefaultCourseList(1));
+                courseTestStudent5.addCourseList(Course.buildDefaultCourseList(0));
 
-            System.out.println("\nThe following Students were created using the new course class.\n"
-                                + "\n" + styledSeperator
-                                + "\n" + courseTestStudent1.getDetailsAsString()
-                                + "\n" + courseTestStudent1.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n" + courseTestStudent2.getDetailsAsString()
-                                + "\n" + courseTestStudent2.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n" + courseTestStudent3.getDetailsAsString()
-                                + "\n" + courseTestStudent3.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n" + courseTestStudent4.getDetailsAsString()
-                                + "\n" + courseTestStudent4.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n" + courseTestStudent5.getDetailsAsString()
-                                + "\n" + courseTestStudent5.getCourseList()
-                                + "\n" + styledSeperator
-                                + "\n\nPress enter to return to the main menu\n");
+                System.out.println("\nThe following Students were created using the new course class.\n"
+                                    + "\n" + styledSeperator
+                                    + "\n" + courseTestStudent1.getDetailsAsString()
+                                    + "\n" + courseTestStudent1.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n" + courseTestStudent2.getDetailsAsString()
+                                    + "\n" + courseTestStudent2.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n" + courseTestStudent3.getDetailsAsString()
+                                    + "\n" + courseTestStudent3.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n" + courseTestStudent4.getDetailsAsString()
+                                    + "\n" + courseTestStudent4.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n" + courseTestStudent5.getDetailsAsString()
+                                    + "\n" + courseTestStudent5.getCourseList()
+                                    + "\n" + styledSeperator
+                                    + "\n\nPress enter to return to the main menu\n");
+            } catch (NullPointerException e){
+                System.out.println(e.toString());
+            }
+            catch (NumberFormatException e){
+                    System.out.println(e.toString());
+            }
+            catch (StudentException e){
+                    System.out.println(e.toString());
+            }
+            catch (Exception e){
+                    System.out.println(e.toString());
+            }
+
             myScanner.nextLine();
-
         }
         
         private void runAddCoursesManuallyTest() {
@@ -396,7 +487,20 @@ public class Lab5 {
             Student courseTestStudent = new Student();
             ArrayList<Course> courses = new ArrayList<>();
             
-            courseTestStudent.buildRandomPerson(Student.ResidentialCodes.INC.toString(), 0);
+            try {
+                courseTestStudent.buildRandomPerson(Student.ResidentialCodes.INC, 0);
+            } catch (NullPointerException e){
+                System.out.println(e.toString());
+            }
+            catch (NumberFormatException e){
+                    System.out.println(e.toString());
+            }
+            catch (StudentException e){
+                    System.out.println(e.toString());
+            }
+            catch (Exception e){
+                    System.out.println(e.toString());
+            }
 
             System.out.println("\nThis test allows you to manually create courses and add them to a students record"
                               + "\n  Type in 'exit' at any time to return to the previous menu"
@@ -534,16 +638,29 @@ public class Lab5 {
                     continue;
                 }
 
-                paymentTestStudent.makePayment(paymentAmount, description);
+                try {
+                    paymentTestStudent.makePayment(paymentAmount, description);
 
-                System.out.println("Thank you " 
-                                    + paymentTestStudent.getName() 
-                                    + " for your payment of " 
-                                    + currencyFormatter.format(paymentAmount)
-                                    + "\nYour remaining balance is "
-                                    + currencyFormatter.format(paymentTestStudent.getTotalDue())
-                                    + "\nPress enter to continue");
-                myScanner.nextLine();
+                    System.out.println("Thank you " 
+                                        + paymentTestStudent.getName() 
+                                        + " for your payment of " 
+                                        + currencyFormatter.format(paymentAmount)
+                                        + "\nYour remaining balance is "
+                                        + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                                        + "\nPress enter to continue");
+                    myScanner.nextLine();
+                } catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+                catch (NumberFormatException e){
+                        System.out.println(e.toString());
+                }
+                catch (StudentException e){
+                        System.out.println(e.toString());
+                }
+                catch (Exception e){
+                        System.out.println(e.toString());
+                }
                 
                 testIsRunning = false;
             }
@@ -595,14 +712,28 @@ public class Lab5 {
                 }
             
                 paymentTestStudent = new Student();
-                paymentTestStudent.buildRandomPerson("INC", creditHours);
+                try {
+                    paymentTestStudent.buildRandomPerson(Student.ResidentialCodes.INC, creditHours);
 
-                System.out.println("\nWelcome "
-                        + paymentTestStudent.getName()
-                        + "!  Your Current remaining tuition balance is "
-                        + currencyFormatter.format(paymentTestStudent.getTotalDue())
-                        + "\nPress enter to continue to the payments menu");
-                myScanner.nextLine();
+                    System.out.println("\nWelcome "
+                            + paymentTestStudent.getName()
+                            + "!  Your Current remaining tuition balance is "
+                            + currencyFormatter.format(paymentTestStudent.getTotalDue())
+                            + "\nPress enter to continue to the payments menu");
+                    myScanner.nextLine();
+                } catch (NullPointerException e){
+                    System.out.println(e.toString());
+                }
+                catch (NumberFormatException e){
+                        System.out.println(e.toString());
+                }
+                catch (StudentException e){
+                        System.out.println(e.toString());
+                }
+                catch (Exception e){
+                        System.out.println(e.toString());
+                }
+                
                 break;
             }
             return paymentTestStudent;

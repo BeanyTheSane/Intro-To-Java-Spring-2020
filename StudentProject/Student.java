@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class Student {
     private String name;
@@ -14,30 +15,32 @@ public class Student {
 	
 	Student(){}
 
-	Student(String name, String studentNumber, ArrayList<Course> courses, ResidentialCodes residencyCode) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = residencyCode.toString();
-		this.courses = courses;
+	Student(String name, String studentNumber, ArrayList<Course> courses, ResidentialCodes residencyCode) 
+	throws StudentException {
+		setFields(name, studentNumber, courses, residencyCode);
 	}
 
-	Student(String name, String studentNumber, ArrayList<Course> courses) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = ResidentialCodes.INC.toString();
-		this.courses = courses;
+	Student(String name, String studentNumber, ArrayList<Course> courses) 
+	throws StudentException {
+		setFields(name, studentNumber, courses, ResidentialCodes.INC);
 	}
 
-	Student(String name, String studentNumber, ResidentialCodes residencyCode) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = residencyCode.toString();
+	Student(String name, String studentNumber, ResidentialCodes residencyCode)  
+	throws StudentException {
+		setFields(name, studentNumber, new ArrayList<>(), residencyCode);
 	}
 
-	Student(String name, String studentNumber) {
-		this.name = name;
-		this.studentNumber = studentNumber;
-		this.residencyCode = ResidentialCodes.INC.toString();
+	Student(String name, String studentNumber)  
+	throws StudentException {
+		setFields(name, studentNumber, new ArrayList<>(), ResidentialCodes.INC);
+	}
+
+	private  void setFields(String name, String studentNumber, ArrayList<Course> courses, ResidentialCodes residencyCode)   
+	throws StudentException {
+		setName(name);
+		setStudentNumber(studentNumber);
+		setResidencyCode(residencyCode.toString());
+		addCourseList(courses);
 	}
 
 	public String getResidencyCode() {
@@ -52,7 +55,12 @@ public class Student {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name)    
+	throws StudentException {
+		final Pattern regexPattern = Pattern.compile("^.{1,32}$");
+		if (!regexPattern.matcher(name).matches()) {
+			throw new StudentException("Please limit names to less than 32 characters for this test.  Try Again");
+		}
 		this.name = name;
 	}
 
@@ -60,7 +68,12 @@ public class Student {
 		return this.studentNumber;
 	}
 
-	public void setStudentNumber(String studentNumber) {
+	public void setStudentNumber(String studentNumber)      
+	throws StudentException {
+		final Pattern regexPattern = Pattern.compile("^[0-9]{6}$");
+		if (!regexPattern.matcher(studentNumber).matches()) {
+			throw new StudentException("Please enter a 6 digit number.  Try Again");
+		}
 		this.studentNumber = studentNumber;
 	}
 
@@ -149,24 +162,29 @@ public class Student {
 		}
 	}
 
-	public void buildRandomPerson(String residencyCode, int creditHours) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = Course.buildDefaultCourseList(creditHours);
-			
+	public void buildRandomPerson(ResidentialCodes residencyCode, int creditHours)     
+	throws StudentException {
+		setFields(getRandomName(), 
+					MyUtilities.generateRandomNumber(6).toString(), 
+					Course.buildDefaultCourseList(creditHours), 
+					residencyCode);
 	}
 	
-	public void buildRandomPerson(String residencyCode, ArrayList<Course> courses) {
-		this.name = getRandomName();
-		this.studentNumber = MyUtilities.generateRandomNumber(6).toString();
-		this.residencyCode = residencyCode;
-		this.courses = courses;
-			
+	public void buildRandomPerson(ResidentialCodes residencyCode, ArrayList<Course> courses)     
+	throws StudentException  {
+		setFields(getRandomName(), 
+					MyUtilities.generateRandomNumber(6).toString(), 
+					courses, 
+					residencyCode);
 	}
 
-	public void makePayment(BigDecimal paymentAmount, String description) {
+	public void makePayment(BigDecimal paymentAmount, String description)      
+	throws StudentException  {
 		LocalDateTime dateOfPayment = LocalDateTime.now();
+		final Pattern regexPattern = Pattern.compile("^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{1,2})?$");
+		if (!regexPattern.matcher(paymentAmount.toString()).matches()) {
+			throw new StudentException("Please enter a payment amount equal to a dollar or more using the following format XXXX.XX");
+		}
 
 		Payment payment = new Payment(paymentAmount, dateOfPayment, description);
 		this.payments.add(payment);
