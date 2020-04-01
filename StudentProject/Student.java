@@ -178,16 +178,23 @@ public class Student {
 					residencyCode);
 	}
 
-	public void makePayment(BigDecimal paymentAmount, String description)      
-	throws StudentException  {
+	public void makePayment(BigDecimal paymentAmount, String description) {
 		LocalDateTime dateOfPayment = LocalDateTime.now();
-		final Pattern regexPattern = Pattern.compile("^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{1,2})?$");
-		if (!regexPattern.matcher(paymentAmount.toString()).matches()) {
-			throw new StudentException("Please enter a payment amount equal to a dollar or more using the following format XXXX.XX");
+		try {
+			Payment payment = new Payment(paymentAmount, dateOfPayment, description);
+			this.payments.add(payment);
+		} catch (NullPointerException e){
+			System.out.println(e.toString());
 		}
-
-		Payment payment = new Payment(paymentAmount, dateOfPayment, description);
-		this.payments.add(payment);
+		catch (NumberFormatException e){
+				System.out.println(e.toString());
+		}
+		catch (PaymentException e){
+				System.out.println(e.toString());
+		}
+		catch (Exception e){
+				System.out.println(e.toString());
+		}	
 	}
 
 	private boolean doCreditHoursQualifyForSpecialRate() {

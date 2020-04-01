@@ -92,7 +92,7 @@ public class Lab5 {
         //They utilize a regex string to validate a desired criteria.
         InputVerifierModel nameVerifier = 
                             new InputVerifierModel("name", 
-                                                    "^.{1,32}$", 
+                                                    "^[A-Za-z0-9.,-'?/!]{1,32}$", 
                                                     "\nPlease limit names to less than 32 characters for this test.  Try Again");
         InputVerifierModel courseIdVerifier = 
                             new InputVerifierModel("Id", 
@@ -116,7 +116,7 @@ public class Lab5 {
                                                     "\nPlease enter a number between 1 and 5 inclusive.  Try Again");
         InputVerifierModel paymentVerifier = 
                             new InputVerifierModel("Payment", 
-                                                    "^[+-]?[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{2})?$", 
+                                                    "^[0-9]{1,3}(?:,?[0-9]{3})*(?:\\.[0-9]{2})?$", 
                                                     "\nPlease enter a payment amount equal to a dollar or more using the following format XXXX.XX"); 
         InputVerifierModel descriptionVerifier =
                             new InputVerifierModel("Description", 
@@ -203,6 +203,151 @@ public class Lab5 {
         }
 
         public void runExceptionsTest() {
+            System.out.println("\nStudent Class Exceptions");
+            System.out.println("1.) Name is 32 characters or less               -->     " + studentName_ExceptionCheck());
+            System.out.println("2.) Student Number is 6 Digits                  -->     " + studentNumber_ExceptionCheck());
+            System.out.println("\nCourse Class Exceptions"); 
+            System.out.println("1.) CourseId is 3 digits long                   -->     " + courseId_ExceptionCheck());
+            System.out.println("2.) CourseName is 32 characters or less         -->     " + CourseName_ExceptionCheck());
+            System.out.println("3.) credit hours are between 1 and 5            -->     " + creditHours_ExceptionCheck());
+            System.out.println("\nPayment Class Exceptions");
+            System.out.println("1.) Payments are in the correct format          -->     " + payments_ExceptionCheck());
+            System.out.println("2.) Description is 255 characters or less       -->     " + description_ExceptionCheck());
+            myScanner.nextLine();
+        }
+
+        private String description_ExceptionCheck() {
+            Course tesCourse = new Course();
+
+            try {
+                tesCourse.setCourseName("741364485295671893980461249629394169824877362016827704972781025181075070945044171"
+                                        + "81992305302273711998679307601059762127342277251234511414268349358782080894053442"
+                                        + "44892788811575122230770348787505803061206260308733177984831155316933595373928881385168299959289");
+                return "FAILED";
+            } catch (CourseException e){
+                return "PASSED";
+            }
+        }
+
+        private String payments_ExceptionCheck() {
+            Payment testPayment = new Payment();
+            ArrayList<String> passFailToken = new ArrayList<>();
+
+            try {
+                testPayment.setPaymentAmount(BigDecimal.valueOf(-1));
+                passFailToken.add("FAILED");
+            } catch (PaymentException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                testPayment.setPaymentAmount(BigDecimal.valueOf(1000.001));
+                passFailToken.add("FAILED");
+            } catch (PaymentException e){
+                passFailToken.add("PASSED");
+            }
+            if (!passFailToken.contains("FAILED")) {
+                return "PASSED";
+            }
+            return "FAILED";
+        }
+
+        private String creditHours_ExceptionCheck() {
+            Course tesCourse = new Course();
+            ArrayList<String> passFailToken = new ArrayList<>();
+
+            try {
+                tesCourse.setCreditHours(minCreditHourPerCourse - 1);
+                passFailToken.add("FAILED");
+            } catch (CourseException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                tesCourse.setCreditHours(maxCreditHourPerCourse + 1);
+                passFailToken.add("FAILED");
+            } catch (CourseException e){
+                passFailToken.add("PASSED");
+            }
+            if (!passFailToken.contains("FAILED")) {
+                return "PASSED";
+            }
+            return "FAILED";
+        }
+
+        private String CourseName_ExceptionCheck() {
+            Course tesCourse = new Course();
+
+            try {
+                tesCourse.setCourseName("123456789012345678901234567890123");
+                return "FAILED";
+            } catch (CourseException e){
+                return "PASSED";
+            }
+        }
+
+        private String courseId_ExceptionCheck() {
+            Course tesCourse = new Course();
+            ArrayList<String> passFailToken = new ArrayList<>();
+
+            try {
+                tesCourse.setCourseId("1234");
+                passFailToken.add("FAILED");
+            } catch (CourseException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                tesCourse.setCourseId("12");
+                passFailToken.add("FAILED");
+            } catch (CourseException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                tesCourse.setCourseId("12a");
+                passFailToken.add("FAILED");
+            } catch (CourseException e){
+                passFailToken.add("PASSED");
+            }
+            if (!passFailToken.contains("FAILED")) {
+                return "PASSED";
+            }
+            return "FAILED";
+        }
+
+        private String studentNumber_ExceptionCheck() {
+            Student testStudent = new Student();
+            ArrayList<String> passFailToken = new ArrayList<>();
+
+            try {
+                testStudent.setStudentNumber("1234567");
+                passFailToken.add("FAILED");
+            } catch (StudentException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                testStudent.setStudentNumber("12345");
+                passFailToken.add("FAILED");
+            } catch (StudentException e){
+                passFailToken.add("PASSED");
+            }
+            try {
+                testStudent.setStudentNumber("12345a");
+                passFailToken.add("FAILED");
+            } catch (StudentException e){
+                passFailToken.add("PASSED");
+            }
+            if (!passFailToken.contains("FAILED")) {
+                return "PASSED";
+            }
+            return "FAILED";
+        }
+
+        private String studentName_ExceptionCheck() {
+            Student testStudent = new Student();
+            try {
+                testStudent.setName("123456789012345678901234567890123");
+                return "FAILED";
+            } catch (StudentException e){
+                    return "PASSED";
+            }
         }
 
         public void runTuitionChartTest() {
@@ -551,8 +696,21 @@ public class Lab5 {
 
                     if ("y".equals(userChoice.toLowerCase())) {
                         creditHourSum += creditHours;
-                        courses.add(new Course(courseId, courseName, creditHours));
-                        System.out.println("You have successfully added " + courseName + "\n");
+                        try {
+                            courses.add(new Course(courseId, courseName, creditHours));
+                            System.out.println("You have successfully added " + courseName + "\n");
+                        } catch (NullPointerException e){
+                            System.out.println(e.toString());
+                        }
+                        catch (NumberFormatException e){
+                                System.out.println(e.toString());
+                        }
+                        catch (CourseException e){
+                                System.out.println(e.toString());
+                        }
+                        catch (Exception e){
+                                System.out.println(e.toString());
+                        }
                         break;
                     }
                     if ("n".equals(userChoice.toLowerCase())) {
@@ -638,7 +796,6 @@ public class Lab5 {
                     continue;
                 }
 
-                try {
                     paymentTestStudent.makePayment(paymentAmount, description);
 
                     System.out.println("Thank you " 
@@ -649,18 +806,7 @@ public class Lab5 {
                                         + currencyFormatter.format(paymentTestStudent.getTotalDue())
                                         + "\nPress enter to continue");
                     myScanner.nextLine();
-                } catch (NullPointerException e){
-                    System.out.println(e.toString());
-                }
-                catch (NumberFormatException e){
-                        System.out.println(e.toString());
-                }
-                catch (StudentException e){
-                        System.out.println(e.toString());
-                }
-                catch (Exception e){
-                        System.out.println(e.toString());
-                }
+                
                 
                 testIsRunning = false;
             }

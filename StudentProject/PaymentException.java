@@ -1,9 +1,9 @@
-public class StudentException extends
+public class PaymentException extends
 				Exception{
                     
     private static final long serialVersionUID = 1L;
 
-    public StudentException(String arg) {
+    public PaymentException(String arg) {
 		super(arg);
 	}
 }
