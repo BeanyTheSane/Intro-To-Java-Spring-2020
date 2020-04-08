@@ -15,6 +15,8 @@ public class UserInterface extends JFrame {
     public JLabel lblSize = new JLabel("Size:");
     public JLabel lblCrust = new JLabel("Crust:");
     public JLabel lblTopping = new JLabel("Topping:");
+    public JLabel lblSpacer = new JLabel("            ");
+    public JLabel lblSpacer2 = new JLabel("            ");
 	public JTextField txtName = new JTextField(10);
 	public JTextField txtAddress = new JTextField(10);
     public JTextField txtPhone = new JTextField(10);
@@ -87,10 +89,12 @@ public class UserInterface extends JFrame {
         JPanel addPizzaBtnPanel = new JPanel();
         sizePanel.add(lblSize);
         sizePanel.add(cboSize);
+        sizePanel.add(lblSpacer2);
         crustPanel.add(lblCrust);
         crustPanel.add(cboCrust);
         toppingPanel.add(lblTopping);
         toppingPanel.add(cboTopping);
+        addPizzaBtnPanel.add(lblSpacer);
         addPizzaBtnPanel.add(btnAddPizza);
         pizzaSelectionPanel.setLayout(new BoxLayout(pizzaSelectionPanel,BoxLayout.Y_AXIS));
         pizzaSelectionPanel.add(sizePanel);
