@@ -18,10 +18,23 @@ public class UnitTest{
 		System.out.println("Crust is: " + p2.getCrust() + " Bake time is " + p2.calculateBakeTime());
 		System.out.println("Size is: " + p2.getSize() + " has pepperoni " + p2.getHasPepperoni()+ " Cost is " + p2.calculateCost());
 	
-		Order o=new Order("Mike","440-366-4796");
-		o.addPizza(p1);
-		o.addPizza(p2);
-				o.printReceipt();
+		try {
+			Order o=new Order("Mike","440-366-4796");
+			o.addPizza(p1);
+			o.addPizza(p2);
+					o.printReceipt();
+		}  catch (NullPointerException message){
+			System.out.println(message.toString());
+		}
+		catch (NumberFormatException message){
+			System.out.println(message.toString());
+		}
+		catch (OrderException message){
+			System.out.println(message.toString());
+		}
+		catch (Exception message){
+			System.out.println(message.toString());
+		}
 	}
 
 }
