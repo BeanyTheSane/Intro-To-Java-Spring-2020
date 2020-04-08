@@ -81,9 +81,9 @@ public class Pizza{
 			String result;
 			
 			result="Crust: "+ crust +
-					"Size: "+ size +
-					"Pepperoni: "+ hasPepperoni +
-					"Cost " + calculateCost();
+					"\nSize: "+ size +
+					"\nPepperoni: "+ hasPepperoni +
+					"\nCost " + calculateCost();
 					
 			return result;
 	}

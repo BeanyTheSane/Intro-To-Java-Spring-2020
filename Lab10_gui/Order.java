@@ -15,6 +15,14 @@ public class Order{
 	
 	}
 
+	public Order(String argName, String argPhone, boolean argDelivery){
+		name=argName;
+		phone=argPhone;
+		address="N/A";
+		isDelivery=argDelivery;
+	
+	}
+
 	public Order(String argName, String argAddress, String argPhone, boolean argDelivery){
 		name=argName;
 		phone=argPhone;
@@ -115,6 +123,17 @@ public class Order{
 		System.out.println("Total Bake Time: "+ calculateBakeTime());
 		
 		
+	}
+
+	public String getOrderDetails() {
+		String deliveryChoice = isDelivery ? "Delivery" : "Pick-Up";
+		String deliveryTime = isDelivery ? Double.valueOf(calculateBakeTime() + Double.valueOf("15")).toString() :   Double.valueOf(calculateBakeTime()).toString();
+		return "Name: " + getName()
+			+ "\nAddress: " + getAddress()
+			+ "\nPhone: " + getPhone()
+			+ "\n" + deliveryChoice
+			+ "\nEST Delivery: " + deliveryTime + " minutes"
+			+ "\nCost: " + calculateCost();
 	}
 
 }

@@ -1,8 +1,9 @@
 import javax.swing.*;
 
 import java.awt.*;
-import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class UserInterface extends JFrame {
@@ -17,6 +18,7 @@ public class UserInterface extends JFrame {
     public JLabel lblTopping = new JLabel("Topping:");
     public JLabel lblSpacer = new JLabel("            ");
     public JLabel lblSpacer2 = new JLabel("            ");
+    public JLabel lblTestSpace = new JLabel("");
 	public JTextField txtName = new JTextField(10);
 	public JTextField txtAddress = new JTextField(10);
     public JTextField txtPhone = new JTextField(10);
@@ -26,9 +28,12 @@ public class UserInterface extends JFrame {
     public JComboBox<String> cboCrust = new JComboBox<String>();
     public JComboBox<String> cboTopping = new JComboBox<String>();
 	public JButton btnAddPizza = new JButton("Add Pizza");
+	public JButton btnRemovePizza = new JButton("Remove Pizza");
     public JButton btnConfirmOrder = new JButton("Confirm Order");
-    public JTextArea pizzaList = new JTextArea("Pizza List", 12, 20);
+    public JTextArea pizzaList = new JTextArea("Pizza List:\n", 12, 20);
     public JScrollPane scrollablePizzaList = new JScrollPane(pizzaList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+    ArrayList<Pizza> workingPizzaList = new ArrayList<Pizza>();
 
     public static void main(String[] args) {
         new UserInterface();
@@ -37,7 +42,6 @@ public class UserInterface extends JFrame {
     UserInterface() {
         //set up the frame
         this.setTitle("Magic Pan Pizza Order Entry System");
-        this.setBackground(Color.darkGray);
         this.setDefaultCloseOperation((JFrame.EXIT_ON_CLOSE));
         this.setSize(700,300);
         this.setResizable(false);
@@ -66,6 +70,7 @@ public class UserInterface extends JFrame {
         addressPanel.add(lblAddress);
         addressPanel.add(txtAddress);
         customerInfoPanel.setLayout(new BoxLayout(customerInfoPanel,BoxLayout.Y_AXIS));
+        customerInfoPanel.add(lblCustomerInfo);
         customerInfoPanel.add(deliveryPanel);
         customerInfoPanel.add(namePanel);
         customerInfoPanel.add(addressPanel);
@@ -94,15 +99,16 @@ public class UserInterface extends JFrame {
         crustPanel.add(cboCrust);
         toppingPanel.add(lblTopping);
         toppingPanel.add(cboTopping);
-        addPizzaBtnPanel.add(lblSpacer);
         addPizzaBtnPanel.add(btnAddPizza);
+        addPizzaBtnPanel.add(btnRemovePizza);
         pizzaSelectionPanel.setLayout(new BoxLayout(pizzaSelectionPanel,BoxLayout.Y_AXIS));
+        pizzaSelectionPanel.add(lblPizzaInfo);
         pizzaSelectionPanel.add(sizePanel);
         pizzaSelectionPanel.add(crustPanel);
         pizzaSelectionPanel.add(toppingPanel);
         pizzaSelectionPanel.add(addPizzaBtnPanel);
 
-        //build pizza list
+        //build pizza list panel
         JPanel pizzaListPanel = new JPanel();
         pizzaList.setEditable(false);
         pizzaListPanel.add(scrollablePizzaList);
@@ -118,11 +124,29 @@ public class UserInterface extends JFrame {
         //build footer panel
         JPanel footerPanel = new JPanel();
         footerPanel.add(btnConfirmOrder);
+        footerPanel.add(lblTestSpace);
 
-        JPanel orderSuccessfulPanel = new JPanel();
-
-        btnConfirmOrder.addActionListener(ConfirmOrder());
-        btnAddPizza.addActionListener(AddPizza());
+        btnConfirmOrder.addActionListener(new ConfirmOrder());
+        btnAddPizza.addActionListener(new AddPizza());
+        rdbDelivery.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                txtAddress.setEnabled(true);
+            }
+        });
+        rdbPickUp.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                txtAddress.setEnabled(false);
+            }
+        });
+        btnRemovePizza.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                workingPizzaList.remove(workingPizzaList.size() - 1);
+                pizzaList.setText("Pizza List:\n");
+                for (Pizza pizza : workingPizzaList) {
+                    pizzaList.append("\n" + pizza.toString() + "\n");
+                }
+            }
+        });
 
         //add panels to the frame
         this.add(HeaderPanel, BorderLayout.NORTH);
@@ -132,11 +156,109 @@ public class UserInterface extends JFrame {
 		this.setVisible(true);
     }
 
-    private ActionListener AddPizza() {
-        return null;
+    public class AddPizza implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            Boolean pepperoniChecker = cboTopping.getSelectedItem().toString().toLowerCase().equals("pepperoni");
+
+            Pizza newPizza = new Pizza(cboSize.getSelectedItem().toString(), 
+                                        cboCrust.getSelectedItem().toString(), 
+                                        pepperoniChecker);
+
+            workingPizzaList.add(newPizza);
+
+                pizzaList.append("\n" + newPizza.toString() + "\n");
+            
+        }
     }
 
-    private ActionListener ConfirmOrder() {
-        return null;
+    public class ConfirmOrder implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance();
+
+            Order newOrder = txtAddress.getText().isEmpty() 
+                            ? new Order(txtName.getText(), txtPhone.getText(), rdbDelivery.isSelected())
+                            : new Order(txtName.getText(), txtAddress.getText(), txtPhone.getText(), rdbDelivery.isSelected());
+            for (Pizza pizza : workingPizzaList) {
+                newOrder.addPizza(pizza);
+            }
+
+            JLabel lblNameHeader = new JLabel("Name:");
+            JLabel lblNameData = new JLabel(newOrder.getName());
+            JLabel lblAddressHeader = new JLabel("Address:");
+            JLabel lblAddressData = new JLabel(newOrder.getAddress());            
+            JLabel lblPhoneHeader = new JLabel("Phone:");
+            JLabel lblPhoneData = new JLabel(newOrder.getPhone());            
+            JLabel lblDeliveryData = new JLabel(newOrder.isDelivery ? "           DELIVERY" : "           PICK-UP");            
+            JLabel lblDeliveryTimeHeader = new JLabel("EST "
+                                                + (newOrder.isDelivery ? "Delivery" : "Pick-Up")
+                                                + " Time: ");
+            JLabel lblDeliveryTimeData = new JLabel((newOrder.isDelivery 
+                                                    ? Double.valueOf(newOrder.calculateBakeTime() + Double.valueOf("15")).toString()
+                                                    : Double.valueOf(newOrder.calculateBakeTime()).toString()) + " Minutes" );
+            JLabel lblCostHeader = new JLabel("Cost:");
+            JLabel lblCostData = new JLabel(currencyFormatter.format(newOrder.calculateCost()));
+            JLabel emptyCell = new JLabel("     ");
+
+            JTextArea pizzaList = new JTextArea("Pizza List:\n", 12, 20);
+            JScrollPane scrollablePizzaList = new JScrollPane(pizzaList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+            JButton confirmButton = new JButton("Confirm");
+            JButton backButton = new JButton("Back");
+
+            JPanel cutomerInfoHeaders = new JPanel();
+            JPanel customerInfoData = new JPanel();
+            JPanel customerInfoPanel = new JPanel();
+            JPanel pizzaListPanel = new JPanel();
+            JPanel buttonPanel = new JPanel();
+
+            JDialog confimFrame = new JDialog();
+            confimFrame.setTitle("Confirm Order");
+            confimFrame.setDefaultCloseOperation((JDialog.DISPOSE_ON_CLOSE));
+            confimFrame.setSize(500,300);
+            confimFrame.setResizable(false);
+            confimFrame.setLocationRelativeTo(null);
+
+            //set up customer info panel
+            cutomerInfoHeaders.add(lblNameHeader);
+            customerInfoData.add(lblNameData);
+            cutomerInfoHeaders.add(lblAddressHeader);
+            customerInfoData.add(lblAddressData);
+            cutomerInfoHeaders.add(lblPhoneHeader);
+            customerInfoData.add(lblPhoneData);
+            cutomerInfoHeaders.add(lblDeliveryData);
+            customerInfoData.add(emptyCell);
+            cutomerInfoHeaders.add(lblDeliveryTimeHeader);
+            customerInfoData.add(lblDeliveryTimeData);
+            cutomerInfoHeaders.add(lblCostHeader);
+            customerInfoData.add(lblCostData);
+            
+            cutomerInfoHeaders.setLayout(new BoxLayout(cutomerInfoHeaders,BoxLayout.Y_AXIS));
+            customerInfoData.setLayout(new BoxLayout(customerInfoData,BoxLayout.Y_AXIS));
+            customerInfoPanel.setLayout(new BoxLayout(customerInfoPanel,BoxLayout.X_AXIS));
+            customerInfoPanel.add(cutomerInfoHeaders, BorderLayout.WEST);
+            customerInfoPanel.add(customerInfoData, BorderLayout.EAST);
+
+            //set up pizza list panel
+            for (Pizza pizza : workingPizzaList) {
+                pizzaList.append("\n" + pizza.toString() + "\n");
+            }
+            pizzaListPanel.add(scrollablePizzaList);
+            
+            //set up button panel
+            buttonPanel.add(confirmButton);
+            buttonPanel.add(backButton);
+
+            backButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    confimFrame.setVisible(false);
+                }
+            });
+
+
+            confimFrame.add(customerInfoPanel, BorderLayout.WEST);
+            confimFrame.add(pizzaListPanel, BorderLayout.EAST);
+            confimFrame.add(buttonPanel, BorderLayout.SOUTH);
+            confimFrame.setVisible(true);
+        }
     }
 }
