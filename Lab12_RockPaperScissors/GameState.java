@@ -50,7 +50,7 @@ public class GameState {
         }
     }
 
-    public void selectCompMove() {
+    public void selectCompMove() throws GameStateException {
         try {
             setCompMove(new Move(MoveSelector.selectMove()));
         } catch (NullPointerException message){
@@ -63,7 +63,7 @@ public class GameState {
         }
     }
 
-    public void compareMoves() {
+    public void compareMoves() throws GameStateException {
         try {
             int point = userMove.compare(compMove);
             setUserScore(point);
