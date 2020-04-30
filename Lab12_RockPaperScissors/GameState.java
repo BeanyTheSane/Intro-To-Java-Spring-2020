@@ -1,11 +1,11 @@
 
 public class GameState {
-    private int userScore;
-    private int compScore;
+    private Integer userScore = 0;
+    private Integer compScore = 0;
     private Move userMove;
     private Move compMove;    
 
-    public int getUserScore() {
+    public Integer getUserScore() {
         return this.userScore;
     }
 
@@ -13,7 +13,7 @@ public class GameState {
         this.userScore = userScore;
     }
 
-    public int getCompScore() {
+    public Integer getCompScore() {
         return this.compScore;
     }
 
@@ -37,9 +37,10 @@ public class GameState {
         this.compMove = compMove;
     }
 
-    public void selectUserMove() throws GameStateException {
+    public int selectUserMove() throws GameStateException {
         try {
             setUserMove(new Move(MoveSelector.selectMove()));
+            return userMove.getMoveValue();
         } catch (NullPointerException message){
         }
         catch (NumberFormatException message){
@@ -48,11 +49,13 @@ public class GameState {
         }
         catch (Exception message){
         }
+        return -2;
     }
 
-    public void selectCompMove() throws GameStateException {
+    public int selectCompMove() throws GameStateException {
         try {
             setCompMove(new Move(MoveSelector.selectMove()));
+            return compMove.getMoveValue();
         } catch (NullPointerException message){
         }
         catch (NumberFormatException message){
@@ -61,13 +64,18 @@ public class GameState {
         }
         catch (Exception message){
         }
+        return -2;
     }
 
-    public void compareMoves() throws GameStateException {
+    public int compareMoves() throws GameStateException {
         try {
             int point = userMove.compare(compMove);
-            setUserScore(point);
-            setCompScore(point * -1);
+            if (point == 1) {
+                setUserScore(getUserScore() + 1);
+            } else if (point == -1) {
+                setCompScore(getCompScore() + 1);
+            }
+            return point;
 
         } catch (NullPointerException message){
         }
@@ -77,5 +85,6 @@ public class GameState {
         }
         catch (Exception message){
         }
+        return -2;
     }
 }
